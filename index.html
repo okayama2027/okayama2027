@@ -25,6 +25,7 @@
   --clay:#9A8279; --clay-wash:#F3ECE8;
   --matsu:#5C7A56; --matsu-wash:#EBF1E9;
   --alert:#8E2C4E; --alert-wash:#FAE4EA; --red:#D6402F;
+  --sora:#3E6E86;
   --shadow:0 1px 2px rgba(46,37,33,.045), 0 10px 22px -14px rgba(46,37,33,.26);
   --shadow-lg:0 12px 44px -12px rgba(46,37,33,.4);
   --r:16px; --r-sm:10px;
@@ -195,16 +196,40 @@ main{padding:16px 14px 128px;display:flex;flex-direction:column;gap:16px}
 .tw.bad{border-color:var(--alert);color:var(--alert);border-style:solid}
 
 .notes{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
-.notes li{font-size:12.5px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;
-  word-break:break-word;min-height:1.6em;display:flex;align-items:flex-start;gap:6px}
-.notes li>.nt{flex:1;min-width:0}
-.notes li::before{content:"・";position:absolute;left:0;color:var(--clay)}
-.notes li.warn{color:var(--alert)}
-.notes li.warn::before{content:"⚠";font-size:10px;top:1px}
-.notes li.sub{font-weight:700;color:var(--ink);padding-left:0;margin-top:4px}
-.notes li.sub::before{content:""}
+.notes li{font-size:12.5px;color:var(--ink-2);line-height:1.6;
+  word-break:break-word;min-height:24px;display:flex;align-items:center;gap:4px;flex-wrap:nowrap}
+/* 行首符號：點一下可以切換（編輯模式），☐ 平常也能直接打勾 */
+/* 預設的圓點直接用 CSS 畫，大小才控制得準（「・」這個字太小） */
+.mk{flex:none;align-self:flex-start;width:18px;height:24px;padding:0;border:0;background:none;
+  display:grid;place-items:center;font-size:12px;line-height:1;color:var(--ink);
+  font-family:inherit;cursor:default}
+.mk::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.mkwarn>.mk::before,.mkchk>.mk::before{display:none}
+.editmode .mk{cursor:pointer}
+.mkwarn{color:var(--alert)!important}
+.mkwarn>.mk{color:var(--alert);font-size:12px}
+.mkchk>.mk{width:15px;height:15px;margin:0 1.5px;border:1.5px solid var(--sora);border-radius:3px;
+  color:transparent;font-size:11px;cursor:pointer}
+.mkchk{color:var(--sora)!important}
+.mkchk.mkon>.mk{border-color:var(--ink);color:var(--ink)}
+.mkchk.mkon{color:var(--ink)!important}
+.notes li.sub{font-weight:700;color:var(--ink);margin-top:4px}
+.notes li.sub>.mk{visibility:hidden}
 .notes li>.nt:focus{outline:none;background:var(--clay-wash);border-radius:4px}
-.notes li.blank::before,.bpnotes li.blank::before{content:""}
+.notes li.blank>.mk{visibility:hidden}
+.bpnotes li.blank::before{content:""}
+/* 文字框的高度跟按鈕一樣，整列垂直置中 */
+.notes li>.nt{flex:1;min-width:0;min-height:24px;display:flex;align-items:center;padding:1px 5px}
+.notes li>.grip{margin-left:0;padding:0;width:24px;height:24px;display:none;place-items:center;flex:none}
+.editmode .notes li>.grip{display:grid}
+.notes li>.grip svg{width:14px;height:14px}
+
+/* 超連結列 */
+.lnk{display:inline-flex;align-items:center;gap:4px;max-width:132px;font-size:11.5px;height:24px;
+  color:var(--matsu);text-decoration:none;border:1px solid color-mix(in srgb,var(--matsu) 30%,var(--line));
+  background:var(--matsu-wash);border-radius:999px;padding:0 9px;flex:none}
+.lnk svg{width:11px;height:11px;flex:none}
+.lnk .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* 內容被清空的行，完成編輯後就不留白 */
 body:not(.editmode) .notes li.blank,
 body:not(.editmode) .bpnotes li.blank{display:none}
@@ -237,7 +262,10 @@ body:not(.editmode) .bul.blank{display:none}
 .mini{font-size:11.5px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);color:var(--ink-2);background:var(--ground);
   display:inline-flex;align-items:center;gap:5px}
 .mini svg{width:12px;height:12px}
-.grip{margin-left:auto;color:var(--muted);padding:4px 2px;touch-action:none;cursor:grab;flex:none}
+.grip{color:var(--muted);padding:4px 2px;touch-action:none;cursor:grab;flex:none}
+.ftrow .iconb{margin-left:auto}
+.ftrow .grip{margin-left:6px}
+.memo>.grip,.sec>.grip{margin-left:auto}
 .grip svg{width:15px;height:15px}
 
 /* ---------- transit ---------- */
@@ -386,12 +414,16 @@ body:not(.editmode) .bul.blank{display:none}
 .sec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
   padding:12px 13px;display:flex;gap:9px;align-items:flex-start}
 .sec.dragging{opacity:.35}
-.sec>.grip{margin-left:0;margin-top:2px}
+.sec{position:relative}
+.sec>.grip{position:absolute;right:11px;top:12px;margin:0;order:2}
 .sec .sc{flex:1;min-width:0}
 .sec h3{margin:0 0 8px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:14.5px;letter-spacing:.05em}
 .sec h3:focus{outline:none;background:var(--clay-wash);border-radius:4px}
 .kv{display:flex;flex-direction:column;gap:5px}
-.kv .r{display:flex;gap:8px;font-size:12.5px;line-height:1.6;align-items:flex-start}
+.kv .r{display:flex;gap:6px;font-size:12.5px;line-height:1.6;align-items:center;min-height:24px;flex-wrap:nowrap}
+.kv .r>.grip{padding:0;width:24px;height:24px;display:none;place-items:center;flex:none}
+.editmode .kv .r>.grip{display:grid}
+.kv .r>.grip svg{width:14px;height:14px}
 .kv .r>.k{flex:none;width:52px;color:var(--muted);font-size:11.5px;word-break:break-word}
 .kv .r>.k:focus{outline:none;background:var(--clay-wash);border-radius:4px}
 .kv .r>.v{flex:1;min-width:0;color:var(--ink-2);word-break:break-word}
@@ -406,19 +438,29 @@ body:not(.editmode) .bul.blank{display:none}
 .tbl tr:last-child td{border-bottom:0}
 .tblwrap{overflow-x:auto}
 /* 逐列的 ✕／＋ 平常收起來，按頁首的「編輯」才出現 */
-.rowx{flex:none;width:23px;height:23px;border-radius:7px;display:none;place-items:center;
-  color:var(--red);font-size:11px;border:1px solid color-mix(in srgb,var(--red) 32%,var(--line));
-  background:var(--ground);margin-top:1px}
-.rowadd{margin-top:9px;font-size:11.5px;color:var(--clay);border:1px dashed var(--line-2);
-  border-radius:8px;padding:6px 11px;background:transparent;display:none}
+.rowx{flex:none;flex-shrink:0;width:24px;height:24px;border-radius:8px;display:none;place-items:center;
+  color:var(--red);font-size:11px;line-height:1;padding:0;
+  border:1px solid color-mix(in srgb,var(--red) 32%,var(--line));
+  background:var(--ground);margin:0}
+.rowx svg{width:11px;height:11px}
+.rowx.ed{color:var(--clay);border-color:var(--line-2)}
+/* ＋ 跟 ✕ 一樣大、置中 */
+.addrow{display:none;justify-content:center;gap:8px;margin-top:9px}
+.editmode .addrow{display:flex}
+.rowadd{flex:none;width:24px;height:24px;border-radius:8px;display:none;place-items:center;
+  color:var(--matsu);font-size:11px;line-height:1;padding:0;
+  border:1px solid color-mix(in srgb,var(--matsu) 32%,var(--line));
+  background:var(--ground);margin:0}
+.rowadd svg{width:11px;height:11px}
+.rowadd.lk{color:var(--clay);border-color:var(--line-2)}
 .editmode .rowx{display:grid}
-.bmap{flex:none;width:23px;height:23px;border-radius:7px;display:grid;place-items:center;margin-top:1px;
+.bmap{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;margin:0;
   color:var(--matsu);border:1px solid color-mix(in srgb,var(--matsu) 35%,var(--line));background:var(--surface)}
 .bmap svg{width:12px;height:12px}
 .bmapset svg{width:11px;height:11px}
 .bmapset{color:var(--muted)!important;border-color:var(--line)!important}
 .bmapset.on{color:var(--matsu)!important;border-color:color-mix(in srgb,var(--matsu) 45%,var(--line))!important}
-.editmode .rowadd{display:inline-block}
+.editmode .rowadd{display:grid}
 .dayfoot{display:none}
 .editmode .dayfoot{display:flex}
 [data-addleg],[data-delleg]{display:none}
@@ -447,13 +489,16 @@ body:not(.editmode) .bul.blank{display:none}
 .icgrid button svg{width:21px;height:21px}
 .icgrid button[aria-pressed="true"]{background:var(--shu-wash);border-color:var(--shu);color:var(--shu)}
 .after{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
-.after li{font-size:11.5px;color:var(--muted);line-height:1.6;padding-left:13px;position:relative;display:flex;gap:7px;align-items:flex-start}
+.after li{font-size:11.5px;color:var(--muted);line-height:1.6;display:flex;gap:4px;align-items:center;min-height:24px;flex-wrap:nowrap}
+.after li>.tx{flex:1;min-width:0;min-height:24px;display:flex;align-items:center;padding:1px 5px}
+.after li>.grip{padding:0;width:24px;height:24px;display:none;place-items:center;flex:none}
+.editmode .after li>.grip{display:grid}
+.after li>.grip svg{width:14px;height:14px}
 .after li .tx{flex:1;min-width:0;word-break:break-word}
-.after li::before{content:"・";position:absolute;left:0}
 .after li:focus{outline:none;background:var(--clay-wash);border-radius:4px}
 .chk{display:flex;flex-direction:column;gap:2px}
-.chkrow{display:flex;gap:7px;align-items:flex-start;font-size:12.5px;line-height:1.6;padding:3px 0}
-.chkbox{flex:none;width:16px;height:16px;border-radius:5px;border:1.5px solid var(--line);margin-top:3px;
+.chkrow{display:flex;gap:4px;align-items:center;font-size:12.5px;line-height:1.6;min-height:24px;flex-wrap:nowrap}
+.chkbox{flex:none;align-self:flex-start;margin-top:4px;width:16px;height:16px;border-radius:5px;border:1.5px solid var(--line);margin:0;
   display:grid;place-items:center;color:transparent;font-size:10px}
 .chkrow.done .chkbox{background:var(--matsu);border-color:var(--matsu);color:#fff}
 .chkrow.done .ct{color:var(--muted);text-decoration:line-through}
@@ -520,10 +565,16 @@ body:not(.editmode) .bul.blank{display:none}
   border-bottom:2px solid var(--shu);padding-bottom:6px;display:inline-block;line-height:1.35}
 .memo h2:focus{outline:none;background:var(--clay-wash)}
 .buls{margin:11px 0 0;display:flex;flex-direction:column;gap:1px}
-.bul{display:flex;gap:7px;align-items:flex-start}
-.bul .rowx{margin-top:5px}
-.bul .d{color:var(--shu);font-size:14px;line-height:1.75;flex:none;font-weight:700}
-.bul .x{flex:1;font-size:13.5px;line-height:1.8;min-height:1.8em;word-break:break-word}
+.bul{display:flex;gap:4px;align-items:center;min-height:24px;flex-wrap:nowrap}
+.bul .rowx{margin:0}
+.bul>.grip,.chkrow>.grip,.tbl .grip{padding:0;width:24px;height:24px;display:none;place-items:center;flex:none}
+.editmode .bul>.grip,.editmode .chkrow>.grip,.editmode .tbl .grip{display:grid}
+.bul>.grip svg,.chkrow>.grip svg,.tbl .grip svg{width:14px;height:14px}
+.tbl td.x{white-space:nowrap}
+.editmode .tbl td.x{width:58px;display:flex;gap:4px;align-items:center;justify-content:flex-end}
+
+.bul .x{flex:1;font-size:13.5px;line-height:1.6;min-height:24px;display:flex;align-items:center;
+  padding:1px 5px;word-break:break-word}
 .bul .x:focus{outline:none;background:var(--clay-wash);border-radius:4px}
 .bul .x:empty::before{content:"輸入重點，按 Enter 換下一點";color:var(--muted)}
 
@@ -734,6 +785,9 @@ label.fl{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--m
     <g id="i-dots" fill="currentColor" stroke="none">
       <circle cx="6" cy="12" r="1.7"></circle><circle cx="12" cy="12" r="1.7"></circle><circle cx="18" cy="12" r="1.7"></circle>
     </g>
+    <g id="i-plus" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"></path></g>
+    <g id="i-close" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"></path></g>
+    <g id="i-link" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 13.8a3.6 3.6 0 0 0 5.1 0l2.8-2.8a3.6 3.6 0 0 0-5.1-5.1l-1.3 1.3"></path><path d="M13.8 10.2a3.6 3.6 0 0 0-5.1 0l-2.8 2.8a3.6 3.6 0 0 0 5.1 5.1l1.3-1.3"></path></g>
     <g id="i-grip" fill="currentColor" stroke="none">
       <circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle>
       <circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle>
@@ -1003,7 +1057,8 @@ function DEFAULT(){ return {
     "鶴形山山頂，美觀地區的總鎮守，主祭宗像三女神",
     "參拜終日開放；授与所 9:00–17:00（元旦通常延長）",
     "境內「阿知の藤」是日本最古老的藤樹之一（花期 4 月中）",
-    "元旦傍晚人潮比白天緩和，燈籠亮起來的氣氛剛好"],
+    "元旦傍晚人潮比白天緩和，燈籠亮起來的氣氛剛好",
+    "@阿智神社 官網|https://achi.or.jp/"],
    esrc:"阿智神社 年間祭事・正月行事案內（2026/08 查得，實際以官網公告為準）", eurl:"https://achi.or.jp/saiji",
    events:[
     {t:"0:00",n:"鏡開き",d:"跨年零時，於境內舉行。"},
@@ -1064,7 +1119,8 @@ function DEFAULT(){ return {
     "鳴釜神事 受付 9:00–13:45（以釜鳴聲占卜吉凶，值得排）",
     "祈禱 9:00／10:00／11:00／13:00／14:00／15:00",
     "!三が日約 5 萬人參拜，10:00–16:00 是尖峰，9 點到最舒服",
-    "屋台約 11:00 才陸續開"],
+    "屋台約 11:00 才陸續開",
+    "@吉備津神社 官網|https://www.kibitujinja.com/"],
    esrc:"吉備津神社 正月案內・年中行事（2026/08 查得，實際以官網公告為準）", eurl:"https://www.kibitujinja.com/event/",
    events:[
     {t:"5:00–21:00",n:"參拜時間",d:"三が日延長到 21:00，1/4 起恢復 5:00–18:00。"},
@@ -1093,7 +1149,8 @@ function DEFAULT(){ return {
   {id:"t24",k:"transit",from:P.OHARA,to:P.ACHI,fare:0,note:"含約 100 階石階。",legs:[W("大原美術館 → 阿智神社",6)]},
   {id:"b5",k:"spot",ic:"torii",t:"阿智神社（白天版）",place:P.ACHI,star:true,stay:40,min:25,notes:[
     "授与所 9:00–17:00，御朱印與御守在這個時段拿",
-    "從鶴形山上可俯瞰倉敷街景，跟元旦晚上完全兩種感覺"],
+    "從鶴形山上可俯瞰倉敷街景，跟元旦晚上完全兩種感覺",
+    "@阿智神社 官網|https://achi.or.jp/"],
    esrc:"阿智神社 年間祭事（2026/08 查得）", eurl:"https://achi.or.jp/saiji",
    events:[
     {t:"9:00 起",n:"崇敬会祈願祭・迎春行事",d:"福餅つき、獅子舞、三女神の舞——1/2 也照常，白天來剛好看得到。"},
@@ -2219,7 +2276,7 @@ function viewItin(){
       var doneTr = nx && S.visited[nx.id] && !expandTr[it.id];
       return doneTr ? rowTransitMini(it,c[it.id],ln) : rowTransit(it,c[it.id],ln);
     }
-    return rowSpot(it,c[it.id],ln);
+    return rowSpot(it,c[it.id],ln,i===fi);
   }).join("");
   return ''+
   '<div class="dayhead"><div class="kick"><span>'+esc(d.num)+'</span><span>'+esc(d.date)+' '+esc(d.dow)+'</span><span>'+esc(d.tag)+'</span></div>'+
@@ -2311,24 +2368,131 @@ function eventsBox(it){
     '</details>';
 }
 
-function rowSpot(it,c,ln){
-  var notes=(it.notes||[]).map(function(n,i){
-    var cls="", tx=n;
-    if(n.charAt(0)==="!"){ cls="warn"; tx=n.slice(1); }
-    else if(n.charAt(0)===":"){ cls="sub"; tx=n.slice(1); }
+
+/* 條列的四種樣子，用開頭那個字元記在字串裡：
+   （無）＝・　!＝⚠　?＝☐未打勾　+＝☐已打勾　:＝小標（舊資料）　@＝超連結列 */
+function noteKind(n){
+  var c=String(n||"").charAt(0);
+  if(c==="!") return "warn";
+  if(c==="?") return "chk";
+  if(c==="+") return "chkon";
+  if(c===":") return "sub";
+  if(c==="@") return "link";
+  return "dot";
+}
+function noteBody(n){
+  n=String(n||"");
+  return noteKind(n)==="dot" ? n : n.slice(1);
+}
+function notePre(k){
+  return k==="warn"?"!":k==="chk"?"?":k==="chkon"?"+":k==="sub"?":":k==="link"?"@":"";
+}
+function noteCycle(k){        /* 點符號時的循環：・ → ⚠ → ☐ → ・ */
+  return k==="dot"?"warn":k==="warn"?"chk":"dot";
+}
+function noteMark(k){
+  return k==="warn"?"⚠":k==="chkon"?"✓":"";   /* ・ 由 CSS 畫，這裡留空才不會多一個格 */
+}
+
+/* 行首符號：三個頁面共用一套，用事件委派，重畫也不用重綁 */
+var MKWIRED=false;
+function cycleAt(cur,forceCheck){
+  var k=noteKind(cur), body=noteBody(cur), nk;
+  if(forceCheck){ nk = (k==="chkon") ? "chk" : (k==="chk" ? "chkon" : null); }
+  else nk = noteCycle(k==="chkon"?"chk":k);
+  return nk===null ? null : notePre(nk)+body;
+}
+function wireMarkers(){
+  if(MKWIRED) return; MKWIRED=true;
+  document.addEventListener("click",function(e){
+    var b=e.target.closest(".mk"); if(!b) return;
+    var forceCheck=!EDIT;
+
+    if(b.dataset.mk){                                  /* 行程條列 */
+      var q=b.dataset.mk.split(":"), f=findItem(q[0]); if(!f) return;
+      var v=cycleAt(f.it.notes[+q[1]]||"",forceCheck); if(v===null) return;
+      f.it.notes[+q[1]]=v; save(); render(); return;
+    }
+    if(b.dataset.mki){                                 /* 行前 */
+      var r=b.dataset.mki.split(":"), sec=secById(r[0]); if(!sec) return;
+      var arr = r[1]==="after" ? sec.after : sec.rows;
+      if(!arr) return;
+      var w=cycleAt(arr[+r[2]]||"",forceCheck); if(w===null) return;
+      arr[+r[2]]=w; save(); render(); return;
+    }
+    if(b.dataset.mkb){                                 /* 備忘 */
+      var t=b.dataset.mkb.split(":"), m=memoById(t[0]); if(!m) return;
+      var u=cycleAt(m.b[+t[1]]||"",forceCheck); if(u===null) return;
+      m.b[+t[1]]=u; save(); render(); return;
+    }
+  });
+}
+
+function mkBtn(attr,key,k){
+  return '<button class="mk" data-'+attr+'="'+key+'" aria-label="切換符號">'+noteMark(k)+'</button>';
+}
+function mkCls(k){ return k==="warn"?"mkwarn":k==="chk"?"mkchk":k==="chkon"?"mkchk mkon":""; }
+function gripEl(){ return '<span class="grip" data-ngrip>'+ico("grip")+'</span>'; }
+function linkParts(n){
+  var b=noteBody(n), i=b.indexOf("|");
+  return i<0 ? {n:b,u:""} : {n:b.slice(0,i),u:b.slice(i+1)};
+}
+function safeUrl(u){
+  u=String(u||"").trim();
+  if(!u) return "";
+  if(!/^https?:\/\//i.test(u)) u="https://"+u.replace(/^\/+/,"");
+  return /^https?:\/\/[^\s"'<>]+$/i.test(u) ? u : "";
+}
+
+function rowSpot(it,c,ln,isFirst){
+  var lines=[], links=[];
+  (it.notes||[]).forEach(function(n,i){ (noteKind(n)==="link"?links:lines).push({n:n,i:i}); });
+
+  var notes=lines.map(function(o){
+    var k=noteKind(o.n), tx=noteBody(o.n);
+    var cls=(k==="sub"?"sub":mkCls(k));
     if(!tx.trim()) cls+=" blank";
-    return '<li class="'+cls.trim()+'">'+
-      '<span class="nt" contenteditable="true" data-note="'+it.id+':'+i+'">'+esc(tx)+'</span>'+
-      '<button class="rowx" data-delnote="'+it.id+':'+i+'" aria-label="刪除這列">✕</button></li>';
+    return '<li class="'+cls.trim()+'" data-id="'+o.i+'">'+
+      mkBtn("mk",it.id+":"+o.i,k)+
+      '<span class="nt" contenteditable="true" data-note="'+it.id+':'+o.i+'">'+esc(tx)+'</span>'+
+      '<button class="rowx" data-delnote="'+it.id+':'+o.i+'" aria-label="刪除這列">'+ico("close")+'</button>'+
+      gripEl()+'</li>';
   }).join("");
-  notes = '<ul class="notes">'+notes+'</ul>'+
-    '<div><button class="rowadd" data-addnote="'+it.id+'">＋ 新增一列</button></div>';
+  notes = '<ul class="notes" data-notesfor="'+it.id+'">'+notes+'</ul>'+
+    '<div class="addrow">'+
+      '<button class="rowadd" data-addnote="'+it.id+'" aria-label="新增一列">'+ico("plus")+'</button>'+
+      '<button class="rowadd lk" data-addlink="'+it.id+'" aria-label="新增超連結">'+ico("link")+'</button>'+
+    '</div>';
+
+  var lnkHTML = links.map(function(o){
+      var L=linkParts(o.n), u=safeUrl(L.u);
+      return (u?'<a class="lnk" target="_blank" rel="noopener" href="'+esc(u)+'">':'<span class="lnk">')+
+        ico("link")+'<span class="t">'+esc(L.n||u||"連結")+'</span>'+(u?'</a>':'</span>')+
+        '<button class="rowx ed" data-editlink="'+it.id+':'+o.i+'" aria-label="編輯連結">'+ico("pencil")+'</button>'+
+        '<button class="rowx" data-delnote="'+it.id+':'+o.i+'" aria-label="刪除連結">'+ico("close")+'</button>';
+    }).join("");
   var done=!!S.visited[it.id];
   var nameHTML = EDIT
     ? '<span class="mv'+(String(it.place||"").trim()?"":" empty")+'" contenteditable="true" data-ed="place" data-id="'+it.id+'">'+esc(it.place||"")+'</span>'
     : (it.place
         ? '<a class="mv" target="_blank" rel="noopener" href="'+mapGo(it.place)+'">'+esc(it.place)+'</a>'
         : '<span class="mv plain">尚未填地點</span>');
+  var head = isFirst
+   ? '<div class="span"><span class="lbl">出發</span>'+
+       timeField("lv",it.id,hm(c.leave),c.lvfix?"anch":"")+
+       (c.lvfix?'<button class="clr" data-unlv="'+it.id+'" aria-label="解除固定">✕ 固定</button>':'')+
+     '</div>'
+   : '<div class="span"><span class="lbl">抵達</span>'+
+       timeField("arr",it.id,hm(c.arr),c.anchored?"anch":"")+
+       (c.anchored&&c.chained?'<button class="clr" data-unanchor="'+it.id+'" aria-label="解除固定">✕ 固定</button>':'')+
+     '</div>';
+  var rt = isFirst ? '' :
+    '<div class="rt'+(c.tight?" tight":"")+'">'+
+      '<span class="stay">可停留 '+dur(Math.max(0,c.win))+'</span>'+
+      '<span class="lv">離開'+timeField("lv",it.id,hm(c.leave),"sm")+
+        (c.lvfix?'<button class="clr" data-unlv="'+it.id+'" aria-label="解除固定">✕</button>':'')+
+      '</span>'+
+    '</div>';
   return '<div class="row" data-k="spot" data-ln="'+ln+'"><div class="gutter">'+
    '<div class="mark" data-icopen="'+it.id+'">'+ico(it.ic)+'</div></div><div class="col">'+
    '<div class="card'+(it.star?" star":"")+(done?" done":"")+'" data-id="'+it.id+'" data-drag>'+
@@ -2336,28 +2500,20 @@ function rowSpot(it,c,ln){
       '<button class="tick" data-tick="'+it.id+'" aria-pressed="'+done+'" aria-label="標記已完成">✓</button>'+
       '<div class="mid">'+
         '<h3 class="h3" contenteditable="true" data-ed="t" data-id="'+it.id+'">'+esc(it.t)+'</h3>'+
-        '<div class="span"><span class="lbl">抵達</span>'+
-          timeField("arr",it.id,hm(c.arr),c.anchored?"anch":"")+
-          (c.anchored&&c.chained?'<button class="clr" data-unanchor="'+it.id+'" aria-label="解除固定">✕ 固定</button>':'')+
-        '</div>'+
+        head+
       '</div>'+
-      '<div class="rt'+(c.tight?" tight":"")+'">'+
-        '<span class="stay">可停留 '+dur(Math.max(0,c.win))+'</span>'+
-        '<span class="lv">離開'+timeField("lv",it.id,hm(c.leave),"sm")+
-          (c.lvfix?'<button class="clr" data-unlv="'+it.id+'" aria-label="解除固定">✕</button>':'')+
-        '</span>'+
-      '</div></div>'+
-    (c.over?'<div class="conf">抵達已經晚於原本設定的離開時間，可停留變成 0 分。'+
+      rt+'</div>'+
+    (!isFirst&&c.over?'<div class="conf">抵達已經晚於原本設定的離開時間，可停留變成 0 分。'+
       '<br><button class="cb" data-unlv="'+it.id+'">解除離開時間，改用預計停留</button></div>':'')+
-    (c.early&&!S.hush[it.id+":early"]?'<div class="conf">這一站被固定在 '+toHM(c.arr)+'，但前一段最快 '+toHM(c.nat)+' 才會到。'+
+    (!isFirst&&c.early&&!S.hush[it.id+":early"]?'<div class="conf">這一站被固定在 '+toHM(c.arr)+'，但前一段最快 '+toHM(c.nat)+' 才會到。'+
       '<button class="cx" data-hush="'+it.id+':early" aria-label="關掉提醒">✕</button>'+
       '<br><button class="cb" data-unanchor="'+it.id+'">解除固定</button></div>':'')+
-    (c.tight&&!S.hush[it.id+":tight"]?'<div class="conf">這一站只排了 '+dur(Math.max(0,c.win))+'，比建議的 '+dur(it.min)+' 少。'+
+    (!isFirst&&c.tight&&!S.hush[it.id+":tight"]?'<div class="conf">這一站只排了 '+dur(Math.max(0,c.win))+'，比建議的 '+dur(it.min)+' 少。'+
       '<button class="cx" data-hush="'+it.id+':tight" aria-label="關掉提醒">✕</button>'+
       '<br><button class="cb" data-ext="'+it.id+'">一鍵套用：拉長到 '+dur(it.min)+'</button></div>':'')+
     notes+
     eventsBox(it)+ photoStrip(it.id)+
-    '<div class="ftrow">'+ico("pin")+ nameHTML +
+    '<div class="ftrow">'+ico("pin")+ nameHTML + lnkHTML +
       '<button class="iconb" data-addphoto="'+it.id+'" aria-label="加入活動圖">'+ico("camera")+'</button>'+
       '<span class="grip" data-grip>'+ico("grip")+'</span>'+
     '</div>'+
@@ -2464,34 +2620,41 @@ function ttBox(tt,hi){
 function viewInfo(){
   var secs=S.info.sections.map(function(sec){
     var inner="", id=sec.id;
-    function x(kind,i){ return '<button class="rowx" data-delrow="'+id+':'+kind+':'+i+'" aria-label="刪除這列">✕</button>'; }
+    function x(kind,i){ return '<button class="rowx" data-delrow="'+id+':'+kind+':'+i+'" aria-label="刪除這列">'+ico("close")+'</button>'; }
     if(sec.type==="kv"){
-      inner='<div class="kv">'+sec.rows.map(function(r,i){
-        return '<div class="r"><span class="k" contenteditable="true" data-kvk="'+id+':'+i+'">'+esc(r[0])+'</span>'+
-          '<span class="v" contenteditable="true" data-kv="'+id+':'+i+'">'+esc(r[1])+'</span>'+x("rows",i)+'</div>';
+      inner='<div class="kv" data-sort="'+id+':rows">'+sec.rows.map(function(r,i){
+        return '<div class="r" data-id="'+i+'"><span class="k" contenteditable="true" data-kvk="'+id+':'+i+'">'+esc(r[0])+'</span>'+
+          '<span class="v" contenteditable="true" data-kv="'+id+':'+i+'">'+esc(r[1])+'</span>'+x("rows",i)+gripEl()+'</div>';
       }).join("")+'</div>';
     } else if(sec.type==="table"){
       inner='<div class="tblwrap"><table class="tbl"><thead><tr>'+
-        sec.head.map(function(h){return '<th>'+esc(h)+'</th>';}).join("")+'<th class="x"></th></tr></thead><tbody>'+
-        sec.rows.map(function(r,ri){ return '<tr>'+r.map(function(cc,ci){
+        sec.head.map(function(h){return '<th>'+esc(h)+'</th>';}).join("")+'<th class="x"></th></tr></thead>'+
+        '<tbody data-sort="'+id+':rows">'+
+        sec.rows.map(function(r,ri){ return '<tr data-id="'+ri+'">'+r.map(function(cc,ci){
           return '<td'+(ci===r.length-1?' class="num"':'')+' contenteditable="true" data-td="'+id+':'+ri+':'+ci+'">'+esc(cc)+'</td>';
-        }).join("")+'<td class="x">'+x("rows",ri)+'</td></tr>'; }).join("")+
+        }).join("")+'<td class="x">'+x("rows",ri)+gripEl()+'</td></tr>'; }).join("")+
         '</tbody></table></div>'+
-        (sec.after?'<ul class="after">'+sec.after.map(function(a,ai){
-          return '<li><span class="tx" contenteditable="true" data-af="'+id+':'+ai+'">'+esc(a)+'</span>'+x("after",ai)+'</li>';
+        (sec.after?'<ul class="after" data-sort="'+id+':after">'+sec.after.map(function(a,ai){
+          var k=noteKind(a);
+          return '<li class="'+mkCls(k)+'" data-id="'+ai+'">'+mkBtn("mki",id+":after:"+ai,k)+
+            '<span class="tx" contenteditable="true" data-af="'+id+':'+ai+'">'+esc(noteBody(a))+'</span>'+
+            x("after",ai)+gripEl()+'</li>';
         }).join("")+'</ul>':'');
     } else if(sec.type==="list"){
-      inner='<ul class="after">'+sec.rows.map(function(r,i){
-        return '<li><span class="tx" contenteditable="true" data-li="'+id+':'+i+'">'+esc(r)+'</span>'+x("rows",i)+'</li>';
+      inner='<ul class="after" data-sort="'+id+':rows">'+sec.rows.map(function(r,i){
+        var k=noteKind(r);
+        return '<li class="'+mkCls(k)+'" data-id="'+i+'">'+mkBtn("mki",id+":rows:"+i,k)+
+          '<span class="tx" contenteditable="true" data-li="'+id+':'+i+'">'+esc(noteBody(r))+'</span>'+
+          x("rows",i)+gripEl()+'</li>';
       }).join("")+'</ul>';
     } else if(sec.type==="check"){
-      inner='<div class="chk">'+sec.rows.map(function(r,i){
+      inner='<div class="chk" data-sort="'+id+':rows">'+sec.rows.map(function(r,i){
         var k=id+":"+i, on=!!S.done[k];
-        return '<div class="chkrow'+(on?" done":"")+'"><button class="chkbox" data-chk="'+k+'">✓</button>'+
-          '<span class="ct" contenteditable="true" data-li="'+id+':'+i+'">'+esc(r)+'</span>'+x("rows",i)+'</div>';
+        return '<div class="chkrow'+(on?" done":"")+'" data-id="'+i+'"><button class="chkbox" data-chk="'+k+'">✓</button>'+
+          '<span class="ct" contenteditable="true" data-li="'+id+':'+i+'">'+esc(r)+'</span>'+x("rows",i)+gripEl()+'</div>';
       }).join("")+'</div>';
     }
-    inner+='<div><button class="rowadd" data-addrow="'+id+'">＋ 新增一列</button></div>';
+    inner+='<div class="addrow"><button class="rowadd" data-addrow="'+id+'" aria-label="新增一列">'+ico("plus")+'</button></div>';
     inner+='<div class="boxfoot"><span class="bl">這個區塊</span>'+
       '<button class="bf add" data-addsec="'+id+'" aria-label="在下方新增一個區塊">＋</button>'+
       '<button class="bf del" data-delsec="'+id+'" aria-label="刪除這個區塊">✕</button></div>';
@@ -2594,14 +2757,16 @@ function viewMemo(){
       '<span class="grip" data-grip>'+ico("grip")+'</span>'+
       '<h2 contenteditable="true" data-memoh="'+m.id+'">'+esc(m.h)+'</h2>'+
       '<div class="buls" data-memo="'+m.id+'">'+m.b.map(function(t,i){
-        var q=(m.g&&m.g[i])||"";
-        return '<div class="bul'+(String(t).trim()?"":" blank")+'" data-geo="'+esc(q)+'"><span class="d">・</span>'+
-          '<div class="x" contenteditable="true">'+esc(t)+'</div>'+
+        var q=(m.g&&m.g[i])||"", k=noteKind(t), tx=noteBody(t);
+        return '<div class="bul '+mkCls(k)+(String(tx).trim()?"":" blank")+'" data-id="'+i+'" data-mk="'+k+'" data-geo="'+esc(q)+'">'+
+          mkBtn("mkb",m.id+":"+i,k)+
+          '<div class="x" contenteditable="true">'+esc(tx)+'</div>'+
           (q?'<a class="bmap" target="_blank" rel="noopener" href="'+mapGo(q)+'" aria-label="在 Google Maps 開啟：'+esc(q)+'">'+ico("pin")+'</a>':'')+
           '<button class="rowx bmapset'+(q?" on":"")+'" data-setg="'+m.id+':'+i+'" aria-label="設定地圖連結">'+ico("pin")+'</button>'+
-          '<button class="rowx" data-delbul="'+m.id+':'+i+'" aria-label="刪除這點">✕</button></div>';
+          '<button class="rowx" data-delbul="'+m.id+':'+i+'" aria-label="刪除這點">'+ico("close")+'</button>'+
+          gripEl()+'</div>';
       }).join("")+'</div>'+
-      '<div><button class="rowadd" data-addbul="'+m.id+'">＋ 新增一點</button></div>'+
+      '<div class="addrow"><button class="rowadd" data-addbul="'+m.id+'" aria-label="新增一點">'+ico("plus")+'</button></div>'+
       '<div class="boxfoot"><span class="bl">這則備忘</span>'+
         '<button class="bf add" data-addmemo="'+m.id+'" aria-label="在下方新增一則備忘">＋</button>'+
         '<button class="bf del" data-delmemo="'+m.id+'" aria-label="刪除這則備忘">✕</button></div>'+
@@ -2880,7 +3045,9 @@ function onTime(inp,apply){
 }
 
 /* ================= 拖曳排序 ================= */
-function sortable(box,sel,onEnd,holdMs){
+function sortable(box,sel,onEnd,holdMs,wrap,gripSel){
+  wrap = wrap || function(n){ return n.closest(".row")||n; };
+  gripSel = gripSel || "[data-grip]";
   var el=null,sy=0,hold=null,py=0,auto=null;
   function items(){ return $$(sel,box); }
   /* 拖到畫面上下緣時自動捲動，這樣才能從最底下一路拉到最上面 */
@@ -2899,7 +3066,7 @@ function sortable(box,sel,onEnd,holdMs){
   }
   box.addEventListener("pointerdown",function(e){
     var t=e.target.closest(sel); if(!t) return;
-    if(e.target.closest("[data-grip]")){ e.preventDefault(); begin(t,e.clientY); return; }
+    if(e.target.closest(gripSel)){ e.preventDefault(); e.stopPropagation(); begin(t,e.clientY); return; }
     if(holdMs==null) return;
     if(e.target.closest("[contenteditable],button,a,input,summary,details")) return;
     hold=setTimeout(function(){ begin(t,e.clientY); },holdMs);
@@ -2925,7 +3092,7 @@ function sortable(box,sel,onEnd,holdMs){
       var q=o.getBoundingClientRect();
       if(mid>q.top&&mid<q.bottom){
         var before=list.indexOf(o)<list.indexOf(el);
-        var he=el.closest(".row")||el, ho=o.closest(".row")||o;
+        var he=wrap(el), ho=wrap(o);
         if(before) ho.parentNode.insertBefore(he,ho); else ho.parentNode.insertBefore(he,ho.nextSibling);
         sy=py; el.style.transform="translateY(0px)";
         if(navigator.vibrate) navigator.vibrate(6);
@@ -2979,8 +3146,8 @@ function wire(){
   $$("[data-note]").forEach(function(n){
     n.addEventListener("blur",function(){
       var p=n.dataset.note.split(":"), f=findItem(p[0]); if(!f) return;
-      var old=f.it.notes[+p[1]]||"", pre=(old.charAt(0)==="!"||old.charAt(0)===":")?old.charAt(0):"";
-      f.it.notes[+p[1]]=pre+txt(n); save();
+      var old=f.it.notes[+p[1]]||"";
+      f.it.notes[+p[1]]=notePre(noteKind(old))+txt(n); save();
     });
     n.addEventListener("input",function(){
       var box=n.closest("li")||n;
@@ -2996,6 +3163,66 @@ function wire(){
         var prev=$('[data-note="'+p[0]+':'+Math.max(0,+p[1]-1)+'"]'); if(prev) prev.focus(); }
     });
   });
+  /* 超連結：新增與編輯 */
+  function linkDialog(title,name,url,onOk){
+    dlgOpen(title,"填顯示名稱跟網址，會變成卡片下方那顆可以點的連結。",
+      '<label class="fl">顯示名稱<input class="inp" id="lkN" value="'+esc(name)+'" placeholder="例：三宅商店 官網"></label>'+
+      '<label class="fl">網址<input class="inp" id="lkU" inputmode="url" value="'+esc(url)+'" placeholder="https://…"></label>',
+      "儲存", function(){
+        var n=String($("#lkN").value||"").trim(), u=safeUrl($("#lkU").value);
+        if(!u){ tell("網址看起來不對","要像 https://example.com 這樣，可以直接從瀏覽器複製貼上。"); return true; }
+        onOk(n||u.replace(/^https?:\/\//,"").replace(/\/.*$/,""), u);
+      });
+  }
+  $$("[data-addlink]").forEach(function(b){ b.onclick=function(){
+    var f=findItem(b.dataset.addlink); if(!f) return;
+    linkDialog("新增超連結","","",function(n,u){
+      f.it.notes=f.it.notes||[]; f.it.notes.push("@"+n+"|"+u); save(); render(); });
+  }; });
+  $$("[data-editlink]").forEach(function(b){ b.onclick=function(){
+    var q=b.dataset.editlink.split(":"), f=findItem(q[0]); if(!f) return;
+    var L=linkParts(f.it.notes[+q[1]]||"");
+    linkDialog("編輯超連結",L.n,L.u,function(n,u){
+      f.it.notes[+q[1]]="@"+n+"|"+u; save(); render(); });
+  }; });
+
+  /* 條列可以拖曳重排 */
+  $$(".notes[data-notesfor]").forEach(function(ul){
+    var f=findItem(ul.dataset.notesfor); if(!f) return;
+    sortable(ul,"li[data-id]",function(order){
+      var links=(f.it.notes||[]).filter(function(n){ return noteKind(n)==="link"; });
+      f.it.notes=order.map(function(i){ return f.it.notes[+i]; }).concat(links);
+      save(); render();
+    },null,function(n){ return n; },"[data-ngrip]");
+  });
+  /* 行前：每個區塊裡的列 */
+  $$("[data-sort]").forEach(function(box){
+    var q=box.dataset.sort.split(":"), sec=secById(q[0]); if(!sec) return;
+    var sel = box.tagName==="TBODY" ? "tr[data-id]" : (box.classList.contains("after") ? "li[data-id]" : "[data-id]");
+    sortable(box,sel,function(order){
+      var arr = q[1]==="after" ? sec.after : sec.rows;
+      if(!arr) return;
+      var next=order.map(function(i){ return arr[+i]; });
+      /* 打勾清單的完成狀態是照索引存的，重排後要跟著搬 */
+      if(sec.type==="check"){
+        var d={}; order.forEach(function(oldI,newI){ if(S.done[sec.id+":"+oldI]) d[sec.id+":"+newI]=1; });
+        arr.forEach(function(_,i){ delete S.done[sec.id+":"+i]; });
+        for(var kk in d) S.done[kk]=d[kk];
+      }
+      if(q[1]==="after") sec.after=next; else sec.rows=next;
+      save(); render();
+    },null,function(n){ return n; },"[data-ngrip]");
+  });
+  /* 備忘：每則備忘裡的點 */
+  $$(".buls[data-memo]").forEach(function(box){
+    var m=memoById(box.dataset.memo); if(!m) return;
+    sortable(box,".bul[data-id]",function(order){
+      var b=order.map(function(i){ return m.b[+i]; });
+      var g=order.map(function(i){ return (m.g&&m.g[+i])||""; });
+      m.b=b; m.g=g; save(); render();
+    },null,function(n){ return n; },"[data-ngrip]");
+  });
+
   $$("[data-delnote]").forEach(function(b){ b.onclick=function(){
     var q=b.dataset.delnote.split(":"), f=findItem(q[0]); if(!f) return;
     f.it.notes.splice(+q[1],1); save(); render(); }; });
@@ -3071,7 +3298,7 @@ function wire(){
   $$("[data-memo]").forEach(function(box){
     var m=memoById(box.dataset.memo);
     function sync(){
-      m.b=$$(".x",box).map(function(x){return txt(x);});
+      m.b=$$(".bul",box).map(function(n){ return notePre(n.dataset.mk||"dot")+txt(n.querySelector(".x")); });
       m.g=$$(".bul",box).map(function(n){return n.dataset.geo||"";});
       save(); }
     box.addEventListener("input",function(e){
@@ -3084,7 +3311,8 @@ function wire(){
       if(e.key==="Enter"){ e.preventDefault();
         var row=document.createElement("div"); row.className="bul";
         row.setAttribute("data-geo","");
-        row.innerHTML='<span class="d">・</span><div class="x" contenteditable="true"></div>';
+        row.setAttribute("data-mk","dot");
+        row.innerHTML='<button class="mk" aria-label="切換符號">・</button><div class="x" contenteditable="true"></div>';
         x.closest(".bul").after(row); row.querySelector(".x").focus(); sync(); }
       if(e.key==="Backspace"&&!txt(x).trim()&&$$(".x",box).length>1){ e.preventDefault();
         var prev=x.closest(".bul").previousElementSibling; x.closest(".bul").remove();
@@ -3258,6 +3486,7 @@ $("#daystrip").addEventListener("click",function(e){ var c=e.target.closest("[da
 $("#fab").onclick=sheetAdd;
 
 fbLoad();
+wireMarkers();
 render();
 var FBjoined = fbIncomingLink();
 if(!FBjoined) shareIncoming();
