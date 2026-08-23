@@ -2680,6 +2680,15 @@ function sheetIcon(id){
   $$("[data-ic]",$("#shBody")).forEach(function(b){ b.onclick=function(){
     f.it.ic=b.dataset.ic; save(); closeSheet(); render(); }; });
 }
+function offCheck(){
+  var el=$("#offStat"); if(!el) return;
+  if(!window.OFFCORE || !window.caches){ el.textContent="這個網址不支援離線（要用你自己架的版本）"; return; }
+  caches.open(window.OFFCORE).then(function(c){ return c.match("./index.html"); }).then(function(hit){
+    if(hit){ el.innerHTML='<b style="color:var(--matsu)">● 已就緒</b>　沒有網路也開得起來，可以測飛航模式了'; }
+    else{ el.innerHTML='<b style="color:var(--red)">● 還沒存好</b>　請保持連線，下拉重新整理一次再回來看'; }
+    setTimeout(offCheck,3000);
+  }).catch(function(){ el.textContent="檢查不到離線狀態"; });
+}
 function sheetSet(){
   openSheet("設定",
    '<label class="fl">日圓 → 台幣 匯率（1 JPY = ? TWD）<input class="inp mono" id="sR" type="number" step="0.0001" value="'+S.rate+'"></label>'+
@@ -2695,7 +2704,11 @@ function sheetSet(){
    '<button class="bigbtn ghost" id="sExp">匯出備份</button>'+
    '<button class="bigbtn ghost" id="sImp">從備份還原</button>'+
    '<button class="bigbtn ghost" id="sRst" style="color:var(--red)">重設回預設行程</button>'+
+   '<hr style="border:0;border-top:1px solid var(--line)">'+
+   '<div class="flh">離線狀態</div>'+
+   '<p class="perhead" id="offStat">檢查中…</p>'+
    '<p class="perhead">所有編輯都存在這台裝置的瀏覽器裡，會自動存檔。換手機或想跟旅伴同步，用匯出／還原。</p>');
+  offCheck();
   $("#sSave").onclick=function(){
     S.rate=+$("#sR").value||0.2006;
     save(); closeSheet(); render(); };
@@ -3173,7 +3186,7 @@ if(fbOn()) fbStart();
 /* 離線化：把整個 App 存進瀏覽器，之後沒網路也能開 */
 (function(){
   if(!("serviceWorker" in navigator) || location.protocol==="file:" || !window.caches) return;
-  var CORE="core-2027-okayama-v3";
+  var CORE="core-2027-okayama-v3"; window.OFFCORE=CORE;
   window.addEventListener("load",function(){
     navigator.serviceWorker.register("sw.js").catch(function(){});
     var el=null, shown=false;
