@@ -1,0 +1,3068 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#C04C36">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="初春手帖">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>岡山倉敷 初春手帖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap">
+<style>
+/* 單一淺色主題 */
+:root{
+  color-scheme:light;
+  --ground:#FAF6F3; --surface:#FFFDFC; --surface-2:#F2EBE7;
+  --line:#E7DBD4; --line-2:#D8C4B6; --line-soft:#F1E9E4;
+  --ink:#2E2521; --ink-2:#61524B; --muted:#96857D;
+  --shu:#C04C36; --shu-2:#D4715B; --shu-wash:#FAEBE6;
+  --clay:#9A8279; --clay-wash:#F3ECE8;
+  --matsu:#5C7A56; --matsu-wash:#EBF1E9;
+  --alert:#8E2C4E; --alert-wash:#FAE4EA; --red:#D6402F;
+  --shadow:0 1px 2px rgba(46,37,33,.045), 0 10px 22px -14px rgba(46,37,33,.26);
+  --shadow-lg:0 12px 44px -12px rgba(46,37,33,.4);
+  --r:16px; --r-sm:10px;
+  --c-food:#C25A3E; --c-tran:#4E7A8C; --c-tkt:#6B5C9E; --c-gift:#A8683F;
+  --c-shop:#B4557E; --c-omam:#9C7A2E; --c-misc:#6E7B72; --c-etc:#8A7C75;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Noto Sans TC","Hiragino Sans","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;text-align:left}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--shu);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+svg{display:block}
+
+#app{max-width:480px;margin:0 auto;min-height:100dvh;background:var(--ground);position:relative;
+  box-shadow:0 0 0 1px var(--line)}
+@media (min-width:520px){body{background:var(--surface-2)}}
+
+/* ---------- masthead：青海波 + 水引 ---------- */
+.mast{position:relative;padding:22px 16px 0;overflow:hidden;border-bottom:1px solid var(--line)}
+.mast::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.08;
+  background-image:
+    radial-gradient(circle at 50% 100%,
+      transparent 23%, var(--clay) 23%, var(--clay) 25.2%, transparent 25.2%,
+      transparent 39%, var(--clay) 39%, var(--clay) 41.2%, transparent 41.2%,
+      transparent 55%, var(--clay) 55%, var(--clay) 57.2%, transparent 57.2%,
+      transparent 71%, var(--clay) 71%, var(--clay) 73.2%, transparent 73.2%),
+    radial-gradient(circle at 50% 100%,
+      transparent 23%, var(--clay) 23%, var(--clay) 25.2%, transparent 25.2%,
+      transparent 39%, var(--clay) 39%, var(--clay) 41.2%, transparent 41.2%,
+      transparent 55%, var(--clay) 55%, var(--clay) 57.2%, transparent 57.2%,
+      transparent 71%, var(--clay) 71%, var(--clay) 73.2%, transparent 73.2%);
+  background-size:56px 28px;
+  background-position:0 0, 28px 14px;
+}
+.mast>*{position:relative}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--clay);display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.titlewrap{display:inline-block;max-width:100%;margin:7px 0 9px}
+.mast h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:25px;line-height:1.25;
+  margin:0;letter-spacing:.03em}
+.mast p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+.mast h1:focus,.mast p:focus{outline:none;background:var(--clay-wash);border-radius:5px}
+.mizu{display:block;width:100%;margin:9px 0 0;height:8px;position:relative}
+.mizu i{display:block;position:absolute}
+.mizu .g{inset:0;border-radius:4px;background:#BFA492}
+.mizu .rw{inset:1px;border-radius:3px;overflow:hidden;
+  background:repeating-linear-gradient(118deg,var(--shu) 0 7px,#FFFFFF 7px 14px)}
+.mtools{display:flex;gap:7px;padding:10px 0 12px;align-items:center;flex-wrap:wrap}
+.pill{font-size:11.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink-2);display:inline-flex;align-items:center;gap:5px}
+.pill svg{width:13px;height:13px}
+.pill.live{background:var(--matsu-wash);border-color:color-mix(in srgb,var(--matsu) 45%,var(--line));color:var(--matsu);font-weight:500}
+#saveflag{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);transition:color .2s}
+
+/* ---------- day strip ---------- */
+.daystrip{display:flex;gap:6px;padding:11px 16px;overflow-x:auto;scrollbar-width:none;
+  border-bottom:1px solid var(--line);background:var(--ground);position:sticky;top:0;z-index:30}
+.daystrip::-webkit-scrollbar{display:none}
+.dchip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:12px;
+  padding:6px 12px;display:flex;flex-direction:column;min-width:0}
+.dchip b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;letter-spacing:.02em}
+.dchip span{font-size:10.5px;color:var(--muted);white-space:nowrap}
+.dchip[aria-selected="true"]{background:var(--shu);border-color:var(--shu);color:#fff}
+.dchip[aria-selected="true"] span{color:rgba(255,255,255,.82)}
+
+main{padding:16px 14px 128px;display:flex;flex-direction:column;gap:16px}
+
+/* ---------- headings ---------- */
+.dayhead{padding:2px 2px 0}
+.dayhead .kick{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--clay);display:flex;gap:9px;align-items:baseline}
+.dayhead h2{font-family:"Noto Serif TC",serif;font-weight:700;font-size:21px;margin:6px 0 5px;letter-spacing:.03em;text-wrap:balance}
+.dayhead h2:focus,.dayhead p:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.dayhead p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.65}
+.prog{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;padding:10px 13px;box-shadow:var(--shadow)}
+.prog .pl{font-size:11px;letter-spacing:.1em;color:var(--muted);font-family:"IBM Plex Mono",monospace;flex:none}
+.prog .pt{flex:1;display:block;height:8px;border-radius:5px;background:var(--surface-2);overflow:hidden;min-width:0}
+.prog .pf{display:block;height:100%;border-radius:5px;background:var(--matsu);transition:width .25s}
+.prog .pn{flex:none;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:500;color:var(--matsu)}
+.prog.full .pf{background:var(--shu)}
+.prog.full .pn{color:var(--shu)}
+.sechead{display:flex;align-items:center;gap:10px}
+.sechead h2{margin:0;font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px;letter-spacing:.06em;white-space:nowrap}
+.sechead .rule{flex:1;height:1px;background:var(--line)}
+.sechead .cnt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted)}
+
+/* ---------- timeline ---------- */
+.tl{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:10px;align-items:stretch}
+.row[data-k="flight"]{gap:0}
+.gutter{flex:none;width:38px;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:2px;position:relative;--mh:0px}
+.row[data-k="spot"] .gutter{--mh:38px}
+/* 連接線：每一列只畫「往下」那一段，離圖標固定 6px、跨越列距時上下各留 4px，
+   所以每個圖標上下的留白完全一致 */
+.gutter::before{content:"";position:absolute;left:calc(50% - 1px);width:0;
+  border-left:2px dashed #F0E7E1;z-index:0;
+  top:calc(2px + var(--mh) + 6px);bottom:-4px}
+.row[data-ln="none"] .gutter::before,
+.row[data-ln="end"] .gutter::before{display:none}
+.row[data-ln="mid"] .gutter::before,
+.row[data-ln="start"] .gutter::before{display:block}
+.row:not([data-k="spot"]) .gutter::before{top:-4px}
+.mark{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;flex:none;position:relative;z-index:1;
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--shu)}
+.mark svg{width:19px;height:19px}
+.row[data-k="transit"] .mark{width:30px;height:30px;border-radius:10px;border-style:dashed;
+  box-shadow:none;background:transparent;color:var(--clay)}
+.row[data-k="transit"] .mark svg{width:15px;height:15px}
+.gutter .gt{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);letter-spacing:-.02em}
+.col{flex:1;min-width:0}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:12px 13px}
+.card.dragging{opacity:.35}
+.card.star{border-color:color-mix(in srgb,var(--shu) 45%,var(--line))}
+.chead{display:flex;gap:9px;align-items:flex-start}
+.chead .mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.h3{font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px;line-height:1.35;margin:0;
+  word-break:break-word;text-wrap:balance}
+.h3:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.place{font-size:11.5px;color:var(--muted);margin-top:3px;display:flex;align-items:baseline;gap:4px}
+.place svg{width:11px;height:11px;flex:none;color:var(--clay);align-self:center}
+.place .pv{flex:1;min-width:0;word-break:break-word}
+.place .pv:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.place .pgo{flex:none;color:var(--clay);text-decoration:none;font-size:11px}
+
+.tick{flex:none;width:23px;height:23px;border-radius:7px;border:1.5px solid var(--line-2);
+  display:grid;place-items:center;color:transparent;font-size:12px;font-weight:700;margin-top:2px;background:var(--ground)}
+.card.done .tick{background:var(--matsu);border-color:var(--matsu);color:#fff}
+.card.done{opacity:.62}
+.card.done .h3{text-decoration:line-through;text-decoration-color:var(--muted)}
+.rt{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.rt .lv{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted);
+  font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.rt .stay{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;white-space:nowrap;
+  background:var(--matsu-wash);color:var(--matsu);border-radius:6px;padding:3px 8px;border:1px dashed color-mix(in srgb,var(--matsu) 38%,transparent)}
+.rt .stay:active{border-color:currentColor}
+.rt .leave{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);white-space:nowrap}
+.rt .leave b{color:var(--ink-2);font-weight:500}
+.rt.tight .stay{background:var(--alert-wash);color:var(--alert);border-color:color-mix(in srgb,var(--alert) 38%,transparent)}
+
+.span{display:flex;align-items:center;gap:8px}
+.span .lbl{font-size:10.5px;letter-spacing:.12em;color:var(--muted);font-family:"IBM Plex Mono",monospace;text-transform:uppercase}
+.span .clr{margin-left:auto;font-size:10.5px;color:var(--shu);font-weight:400}
+/* 時間欄位：外觀自己畫，原生 time input 透明疊在上面 → 點下去跳出滑輪 */
+.tw{position:relative;display:inline-flex;align-items:center;
+  font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:500;line-height:1.25;
+  background:var(--surface-2);border:1px dashed var(--shu);border-radius:8px;padding:5px 10px;color:var(--shu)}
+.tw::after{content:"▾";font-size:9px;margin-left:5px;opacity:.65}
+.tw input{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;margin:0;padding:0;
+  background:transparent;-webkit-appearance:none;appearance:none;font-size:16px;cursor:pointer}
+.tw input::-webkit-calendar-picker-indicator{opacity:0;width:100%;height:100%;position:absolute;inset:0;padding:0;margin:0}
+.tw:focus-within{border-style:solid;outline:2px solid color-mix(in srgb,var(--shu) 35%,transparent);outline-offset:1px}
+.tw.sm{font-size:12px;padding:3px 8px;border-color:var(--line-2);color:var(--ink-2);background:var(--surface)}
+.tw.anch{border-style:solid}
+.tw.bad{border-color:var(--alert);color:var(--alert);border-style:solid}
+
+.notes{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.notes li{font-size:12.5px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;
+  word-break:break-word;min-height:1.6em;display:flex;align-items:flex-start;gap:6px}
+.notes li>.nt{flex:1;min-width:0}
+.notes li::before{content:"・";position:absolute;left:0;color:var(--clay)}
+.notes li.warn{color:var(--alert)}
+.notes li.warn::before{content:"⚠";font-size:10px;top:1px}
+.notes li.sub{font-weight:700;color:var(--ink);padding-left:0;margin-top:4px}
+.notes li.sub::before{content:""}
+.notes li>.nt:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.notes li.blank::before,.bpnotes li.blank::before{content:""}
+/* 內容被清空的行，完成編輯後就不留白 */
+body:not(.editmode) .notes li.blank,
+body:not(.editmode) .bpnotes li.blank{display:none}
+body:not(.editmode) .bul.blank{display:none}
+
+/* ---------- 方框右下角的 ＋／✕（只在編輯模式出現） ---------- */
+.boxfoot{display:none;justify-content:flex-end;align-items:center;gap:8px;margin-top:11px;padding-top:9px;
+  border-top:1px dashed var(--line)}
+.editmode .boxfoot{display:flex}
+.bf{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:17px;
+  line-height:1;border:1px solid var(--line-2);background:var(--surface);color:var(--clay);
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.bf:active{filter:brightness(.94)}
+.bf.add{color:var(--matsu);border-color:color-mix(in srgb,var(--matsu) 40%,var(--line))}
+.bf.del{color:#fff;background:var(--red);border-color:var(--red)}
+.boxfoot .bl{margin-right:auto;font-size:11px;color:var(--muted);letter-spacing:.04em}
+.ftrow{display:flex;align-items:center;gap:6px;margin-top:11px;padding-top:9px;border-top:1px solid var(--line-soft)}
+.ftrow>svg{width:12px;height:12px;flex:none;color:var(--clay)}
+.ftrow .mv{flex:none;max-width:calc(100% - 92px);font-size:12.5px;color:var(--matsu);text-decoration:none;
+  border-bottom:1px solid color-mix(in srgb,var(--matsu) 35%,transparent);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-bottom:1px}
+.ftrow .mv.plain{color:var(--muted);border-bottom:0}
+.ftrow .mv[contenteditable]{color:var(--ink-2);border-bottom:1px dashed var(--kin,var(--clay))}
+.ftrow .mv:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.iconb{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  border:1px solid var(--line);color:var(--muted);background:var(--ground);font-size:12px}
+.iconb.del{color:var(--alert);border-color:color-mix(in srgb,var(--alert) 28%,var(--line))}
+.iconb svg{width:12px;height:12px}
+.acts{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;align-items:center}
+.mini{font-size:11.5px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);color:var(--ink-2);background:var(--ground);
+  display:inline-flex;align-items:center;gap:5px}
+.mini svg{width:12px;height:12px}
+.grip{margin-left:auto;color:var(--muted);padding:4px 2px;touch-action:none;cursor:grab;flex:none}
+.grip svg{width:15px;height:15px}
+
+/* ---------- transit ---------- */
+.tr{background:var(--clay-wash);border:1px dashed var(--line);border-radius:13px;padding:10px 12px}
+.tr .th{font-size:11.5px;color:var(--muted)}
+.tr .th b{color:var(--ink-2);font-weight:500;font-size:12px;line-height:1.45;word-break:break-word}
+.tr .main .fare{font-family:"IBM Plex Mono",monospace;color:var(--clay);font-weight:500;white-space:nowrap}
+.tr .main{display:flex;align-items:center;gap:8px;margin-top:6px;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:500}
+.tr .main .ar{color:var(--muted);font-size:10px}
+.tr .main .tot{margin-left:auto;font-size:10.5px;color:var(--muted);font-family:"Noto Sans TC",sans-serif;font-weight:400;text-align:right;white-space:nowrap}
+.legs{margin:9px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.legs li{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.5}
+.legs li>svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--clay)}
+.legs .lg{flex:1;min-width:0}
+.legs .lg b{font-weight:500;color:var(--ink)}
+.legs .lg .m{color:var(--muted);font-size:11px;display:block;font-family:"IBM Plex Mono",monospace}
+.legs .lg .tm{font-family:"IBM Plex Mono",monospace;color:var(--shu);font-weight:500}
+.legs .lg .em{border-bottom:1px dashed var(--clay);cursor:pointer;color:var(--ink-2)}
+
+.depbar{display:flex;align-items:center;gap:8px;margin-top:9px;padding-top:8px;border-top:1px solid var(--line)}
+.depbar.more{border-top:0;padding-top:2px;margin-top:7px}
+.depbar .tlb{font-size:10.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;font-family:"IBM Plex Mono",monospace}
+.depbar .clr{font-size:10.5px;color:var(--shu)}
+.depbar .why{margin-left:auto;font-size:10.5px;color:var(--muted);text-align:right;line-height:1.35}
+
+.times{display:flex;gap:5px;margin-top:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.times::-webkit-scrollbar{display:none}
+.tb{flex:none;font-family:"IBM Plex Mono",monospace;font-size:12px;padding:4px 8px;border-radius:7px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink-2)}
+.tb[aria-pressed="true"]{background:var(--shu);border-color:var(--shu);color:#fff;font-weight:500}
+.tb.past{opacity:.38;text-decoration:line-through}
+.tb.now{box-shadow:0 0 0 1px var(--shu) inset}
+.times.synth .tb{border-style:dashed}
+.tb[aria-pressed="true"].past{opacity:1;background:var(--alert);border-color:var(--alert);color:#fff}
+
+.conf{margin-top:9px;background:var(--alert-wash);border:1px solid color-mix(in srgb,var(--alert) 32%,transparent);
+  border-radius:10px;padding:9px 10px;font-size:11.5px;color:var(--alert);line-height:1.55}
+.conf{position:relative}
+.conf .cx{position:absolute;top:6px;right:7px;width:22px;height:22px;border-radius:7px;display:grid;
+  place-items:center;font-size:11px;color:inherit;opacity:.6;background:rgba(255,255,255,.5)}
+.conf.warn2{background:var(--clay-wash);border-color:var(--line-2);color:var(--ink-2)}
+.conf.warn2 .cb{background:var(--clay)}
+.conf .cb{margin-top:7px;display:inline-block;font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:8px;
+  background:var(--alert);color:var(--surface)}
+
+.tnote{margin-top:8px;font-size:11.5px;color:var(--ink-2);line-height:1.6;white-space:pre-wrap;
+  border-left:2px solid var(--line);padding-left:9px}
+.tnote:focus{outline:none;background:var(--clay-wash);border-radius:0 4px 4px 0}
+.photos{display:flex;gap:7px;margin-top:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.photos::-webkit-scrollbar{display:none}
+.photos .ph{flex:none;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface-2);line-height:0}
+.photos .ph img{height:82px;width:auto;max-width:150px;object-fit:cover;display:block}
+.lb{position:fixed;inset:0;z-index:95;background:rgba(24,16,12,.95);display:none;flex-direction:column}
+.lb[open]{display:flex}
+.lb .lbtop{display:flex;justify-content:space-between;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 14px 10px}
+.lb .lbtop button{color:#F3EAE5;font-size:13px;padding:7px 14px;border-radius:9px;border:1px solid rgba(255,255,255,.3);background:transparent}
+.lb .lbtop .rm{color:#FFB3A6;border-color:rgba(255,140,120,.5)}
+.lb .lbbody{flex:1;display:grid;place-items:center;padding:6px 12px calc(18px + env(safe-area-inset-bottom));overflow:auto}
+.lb img{max-width:100%;max-height:100%;border-radius:8px}
+.evt{margin-top:10px;background:var(--shu-wash);border:1px solid color-mix(in srgb,var(--shu) 22%,transparent);
+  border-radius:10px;padding:9px 11px}
+.evt summary{font-size:11.5px;color:var(--shu);cursor:pointer;list-style:none;display:flex;align-items:center;gap:5px;font-weight:500}
+.evt summary::-webkit-details-marker{display:none}
+.evt summary::before{content:"▸";font-size:9px;transition:transform .15s}
+.evt[open] summary::before{transform:rotate(90deg)}
+.evt ul{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.evt li{display:flex;gap:8px;font-size:12px;line-height:1.55;align-items:flex-start}
+.evt li .et{flex:none;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--shu);min-width:56px}
+.evt li .en{flex:1;min-width:0;color:var(--ink-2)}
+.evt li .en b{color:var(--ink);font-weight:500;display:block}
+.evt .esrc{margin-top:8px;font-size:10.5px;color:var(--muted);line-height:1.5}
+.evt .esrc a{color:var(--clay)}
+.disc{margin-top:9px}
+.disc summary{font-size:11.5px;color:var(--clay);cursor:pointer;list-style:none;display:flex;align-items:center;gap:5px}
+.disc summary::-webkit-details-marker{display:none}
+.disc summary::before{content:"▸";font-size:9px;transition:transform .15s}
+.disc[open] summary::before{transform:rotate(90deg)}
+.ttbox{margin-top:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 11px}
+.ttbox h4{margin:0 0 7px;font-size:12px;font-weight:700;font-family:"Noto Serif TC",serif;letter-spacing:.03em}
+.ttgrid{display:flex;flex-direction:column;gap:1px;max-height:210px;overflow:auto}
+.ttr{display:flex;gap:9px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;line-height:1.7}
+.ttr .hh{flex:none;width:22px;color:var(--clay);text-align:right}
+.ttr .mm{flex:1;color:var(--ink-2);word-spacing:.28em}
+.ttr.hi{background:var(--shu-wash);border-radius:4px}
+.ttbox .src{margin-top:8px;font-size:10.5px;color:var(--muted);line-height:1.55;white-space:pre-wrap}
+.ttbox .src a{color:var(--clay)}
+
+/* ---------- 交通方案切換 ---------- */
+.alts{display:flex;gap:6px;margin-top:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.alts::-webkit-scrollbar{display:none}
+.altb{flex:none;min-width:132px;border:1px solid var(--line);border-radius:11px;background:var(--surface);
+  padding:8px 11px;display:flex;flex-direction:column;gap:1px;text-align:left}
+.altb b{font-size:12.5px;font-weight:500;color:var(--ink)}
+.altb span{font-size:10.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.altb[aria-pressed="true"]{background:var(--shu-wash);border-color:var(--shu)}
+.altb[aria-pressed="true"] b{color:var(--shu);font-weight:700}
+.altb[aria-pressed="true"] span{color:color-mix(in srgb,var(--shu) 72%,var(--muted))}
+
+/* 已完成的交通：收成一行 */
+.trmini{width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;
+  border:1px dashed var(--line);background:transparent;color:var(--muted);font-size:11.5px}
+.trmini>svg{width:14px;height:14px;flex:none;opacity:.7}
+.trmini .w{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trmini .t{flex:none;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.trmini .ex{flex:none;font-size:10.5px;color:var(--clay);border:1px solid var(--line);
+  border-radius:7px;padding:2px 7px}
+
+/* ---------- boarding pass ---------- */
+.bp{border-radius:var(--r);overflow:hidden;background:#fff;color:#2B2320;border:1px solid var(--line);box-shadow:var(--shadow)}
+.bp .band{background:linear-gradient(100deg,#C04C36,#D4715B);color:#fff;padding:9px 14px;
+  display:flex;align-items:center;justify-content:space-between;font-size:10.5px;letter-spacing:.2em;
+  text-transform:uppercase;font-weight:500}
+.bp .band .ln{font-family:"IBM Plex Mono",monospace;letter-spacing:.1em}
+.bp .grid{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;padding:17px 4px 7px}
+.bp .col{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:0 2px;min-width:0}
+.bp .iata{font-family:"IBM Plex Mono",monospace;font-size:27px;font-weight:500;letter-spacing:.04em;line-height:1.1;color:#2B2320}
+.bp .apname{font-size:10.5px;color:#8A7469;line-height:1.35}
+.bp .tm{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:500;color:#C04C36;margin-top:3px}
+.bp .plane{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
+/* 航線：dot －虛線－ 飛機 －虛線－ 箭頭。--rg 就是「虛線與兩側的留白」，
+   左右兩端往機場資訊那側各溢出 --rov，讓四段留白看起來一樣寬 */
+.bp .route{--rg:13px;--rov:28px;
+  display:flex;align-items:center;gap:var(--rg);
+  width:calc(100% + var(--rov) * 2);margin:0 calc(var(--rov) * -1)}
+.bp .rdot{flex:none;width:6px;height:6px;border-radius:50%;background:#DCCCC1}
+.bp .rdash{flex:1;min-width:8px;height:2px;border-radius:1px;
+  background:repeating-linear-gradient(90deg,#DCCCC1 0 2.6px,transparent 2.6px 7.4px)}
+.bp .rpl{flex:none;width:31px;height:31px;display:block;color:#C04C36}
+.bp .rarw{flex:none;width:9px;height:14px;display:block;color:#DCCCC1}
+.bp .fno{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.14em;color:#2B2320;font-weight:500}
+.bp .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-top:1px dashed #DCC9BA;margin:11px 12px 0;padding:10px 0 12px}
+.bp .meta div{text-align:center}
+.bp .meta dt{font-size:9.5px;letter-spacing:.14em;color:#A08D81;text-transform:uppercase;margin:0}
+.bp .meta dd{margin:2px 0 0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:#2B2320}
+.bp .foot{background:#FBF1EA;border-top:1px solid #EDDBCC;padding:10px 14px;font-size:11.5px;color:#7B6A60;line-height:1.6}
+.bp [contenteditable]:focus{outline:none;background:#FBEEE6;border-radius:4px}
+.bpnotes{margin:0;padding:10px 14px 13px;list-style:none;display:flex;flex-direction:column;gap:3px;
+  background:#FBF1EA;border-top:1px dashed #E3CFC0}
+.bpnotes li{font-size:12.5px;color:#6E5D54;line-height:1.6;padding-left:14px;position:relative;min-height:1.6em}
+.bpnotes li::before{content:"・";position:absolute;left:0;color:#B79C8C}
+.bpnotes li:focus{outline:none;background:#F6E4D8;border-radius:4px}
+
+/* ---------- info page ---------- */
+.info{display:flex;flex-direction:column;gap:10px}
+.memolist{display:flex;flex-direction:column;gap:16px}
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:12px 13px;display:flex;gap:9px;align-items:flex-start}
+.sec.dragging{opacity:.35}
+.sec>.grip{margin-left:0;margin-top:2px}
+.sec .sc{flex:1;min-width:0}
+.sec h3{margin:0 0 8px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:14.5px;letter-spacing:.05em}
+.sec h3:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.kv{display:flex;flex-direction:column;gap:5px}
+.kv .r{display:flex;gap:8px;font-size:12.5px;line-height:1.6;align-items:flex-start}
+.kv .r>.k{flex:none;width:52px;color:var(--muted);font-size:11.5px;word-break:break-word}
+.kv .r>.k:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.kv .r>.v{flex:1;min-width:0;color:var(--ink-2);word-break:break-word}
+.kv .r>.v:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;font-weight:500;color:var(--muted);font-size:10.5px;letter-spacing:.08em;
+  padding:0 8px 5px 0;border-bottom:1px solid var(--line);text-transform:uppercase}
+.tbl td{padding:6px 8px 6px 0;border-bottom:1px solid var(--line-soft);color:var(--ink-2);vertical-align:top}
+.tbl td.num{font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+.tbl td.x,.tbl th.x{width:26px;padding-right:0;text-align:right}
+.tbl td:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.tbl tr:last-child td{border-bottom:0}
+.tblwrap{overflow-x:auto}
+/* 逐列的 ✕／＋ 平常收起來，按頁首的「編輯」才出現 */
+.rowx{flex:none;width:23px;height:23px;border-radius:7px;display:none;place-items:center;
+  color:var(--red);font-size:11px;border:1px solid color-mix(in srgb,var(--red) 32%,var(--line));
+  background:var(--ground);margin-top:1px}
+.rowadd{margin-top:9px;font-size:11.5px;color:var(--clay);border:1px dashed var(--line-2);
+  border-radius:8px;padding:6px 11px;background:transparent;display:none}
+.editmode .rowx{display:grid}
+.bmap{flex:none;width:23px;height:23px;border-radius:7px;display:grid;place-items:center;margin-top:1px;
+  color:var(--matsu);border:1px solid color-mix(in srgb,var(--matsu) 35%,var(--line));background:var(--surface)}
+.bmap svg{width:12px;height:12px}
+.bmapset svg{width:11px;height:11px}
+.bmapset{color:var(--muted)!important;border-color:var(--line)!important}
+.bmapset.on{color:var(--matsu)!important;border-color:color-mix(in srgb,var(--matsu) 45%,var(--line))!important}
+.editmode .rowadd{display:inline-block}
+.dayfoot{display:none}
+.editmode .dayfoot{display:flex}
+[data-addleg],[data-delleg]{display:none}
+.editmode [data-addleg]{display:inline-flex}
+.editmode [data-delleg]{display:inline}
+.tbl td.x,.tbl th.x{width:0;padding:0;border-bottom-color:transparent}
+.editmode .tbl td.x,.editmode .tbl th.x{width:29px;padding:6px 0 6px 3px;text-align:right;border-bottom-color:var(--line-soft)}
+
+/* ---------- 編輯模式 ---------- */
+.grip{display:none}
+.editmode .grip{display:block}
+/* 可編輯的地方在編輯模式下給一個很淡的底，讓人知道哪裡能改 */
+.editmode [contenteditable="true"]{background:color-mix(in srgb,var(--clay-wash) 55%,transparent);border-radius:4px}
+.editmode .bp [contenteditable="true"]{background:#FCF3EE}
+/* 時間欄位隨時都能調（含非編輯模式），所以一律保持可按的樣子 */
+.mv.empty::before{content:"點這裡填地點";color:var(--muted)}
+.editmode .mv[contenteditable="true"]{min-width:96px;display:inline-block}
+/* 圖標：編輯模式可點著換 */
+.editmode .mark[data-icopen]{border-style:dashed;border-color:var(--shu-2);cursor:pointer}
+.editmode .mark[data-icopen]::after{content:"✎";position:absolute;right:-3px;bottom:-4px;font-size:9px;
+  width:14px;height:14px;border-radius:50%;background:var(--shu);color:#fff;display:grid;place-items:center}
+/* 圖標選擇盤 */
+.icgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.icgrid button{aspect-ratio:1;border:1px solid var(--line);border-radius:12px;background:var(--surface);
+  display:grid;place-items:center;color:var(--ink-2)}
+.icgrid button svg{width:21px;height:21px}
+.icgrid button[aria-pressed="true"]{background:var(--shu-wash);border-color:var(--shu);color:var(--shu)}
+.after{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.after li{font-size:11.5px;color:var(--muted);line-height:1.6;padding-left:13px;position:relative;display:flex;gap:7px;align-items:flex-start}
+.after li .tx{flex:1;min-width:0;word-break:break-word}
+.after li::before{content:"・";position:absolute;left:0}
+.after li:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.chk{display:flex;flex-direction:column;gap:2px}
+.chkrow{display:flex;gap:7px;align-items:flex-start;font-size:12.5px;line-height:1.6;padding:3px 0}
+.chkbox{flex:none;width:16px;height:16px;border-radius:5px;border:1.5px solid var(--line);margin-top:3px;
+  display:grid;place-items:center;color:transparent;font-size:10px}
+.chkrow.done .chkbox{background:var(--matsu);border-color:var(--matsu);color:#fff}
+.chkrow.done .ct{color:var(--muted);text-decoration:line-through}
+.ct{flex:1;min-width:0;color:var(--ink-2);word-break:break-word}
+.ct:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+
+/* ---------- money page ---------- */
+.total{position:relative;background:var(--surface-2);border-radius:12px;padding:11px 56px 13px;
+  display:flex;flex-direction:column;align-items:center;gap:2px}
+.total .tlb{font-size:10.5px;letter-spacing:.12em;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.total .amt{display:flex;flex-direction:column;align-items:center;gap:1px}
+.total .amt b{font-family:"IBM Plex Mono",monospace;font-size:23px;font-weight:500;color:var(--ink)}
+.total .amt small{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-2)}
+.curtog{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  width:38px;height:38px;border-radius:11px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--clay);display:grid;place-items:center}
+.curtog svg{width:19px;height:19px}
+.curtog:active{background:var(--surface-2)}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{flex:1;padding:8px 6px;font-size:12.5px;text-align:center;color:var(--ink-2)}
+.seg button[aria-selected="true"]{background:var(--shu);color:#fff;font-weight:500}
+.mgrp{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.mgrp>h3{margin:0;padding:9px 13px;background:var(--surface-2);border-bottom:1px solid var(--line);
+  font-family:"Noto Serif TC",serif;font-size:13px;letter-spacing:.04em;display:flex;gap:8px;align-items:center}
+.mgrp>h3 .sw{width:9px;height:9px;border-radius:3px;flex:none}
+.mgrp>h3 small{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);font-weight:400;letter-spacing:0}
+.mrow{display:flex;gap:9px;align-items:center;padding:9px 13px;border-bottom:1px solid var(--line-soft)}
+.mrow:last-child{border-bottom:0}
+.mrow .dot{width:8px;height:8px;border-radius:3px;flex:none}
+.mrow .mn{flex:1;min-width:0}
+.mrow .mn b{display:block;font-size:13px;font-weight:400;word-break:break-word}
+.mrow .mn small{font-size:10.5px;color:var(--muted)}
+.mrow .mv{text-align:right;flex:none}
+.mrow .mv b{display:block;font-family:"IBM Plex Mono",monospace;font-size:13.5px;font-weight:500}
+.mrow .mv small{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted)}
+.mrow .mx{flex:none;color:var(--muted);font-size:13px;padding:2px 3px}
+.bars{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--shadow);padding:13px}
+.bar{display:flex;align-items:center;gap:9px;font-size:12px}
+.bar .bl{flex:none;width:76px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .bt{flex:1;display:block;height:9px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.bar .bfill{display:block;height:100%;border-radius:5px}
+.flh{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:6px}
+.curin{display:flex;gap:6px}
+.curin button{flex:1;font-size:12.5px;padding:8px;border-radius:10px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink-2);text-align:center}
+.curin button[aria-selected="true"]{background:var(--shu);border-color:var(--shu);color:#fff;font-weight:700}
+.mhit{flex:1;min-width:0;display:flex;align-items:center;gap:10px;text-align:left;padding:0}
+.mhit:active{opacity:.6}
+.split{display:flex;gap:8px;margin-top:10px}
+.split .sp{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:9px 10px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.split .sp .n{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.split .sp b{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:500}
+.split .sp small{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--matsu)}
+.split .sp.co b{color:var(--clay)}
+.bar .bv{flex:none;font-family:"IBM Plex Mono",monospace;font-size:11.5px;width:64px;text-align:right}
+.empty{text-align:center;color:var(--muted);font-size:12.5px;padding:26px 10px;line-height:1.7}
+
+/* ---------- memo ---------- */
+.memo{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 15px;position:relative}
+.memo>.grip{position:absolute;right:11px;top:12px;margin:0}
+.memo h2{margin:0;font-family:"Noto Serif TC",serif;font-size:19px;font-weight:900;letter-spacing:.04em;
+  border-bottom:2px solid var(--shu);padding-bottom:6px;display:inline-block;line-height:1.35}
+.memo h2:focus{outline:none;background:var(--clay-wash)}
+.buls{margin:11px 0 0;display:flex;flex-direction:column;gap:1px}
+.bul{display:flex;gap:7px;align-items:flex-start}
+.bul .rowx{margin-top:5px}
+.bul .d{color:var(--shu);font-size:14px;line-height:1.75;flex:none;font-weight:700}
+.bul .x{flex:1;font-size:13.5px;line-height:1.8;min-height:1.8em;word-break:break-word}
+.bul .x:focus{outline:none;background:var(--clay-wash);border-radius:4px}
+.bul .x:empty::before{content:"輸入重點，按 Enter 換下一點";color:var(--muted)}
+
+/* ---------- overview ---------- */
+.ov{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.ov>h3{margin:0;padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);
+  font-family:"Noto Serif TC",serif;font-size:13.5px;letter-spacing:.05em;display:flex;gap:8px;align-items:baseline}
+.ov>h3 small{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);font-weight:400;letter-spacing:0}
+.ovr{display:flex;gap:9px;padding:8px 14px;border-bottom:1px solid var(--line-soft);align-items:center}
+.ovr:last-child{border-bottom:0}
+.ovr .i{flex:none;width:16px;color:var(--shu)}
+.ovr .i svg{width:14px;height:14px}
+.ovr .t{font-family:"IBM Plex Mono",monospace;font-size:12px;flex:none;width:92px;letter-spacing:-.02em}
+.ovr .n{font-size:12.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ovr.mv{background:var(--clay-wash)}
+.ovr.mv .i{color:var(--clay)}
+.ovr.mv .n,.ovr.mv .t{color:var(--muted);font-size:11.5px}
+
+/* ---------- fab / sheet / tabbar ---------- */
+.fabrow{position:fixed;right:calc(50% - 240px + 14px);bottom:calc(76px + env(safe-area-inset-bottom));z-index:45;
+  display:flex;align-items:center;gap:8px}
+.fab{height:46px;padding:0 16px;border-radius:999px;background:var(--shu);color:#fff;font-weight:700;font-size:13px;
+  box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:6px;touch-action:manipulation}
+.fab-ed{width:46px;height:46px;padding:0;justify-content:center;
+  background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2)}
+.fab-ed svg{width:22px;height:22px}
+.fab-ed.on{background:var(--matsu);border-color:var(--matsu);color:#fff}
+@media (max-width:511px){.fabrow{right:14px}}
+
+/* ---------- 自製對話框（Artifact 沙箱擋掉原生 confirm／prompt） ---------- */
+.dlg{position:fixed;inset:0;z-index:95;display:none}
+.dlg[open]{display:block}
+.dlg .scrim{position:absolute;inset:0;background:rgba(30,20,16,.5)}
+.dlg .dpanel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(100% - 44px);max-width:340px;
+  background:var(--ground);border-radius:18px;padding:18px 18px 16px;box-shadow:var(--shadow-lg);
+  display:flex;flex-direction:column;gap:10px}
+.dlg h3{margin:0;font-family:"Noto Serif TC",serif;font-size:16px;font-weight:700;letter-spacing:.03em}
+.dlg p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.6}
+.dlg p:empty,.dlg #dlgF:empty{display:none}
+.dlg .dbtns{display:flex;gap:8px;margin-top:4px}
+.dlg .dbtns .bigbtn{flex:1}
+.dlg.noCancel .dbtns [data-dclose]{display:none}
+.dlg .bigbtn.danger{background:var(--red)}
+
+.sheet{position:fixed;inset:0;z-index:80;display:none}
+.sheet[open]{display:block}
+.sheet .scrim{position:absolute;inset:0;background:rgba(30,20,16,.5)}
+.sheet .panel{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;
+  background:var(--ground);border-radius:20px 20px 0 0;max-height:88dvh;display:flex;flex-direction:column;
+  box-shadow:var(--shadow-lg);border:1px solid var(--line);border-bottom:0;animation:up .22s cubic-bezier(.2,.8,.3,1)}
+@keyframes up{from{transform:translate(-50%,20px);opacity:.4}to{transform:translate(-50%,0);opacity:1}}
+.sheet .ph{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.sheet .ph h3{margin:0;font-family:"Noto Serif TC",serif;font-size:16px;font-weight:700;letter-spacing:.04em;flex:1}
+.sheet .pb{padding:14px 16px calc(20px + env(safe-area-inset-bottom));overflow:auto;display:flex;flex-direction:column;gap:12px}
+.icb{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);
+  color:var(--ink-2);background:var(--surface);flex:none;font-size:13px}
+label.fl{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted);letter-spacing:.08em}
+".inp{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px;color:var(--ink)}
+.inp.bk{min-height:150px;font-family:"IBM Plex Mono",monospace;font-size:12px;line-height:1.5;word-break:break-all;resize:vertical}
+.inp:focus{outline:none;border-color:var(--shu)}
+.bigjpy{font-family:"IBM Plex Mono",monospace;font-size:24px;font-weight:500}
+.twdline{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--matsu)}
+.catsel{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cs.newc{color:var(--clay);border-style:dashed}
+.cs.mgc{color:var(--red);border-color:color-mix(in srgb,var(--red) 32%,var(--line))}
+.seg.wrap{flex-wrap:wrap;border:0;background:none;gap:6px}
+.seg.wrap>button{border:1px solid var(--line);border-radius:999px;background:var(--surface);
+  padding:6px 14px;font-size:12.5px;flex:none}
+.seg.wrap>button[aria-selected="true"]{background:var(--shu);border-color:var(--shu);color:#fff}
+.whoset{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+.whoset .wlb{font-size:11px;color:var(--muted);letter-spacing:.08em;flex:none}
+.wc{display:inline-flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:999px;
+  background:var(--surface);padding:4px 6px 4px 12px}
+.wc .wn{font-size:12.5px;color:inherit;font-weight:500}
+.wc .wx{width:19px;height:19px;border-radius:50%;display:grid;place-items:center;
+  font-size:9px;color:var(--muted);background:var(--surface-2)}
+.wadd{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:15px;
+  border:1px dashed var(--line-2);color:var(--clay);background:transparent}
+.cs .csx{display:none;margin-left:3px;margin-right:-4px;width:16px;height:16px;border-radius:50%;
+  background:var(--red);color:#fff;font-size:9px;line-height:16px;text-align:center;flex:none}
+.catsel.mg .cs .csx{display:inline-block}
+.cs{font-size:12px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);
+  background:var(--surface);display:inline-flex;align-items:center;gap:5px}
+.cs .dot{width:7px;height:7px;border-radius:2px}
+.cs[aria-pressed="true"]{border-color:currentColor;font-weight:500}
+.bigbtn{width:100%;background:var(--shu);color:#fff;border-radius:12px;padding:12px;font-weight:700;font-size:14px;text-align:center}
+.bigbtn.ghost{background:var(--surface);color:var(--ink-2);border:1px solid var(--line)}
+
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:50;
+  background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:saturate(180%) blur(16px);
+  -webkit-backdrop-filter:saturate(180%) blur(16px);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px 8px;color:var(--muted)}
+.tab svg{width:18px;height:18px}
+.tab span{font-size:9.5px;letter-spacing:.02em}
+.tab[aria-selected="true"]{color:var(--shu)}
+
+.hint,.perhead{font-size:11.5px;color:var(--muted);line-height:1.65;padding:0 2px}
+.perhead b{color:var(--ink-2);font-weight:500}
+.hint b{color:var(--ink-2);font-weight:500}
+".addb{width:100%;border:1px dashed var(--line);border-radius:var(--r-sm);padding:11px;color:var(--muted);
+  font-size:12.5px;background:transparent;text-align:center}
+.dayfoot{display:flex;gap:8px}
+.dayfoot .addstop{flex:1}
+.addstop{width:100%;border:1px dashed var(--line-2);border-radius:12px;padding:12px;color:var(--clay);
+  font-size:12.5px;background:var(--surface);text-align:center;margin-top:2px}
+.addstop:active{background:var(--clay-wash)}
+.foot{font-size:11px;color:var(--muted);line-height:1.7;padding-top:12px;border-top:1px solid var(--line);margin-top:4px}
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="i-plane" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.6 3.1a1.4 1.4 0 0 1 2.8 0v5.6l7.6 4.2v1.9l-7.6-2.3v3.8l2.4 1.9v1.4L12 18.9l-3.8.7v-1.4l2.4-1.9v-3.8L3 14.8v-1.9l7.6-4.2z"></path>
+    </g>
+    <g id="i-train" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5.5" y="3" width="13" height="13.5" rx="4"></rect><path d="M5.5 10.5h13M9.5 19.5 7.5 22M14.5 19.5 16.5 22M8.5 16.5h7"></path>
+      <circle cx="9" cy="13.6" r=".9" fill="currentColor" stroke="none"></circle><circle cx="15" cy="13.6" r=".9" fill="currentColor" stroke="none"></circle>
+    </g>
+    <g id="i-bus" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="3.5" width="17" height="13" rx="3"></rect><path d="M3.5 10.5h17M7 20v-3.5M17 20v-3.5"></path>
+      <circle cx="7.5" cy="13.5" r=".9" fill="currentColor" stroke="none"></circle><circle cx="16.5" cy="13.5" r=".9" fill="currentColor" stroke="none"></circle>
+    </g>
+    <g id="i-tram" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="6" y="5" width="12" height="12" rx="2.5"></rect><path d="M6 11h12M12 5V2.2M8.5 2.2h7M9 20l-1.5 2M15 20l1.5 2M9 17h6"></path>
+    </g>
+    <g id="i-walk" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="13.5" cy="4" r="1.9"></circle><path d="M11.2 21.5 13 15l-2.6-2.8V8.4l3.6-1.1 2.7 3.2 2.6 1M10.4 12.5 8 16.6M13 15l3 2.2 1.4 4.3"></path>
+    </g>
+    <g id="i-pin" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21.5s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"></path><circle cx="12" cy="10.2" r="2.6"></circle>
+    </g>
+    <g id="i-route" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="5.5" cy="5.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle><path d="M5.5 8v6a4.5 4.5 0 0 0 4.5 4.5h6"></path>
+    </g>
+    <g id="i-clock" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.2V12l3.2 2"></path>
+    </g>
+    <g id="i-bed" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 19v-8M3 14h18v5M21 19v-4.5a3 3 0 0 0-3-3h-7V14"></path><circle cx="7" cy="10" r="2.1"></circle>
+    </g>
+    <g id="i-torii" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.8 5.2h18.4M4.2 8.2h15.6M6.2 5.2V20M17.8 5.2V20M6.2 8.2h11.6"></path>
+    </g>
+    <g id="i-fork" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 2.5v7a2.5 2.5 0 0 0 5 0v-7M9.5 12v9.5M17.5 2.5c-1.6 1-2.4 3-2.4 5.4 0 1.9.8 3 2.4 3.3v10.3"></path>
+    </g>
+    <g id="i-cup" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 8h12v6.5A5 5 0 0 1 11 19.5H9A5 5 0 0 1 4 14.5Z"></path><path d="M16 9.5h1.8a2.6 2.6 0 0 1 0 5.2H16M4 22h12M8 2.5v2.6M12 2.5v2.6"></path>
+    </g>
+    <g id="i-museum" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.6 9 12 3.4 21.4 9M4.5 9v9M9 9v9M15 9v9M19.5 9v9M2.6 21.2h18.8M3.5 18h17"></path>
+    </g>
+    <g id="i-castle" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.5 4.5 7.5h15Z"></path><path d="M6 7.5v3.5M18 7.5v3.5M3.5 11h17M5.5 11v4.5M18.5 11v4.5M2.5 15.5h19M4.5 15.5v5.8M19.5 15.5v5.8M2.5 21.3h19M10 21.3v-4h4v4"></path>
+    </g>
+    <g id="i-tree" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.6 5.6 11h3.1L4 17.4h16L15.3 11h3.1Z"></path><path d="M12 17.4v4"></path>
+    </g>
+    <g id="i-bird" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15.5 5.4a1.5 1.5 0 1 0 0 .01"></path><path d="M14.6 6.6 9.4 10c-2.6 1.7-3.6 4.3-2.6 6.8.9 2.2 3.2 3.4 5.6 2.9l4.6-1c2.2-.5 3.6-2.4 3.6-4.6V8.6l2-1.6-2.6-.6"></path><path d="M11.8 19.6 10 22"></path>
+    </g>
+    <g id="i-bag" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 8h15l-1.2 12.2a1.6 1.6 0 0 1-1.6 1.3H7.3a1.6 1.6 0 0 1-1.6-1.3Z"></path><path d="M8.5 10.5V6.6a3.5 3.5 0 0 1 7 0v3.9"></path>
+    </g>
+    <g id="i-luggage" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4.5" y="7" width="15" height="13" rx="2.5"></rect><path d="M9 7V4.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 4.5V7M9.5 20v1.6M14.5 20v1.6M12 10.5v6"></path>
+    </g>
+    <g id="i-camera" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2.6" y="6.5" width="18.8" height="14" rx="3"></rect><circle cx="12" cy="13.5" r="3.8"></circle><path d="M8.4 6.5 9.6 3.8h4.8l1.2 2.7"></path>
+    </g>
+    <g id="i-moon" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.5 14.4A8.6 8.6 0 0 1 9.6 3.5a8.8 8.8 0 1 0 10.9 10.9Z"></path>
+    </g>
+    <g id="i-ticket" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 8.5V6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v2a2.6 2.6 0 0 0 0 7v2a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5v-2a2.6 2.6 0 0 0 0-7Z"></path><path d="M14 8v1.5M14 14.5V16"></path>
+    </g>
+    <g id="i-gift" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="9" width="18" height="12" rx="2"></rect><path d="M3 13.5h18M12 9v12"></path>
+      <path d="M12 9S10.5 4 8 4a2.2 2.2 0 0 0 0 5M12 9s1.5-5 4-5a2.2 2.2 0 0 1 0 5"></path>
+    </g>
+    <g id="i-box" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="4" width="17" height="16.5" rx="2"></rect><path d="M3.5 10h17M8 14.5h3"></path>
+    </g>
+    <g id="i-store" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.2 8.6 5 3.6h14l1.8 5"></path>
+      <path d="M3.2 8.6a2.4 2.4 0 0 0 4.7 0 2.4 2.4 0 0 0 4.1 0 2.4 2.4 0 0 0 4.1 0 2.4 2.4 0 0 0 4.7 0"></path>
+      <path d="M4.8 10.6v9.8h14.4v-9.8"></path><path d="M3 20.4h18"></path>
+      <path d="M9.2 20.4v-5.2h5.6v5.2"></path>
+    </g>
+    <g id="i-market" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.6 3.6h2.6l2.4 11.2h10.1l1.9-8H6.2"></path>
+      <circle cx="9.4" cy="19.4" r="1.7"></circle><circle cx="17.2" cy="19.4" r="1.7"></circle>
+    </g>
+    <g id="i-pencil" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16.4 2.9a2.3 2.3 0 0 1 3.3 0l1.4 1.4a2.3 2.3 0 0 1 0 3.3L8.4 20.7l-5.1 1.1 1.1-5.1Z"></path>
+      <path d="M14.8 4.6 19.4 9.2"></path>
+    </g>
+    <g id="i-check" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 12.6 9.6 17.8 19.6 6.6"></path>
+    </g>
+    <g id="i-swap" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 8.5h14.5M15 5l3.5 3.5L15 12"></path>
+      <path d="M20 15.5H5.5M9 12l-3.5 3.5L9 19"></path>
+    </g>
+    <g id="i-dots" fill="currentColor" stroke="none">
+      <circle cx="6" cy="12" r="1.7"></circle><circle cx="12" cy="12" r="1.7"></circle><circle cx="18" cy="12" r="1.7"></circle>
+    </g>
+    <g id="i-grip" fill="currentColor" stroke="none">
+      <circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle>
+      <circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle>
+    </g>
+    <g id="i-coin" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.6"></circle><path d="M8.8 8.4 12 12.2l3.2-3.8"></path>
+      <path d="M12 12.2V17"></path><path d="M9.3 13.2h5.4"></path><path d="M9.3 15.2h5.4"></path>
+    </g>
+    <g id="i-note" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6.2 3.4h8.2l4.2 4.2v12.9a1.5 1.5 0 0 1-1.5 1.5H6.2a1.5 1.5 0 0 1-1.5-1.5V4.9a1.5 1.5 0 0 1 1.5-1.5Z"></path>
+      <path d="M14.4 3.4v4.2h4.2"></path><path d="M8.2 12.4h7.6"></path><path d="M8.2 16.1h5.2"></path>
+    </g>
+  </defs>
+</svg>
+<div id="app">
+  <header class="mast" id="mast"></header>
+  <div class="daystrip" id="daystrip" hidden role="tablist"></div>
+  <main id="view"></main>
+  <div class="fabrow">
+    <button class="fab fab-ed" id="editBtn" hidden aria-label="編輯"></button>
+    <button class="fab" id="fab" hidden>¥ 記帳本</button>
+  </div>
+  <nav class="tabbar" role="tablist">
+    <button class="tab" data-p="info" role="tab"><svg viewBox="0 0 24 24"><use href="#i-luggage"/></svg><span>行前</span></button>
+    <button class="tab" data-p="itin" role="tab" aria-selected="true"><svg viewBox="0 0 24 24"><use href="#i-route"/></svg><span>行程</span></button>
+    <button class="tab" data-p="money" role="tab"><svg viewBox="0 0 24 24"><use href="#i-coin"/></svg><span>花費</span></button>
+    <button class="tab" data-p="memo" role="tab"><svg viewBox="0 0 24 24"><use href="#i-note"/></svg><span>備忘</span></button>
+    <button class="tab" data-p="over" role="tab"><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg><span>概略</span></button>
+  </nav>
+</div>
+
+<div class="lb" id="lb"><div class="lbtop"><button id="lbClose">✕ 關閉</button><button class="rm" id="lbDel">刪除這張</button></div><div class="lbbody"><img id="lbImg" alt="活動圖"></div></div>
+
+<div class="dlg" id="dlg"><div class="scrim" data-dclose></div><div class="dpanel">
+  <h3 id="dlgT"></h3><p id="dlgM"></p><div id="dlgF"></div>
+  <div class="dbtns"><button class="bigbtn ghost" data-dclose>取消</button><button class="bigbtn" id="dlgOk">確定</button></div>
+</div></div>
+
+<div class="sheet" id="sheet"><div class="scrim" data-close></div><div class="panel"><div class="ph"><h3 id="shTitle"></h3><button class="icb" data-close aria-label="關閉">✕</button></div><div class="pb" id="shBody"></div></div></div>
+
+<script>
+(function(){
+"use strict";
+var KEY = "okayama-kurashiki-shinshun-v8";
+
+/* ================= helpers ================= */
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+var uid=function(){return Math.random().toString(36).slice(2,9);};
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function ico(n){return '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-'+n+'"/></svg>';}
+function toMin(t){ if(!t) return null; var p=String(t).split(":"); return (+p[0])*60+(+p[1]); }
+function toHM(m){ if(m==null||isNaN(m)) return "--:--"; m=Math.round(m); var d=Math.floor(m/1440); m=((m%1440)+1440)%1440;
+  return ("0"+Math.floor(m/60)).slice(-2)+":"+("0"+(m%60)).slice(-2)+(d>0?"+1":""); }
+function dur(m){ if(m==null) return ""; if(m<0) return "−"+dur(-m); var h=Math.floor(m/60),n=m%60; return h?(h+"小時"+(n?n+"分":"")):(n+"分"); }
+function hm(m){ return toHM(m).slice(0,5); }
+function timeField(attr,id,val,cls){
+  return '<span class="tw'+(cls?" "+cls:"")+'"><span class="tv">'+esc(val)+'</span>'+
+    '<input type="time" lang="en-GB" step="60" data-'+attr+'="'+esc(id)+'" value="'+esc(val)+'" aria-label="選擇時間"></span>';
+}
+function yen(n){ return "¥"+Math.round(n||0).toLocaleString("en-US"); }
+function money(n,cur){ return cur ? cur+Math.round(n||0).toLocaleString("en-US") : yen(n); }
+function mapGo(q){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q); }
+function mapDir(a,b){ return "https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent(a)+"&destination="+encodeURIComponent(b)+"&travelmode=transit"; }
+/* ---------- 自製對話框：Artifact 的 iframe 會擋掉原生 confirm/alert/prompt ---------- */
+function dlgClose(){ var d=$("#dlg"); if(d){ d.removeAttribute("open"); d.classList.remove("noCancel"); } }
+function bindDlg(){
+  var d=$("#dlg"); if(!d||d._bound) return; d._bound=true;
+  d.addEventListener("click",function(e){ if(e.target.closest("[data-dclose]")) dlgClose(); });
+}
+function dlgOpen(title,msg,fields,okLabel,onOk,danger){
+  var d=$("#dlg"); bindDlg();
+  $("#dlgT").textContent=title||"";
+  $("#dlgM").textContent=msg||"";
+  $("#dlgF").innerHTML=fields||"";
+  var ok=$("#dlgOk");
+  ok.textContent=okLabel||"確定";
+  ok.classList.toggle("danger",!!danger);
+  ok.onclick=function(){ var keep=onOk&&onOk(); if(!keep) dlgClose(); };
+  d.classList.remove("noCancel");
+  d.setAttribute("open","");
+  setTimeout(function(){ var i=$("#dlgF input"); if(i){ i.focus(); i.select&&i.select(); } },50);
+}
+function ask(title,msg,onOk,okLabel,danger){ dlgOpen(title,msg,"",okLabel||"確定",onOk,danger); }
+function tell(title,msg){ dlgOpen(title,msg,"","知道了",null); $("#dlg").classList.add("noCancel"); }
+function askInput(title,msg,value,onOk,opts){
+  opts=opts||{};
+  dlgOpen(title,msg,'<input class="inp" id="dlgI" '+(opts.type?'type="'+opts.type+'" ':'')+
+    (opts.mode?'inputmode="'+opts.mode+'" ':'')+'value="'+esc(value==null?"":value)+'">',
+    opts.ok||"儲存", function(){ return onOk($("#dlgI").value); });
+}
+function askTime(cur){
+  var v=prompt("輸入時間（HH:MM）；留空取消設定", cur||"");
+  if(v===null) return undefined;
+  v=v.trim(); if(v==="") return null;
+  if(!/^\d{1,2}:\d{2}$/.test(v)){ alert("請用 HH:MM 格式，例如 08:36。"); return undefined; }
+  var p=v.split(":"); if(+p[0]>47||+p[1]>59){ alert("時間不合法。"); return undefined; }
+  return ("0"+p[0]).slice(-2)+":"+p[1];
+}
+
+/* ================= categories ================= */
+var CATS=[
+ {k:"food",n:"餐飲",v:"--c-food",i:"fork"},
+ {k:"tran",n:"交通",v:"--c-tran",i:"train"},
+ {k:"tkt", n:"門票",v:"--c-tkt", i:"ticket"},
+ {k:"gift",n:"伴手禮",v:"--c-gift",i:"gift"},
+ {k:"shop",n:"購物",v:"--c-shop",i:"bag"},
+ {k:"omam",n:"御守·賽錢",v:"--c-omam",i:"torii"},
+ {k:"misc",n:"寄物櫃·雜支",v:"--c-misc",i:"box"},
+ {k:"etc", n:"其他",v:"--c-etc", i:"dots"}
+];
+var CATPAL=["#C25A3E","#4E7A8C","#6B5C9E","#A8683F","#B4557E","#9C7A2E","#6E7B72","#8A7C75",
+            "#3F7D6B","#8E5B8E","#B08344","#5A6E9E"];
+function allCats(){
+  var hid=(S&&S.hidecat)||{};
+  var base=CATS.filter(function(c){ return !hid[c.k]; });
+  var ex=(S&&S.cats?S.cats:[]).map(function(c){ var o={};
+    for(var k in c) o[k]=c[k]; o.custom=1; return o; });
+  return base.concat(ex);
+}
+function cat(k){ var L=allCats(); for(var i=0;i<L.length;i++) if(L[i].k===k) return L[i]; return CATS[CATS.length-1]; }
+function catColor(C){ return String(C.v).charAt(0)==="-" ? "var("+C.v+")" : C.v; }
+function newCatKey(){ var k; do{ k="c"+uid().slice(0,4); }while(cat(k).k===k); return k; }
+
+/* ================= 時刻表（2026/08 查得，出發前請再確認） ================= */
+var TTS={
+ kibiDown:{t:"JR 桃太郎線　岡山 → 吉備津（土休日）",
+  rows:[["05","23 55"],["06","19 44"],["07","09 33"],["08","11 36"],["09","29"],["10","22"],
+        ["11","12"],["12","12"],["13","03 52"],["14","22 52"],["15","22 52"],["16","22 52"],
+        ["17","22 52"],["18","22 52"],["19","22 52"],["20","32"],["21","17"],["22","05 59"],["23","40"]],
+  note:"全程 18 分・¥210。上午 9–13 點是一小時一班，錯過就要等很久。\n※ 2026 年 8 月版，正月三が日可能加開臨時列車，出發前再查一次。",
+  src:"JRおでかけネット 區間時刻表", url:"https://timetable.jr-odekake.net/line-timetable/2403"},
+ kibiUp:{t:"JR 桃太郎線　吉備津 → 岡山（土休日）",
+  rows:[["05","24"],["06","19 45"],["07","05 28 48"],["08","06 36"],["09","03 29 56"],
+        ["10","46"],["11","36"],["12","36"],["13","21"],["14","17"],["15","17 47"],["16","17 47"],
+        ["17","17 47"],["18","17 47"],["19","17 47"],["20","48"],["21","41"],["22","23"],["23","17"]],
+  note:"全程 18 分・¥210。10 點之後變成一小時一班（10:46／11:36／12:36），離開神社前先看好下一班。",
+  src:"JRおでかけネット 區間時刻表", url:"https://timetable.jr-odekake.net/line-timetable/2404"},
+ sanyoUp:{t:"JR 倉敷 → 岡山（土曜・含伯備線等）",
+  rows:[["05","34"],["06","03 12 32 50"],["07","00 15 19 29 32 47 53"],
+        ["08","02 08 24 27 43 50 59"],["09","12 23 36 42 48 59"],
+        ["10","12 23 31 37 45 59"],["11","15 24 36 44 52"],
+        ["12","00 04 16 26 36 42 51"],["13","11 22 26 34 41 52"],
+        ["14","14 24 36 40 47"],["15","01 13 27 36 46 54"],
+        ["16","02 14 25 36 39 49 56"],["17","00 12 22 36 39 44 56"],
+        ["18","13 18 36 39 44 58"],["19","02 20 37 39 45 50"],
+        ["20","06 18 22 29 49"],["21","03 13 24 30 49"],["22","14 18 28 42"],["23","08 16 52"]],
+  note:"全程 18 分・¥330。一小時 5–7 班，隨到隨搭，不用特別對時刻。",
+  src:"駅探 倉敷駅時刻表", url:"https://ekitan.com/timetable/railway/line-station/115-38/d1"},
+ sanyoDown:{t:"JR 岡山 → 倉敷（山陽本線 下り）",
+  rows:[["07","13 34 57"],["08","26 41"],["09","03 30 46"],["10","26 35 57"],
+        ["12","04 32 53"],["13","34"],["14","04 49"],["15","36 55"],
+        ["16","25"],["17","04 22"],["18","16 40"],["19","21 35"]],
+  note:"全程 18 分・¥330。\n※ 這只是山陽本線的班次；倉敷同時有伯備線與瀬戸大橋線列車停靠，實際約 4–6 班／小時，所以行程用「約 11 分一班」推算，月台看板為準。",
+  src:"JRおでかけネット 區間時刻表", url:"https://timetable.jr-odekake.net/line-timetable/2239"},
+ tram:{t:"岡電路面電車　東山線　岡山駅前 ⇄ 城下", rows:[],
+  note:"白天約 6–10 分一班，隨到隨搭，不需要查時刻表。單程 ¥140，可刷 ICOCA／Suica。\n岡山駅前電停在車站東口出來的正前方，搭「東山行」，第二站就是城下。",
+  src:"岡山電気軌道 路線圖・時刻表", url:"https://okayama-kido.co.jp/tram/route-map/"},
+ busArr:{t:"利木津巴士　岡山桃太郎空港 → 倉敷駅北口", rows:[],
+  note:"⚠ 2027 年 1 月的時刻表尚未公布（通常出發前 1 個月才上線），而且這條線本來就配合航班調整。\n出發前一週上官網查好，直接點上面的「出發」把時刻填進去。\n已知：一天約 6–9 班・35 分・¥1,400・空港 3 號乘車處・可刷 IC 卡。",
+  src:"岡山桃太郎空港 巴士交通", url:"https://www.okayama-airport.org/access/bus/"},
+ mrtWanlong:{t:"台北捷運 松山新店線　萬隆 → 松山方向（假日）",
+  rows:[["06","04 08 17 25 34 40 49 56"],["07","04 13 22 30 35 40 45 49 58"],
+        ["08","02 07 16 21 26 34 41 44 47 55"],["09","02 10 17 23 31 38 46 53 59"],
+        ["10","07 14 22 29 35 43 50 58"],["11","05 11 19 26 34 41 47 55"],
+        ["12","02 10 17 23 31 38 46 53 59"],["13","07 14 22 29 35 43 50 58"],
+        ["14","05 11 19 26 34 41 47 55"],["15","02 10 17 23 31 38 46 53 59"],
+        ["16","07 14 22 29 35 41 47 53 59"],["17","05 11 17 23 29 35 41 47 53 59"],
+        ["18","05 11 17 23 29 35 41 47 53 59"],["19","05 11 17 23 29 35 43 50 58"],
+        ["20","05 11 19 26 34 41 47 55"],["21","02 10 17 23 31 38 46 53"],
+        ["22","00 08 16 24 30 37 44 50 59"],["23","09 21 33 45 57"]],
+  note:"萬隆 → 北門 7 站約 15 分・NT$25。元旦是國定假日，跑假日班表，早上約 6–7 分一班。\n※ 2026-05-11 生效版，出發前再確認一次。",
+  src:"ericyu.org 台北捷運時刻表（G06 萬隆・松山方向・假日）",
+  url:"https://ericyu.org/TaipeiMetroTime/stations/G06-a-6,7.html"},
+ mrtAirport:{t:"機場捷運 直達車　A1 台北車站 → 機場方向（假日）",
+  rows:[["05","30"],["06","00 15 30 45"],["07","00 15 30 45"],["08","00 15 30 45"],
+        ["09","00 15 30 45"],["10","00 15 30 45"],["11","00 15 30 45"],["12","00 15 30 45"],
+        ["13","00 15 30 45"],["14","00 15 30 45"],["15","00 15 30 45"],["16","00 15 30 45"],
+        ["17","00 15 30 45"],["18","00 15 30 45"],["19","00 15 30 45"],["20","00 15 30 45"],
+        ["21","00 15 30 45"],["22","00 15 30 45"],["23","00"]],
+  note:"A1 → A12 機場第一航廈 約 36 分・NT$160，全天每 15 分一班（首班 05:30）。\n普通車約 47 分、同價，班距也是 15 分，趕時間就等直達車。\n※ 桃捷官網時刻表資訊更新至 2026/09/30，出發前三天再查一次。",
+  src:"桃園捷運 乘車指南 台北車站",
+  url:"https://www.tymetro.com.tw/tymetro-new/tw/_pages/travel-guide/timetable.php"},
+ busDep:{t:"利木津巴士　岡山駅西口 → 岡山桃太郎空港", rows:[],
+  note:"⚠ 同上，1 月時刻表待公布，出發前查好填進來。\n這條線班次比倉敷線密，而且配合國際線（台北／首爾／上海）加開。\n已知：30 分・¥720・岡山駅西口 21 番乘車處・可刷 IC 卡。（部分資料寫 ¥780，以現場公告為準。）",
+  src:"岡山桃太郎空港 巴士交通", url:"https://www.okayama-airport.org/access/bus/"}
+};
+function ttList(key){
+  var tt=TTS[key]; if(!tt) return [];
+  if(tt._flat) return tt._flat;
+  var out=[];
+  (tt.rows||[]).forEach(function(r){
+    String(r[1]).trim().split(/\s+/).forEach(function(m){ if(/^\d{1,2}$/.test(m)) out.push(r[0]+":"+("0"+m).slice(-2)); });
+  });
+  tt._flat=out; return out;
+}
+
+/* ================= 地點 ================= */
+var P={
+ WANLONG:"捷運萬隆站", TPE:"桃園國際機場第一航廈", OKJ:"岡山桃太郎空港", HOTEL:"倉敷ステーションホテル",
+ BIKAN:"倉敷美観地区", ACHI:"阿智神社 倉敷", IVY:"倉敷アイビースクエア",
+ OHARA:"大原美術館", FURUICHI:"ぶっかけ庵ふるいち 倉敷 阿知店",
+ GRECO:"喫茶エル・グレコ 倉敷", MIYAKE:"町家喫茶 三宅商店 倉敷",
+ KIBITSU:"吉備津神社 岡山", OKAEKI:"岡山駅", KORAKUEN:"岡山後楽園", OKAJO:"岡山城"
+};
+function W(text,min){ return {k:"walk",ic:"walk",text:text,min:min}; }
+function ALT(n,d,fare,note,legs){ return {n:n,d:d,fare:fare,note:note,legs:legs}; }
+function X(text,min){ return {k:"transfer",ic:"clock",text:text,min:min}; }
+function RIDE(o){ o.k="ride"; return o; }
+
+/* ================= 預設資料 ================= */
+function DEFAULT(){ return {
+ rate:0.2006, pax:2, pick:{}, anchor:{}, leave:{}, done:{}, visited:{}, photos:{}, hush:{}, expenses:[], mgroup:"day",
+ rev:0, people:[{id:"a",n:"我"},{id:"b",n:"旅伴"}], cats:[], hidecat:{}, mshow:"jpy",
+ meta:{title:"岡山倉敷 初春手帖",
+  lede:"1月1日–1月3日．兩人．悠閒步調。後樂園、吉備津神社、阿智神社三處必訪已排入。交通卡可以切換班次，後面的時間會自動重算；花費統一記在「花費」頁。"},
+ info:{
+  foot:"交通時刻與票價為 2026 年 8 月查得之公開資訊。日本鐵路每年 3 月與 10 月改點，正月另有特別班次；利木津巴士的 1 月時刻表通常要 12 月才公布。請於出發前一週再確認一次，並直接在交通卡上更新。所有內容儲存在這台裝置的瀏覽器中。",
+  sections:[
+   {id:"i1",t:"班機",type:"kv",rows:[
+     ["去程","1/1（五）IT214　台北桃園 TPE 11:10 → 岡山 OKJ 14:35"],
+     ["回程","1/3（日）IT715　岡山 OKJ 17:55 → 台北桃園 TPE 19:55"],
+     ["航空","虎航 Tigerair Taiwan（桃園 T1）"],
+     ["時差","日本比台灣快 1 小時"]]},
+   {id:"i2",t:"住宿",type:"kv",rows:[
+     ["飯店","倉敷ステーションホテル"],
+     ["地址","岡山県倉敷市阿知2-8-1"],
+     ["交通","倉敷駅南口 徒步 3 分"],
+     ["時間","Check-in 15:00／Check-out 10:00"],
+     ["早餐","未預訂。飯店 4F 供應 7:00–9:00、¥1,100，需前一日預約且限量（086-425-2525）"]]},
+   {id:"i4",t:"交通速查",type:"table",head:["區間","方式","時間","單程"],rows:[
+     ["空港 ⇄ 倉敷駅北口","利木津巴士","約35分","¥1,400"],
+     ["空港 ⇄ 岡山駅西口","利木津巴士","約30分","¥720"],
+     ["岡山 ⇄ 倉敷","JR 山陽本線","18分","¥330"],
+     ["岡山 ⇄ 吉備津","JR 桃太郎線","18分","¥210"],
+     ["岡山駅前 ⇄ 城下","岡電路面電車","4分","¥140"],
+     ["倉敷駅 → 阿智神社","徒步","約15分","—"],
+     ["吉備津駅 → 吉備津神社","徒步","約10分","—"]],
+    after:["IC 卡（ICOCA／Suica／PASMO 等）在 JR、路面電車、利木津巴士都能刷，落地先辦一張最省事。",
+      "三天都在岡山‐倉敷之間來回，不需要 JR Pass。",
+      "每張交通卡都能展開看完整時刻表，出發前記得依最新版更新。"]},
+   {id:"i5",t:"門票",type:"table",head:["景點","時間","成人"],rows:[
+     ["岡山後樂園","8:00–17:00","¥500"],
+     ["岡山城 天守閣","9:00–17:30","¥400"],
+     ["後樂園＋岡山城 共通券","—","¥720"],
+     ["大原美術館","年始縮短，需確認","約¥2,000"],
+     ["吉備津神社・阿智神社","參拜自由","免費"]]},
+   {id:"i6",t:"早餐選項（飯店未訂）",type:"table",head:["店","開店","公休"],rows:[
+     ["飯店 4F 和食定食 ¥1,100","7:00","需前日預約"],
+     ["Cafe Gewa（林源十郎商店1F）","8:00","不定休"],
+     ["町家喫茶 三宅商店（本町3-11）","週日 8:30","年中無休"],
+     ["コノフォレスタ（林源十郎商店）","8:45","不定休"],
+     ["倉敷駅・アリオ倉敷 便利商店","24h／早","—"]],
+    after:["然味 -sami- 的モーニング目前休業中，別排。",
+      "Day 2 要趕 08:36 的吉備線，咖啡店都來不及開，走便利商店最保險。"]},
+   {id:"i7",t:"元旦三が日 注意事項",type:"list",rows:[
+     "丹頂鶴的園內散策只在 1/1 與 1/3（11:00–14:00・沢の池周邊），1/2 沒有。1/1 我們 14:35 才落地趕不上，所以後樂園排在 1/3。近年數度因禽流感停辦，需確認。",
+     "1/1 後樂園與岡山城入場免費，但當天 17:00 就閉園，落地後趕不上；1/3 用共通券 ¥720 兩個一起看。",
+     "餐飲店 1/1 大量公休，1/2 起陸續恢復。第一晚以「原則無休」的ふるいち與倉敷駅北口的購物中心為主。",
+     "神社人潮尖峰是 10:00–16:00。吉備津神社三が日約 5 萬人，所以 Day 2 排早上 9 點抵達。",
+     "JR 桃太郎線（吉備線）班次稀疏，1–2 班／小時，這是全程最容易卡住的一段。",
+     "大原美術館年末年始開館時間縮短，近年年始為 9:00–15:00、入館至 14:30。",
+     "利木津巴士配合航班調整，元旦前後可能有特別時刻表。"]},
+   {id:"i8",t:"天氣與打包",type:"list",rows:[
+     "岡山 1 月平均氣溫最高約 9–10°C、最低約 1–2°C。這裡是「晴天之國」，降雨少但風冷。",
+     "神社石階多（阿智神社約 100 階、吉備津神社迴廊 360 公尺），好走的鞋是關鍵。",
+     "發熱衣＋薄羽絨＋圍巾手套；室內普遍有暖氣，洋蔥式穿法。",
+     "初詣要投賽錢，準備一些 5 円／10 円硬幣。御守與御朱印多數只收現金。"]},
+   {id:"i9",t:"出發前一週 待確認",type:"check",rows:[
+     "虎航 IT214／IT715 航班時間再確認",
+     "利木津巴士 1 月時刻表公布後，填進兩張交通卡",
+     "後樂園 丹頂鶴園內散策 1/3 是否照常舉行",
+     "飯店早餐能否現場加購（086-425-2525）",
+     "JR 桃太郎線 三が日臨時列車／時刻表",
+     "大原美術館 1/2 開館時間（年始常縮短）",
+     "三宅商店 1/3 正月營業時間（IG 公告）",
+     "レストラン亀遊亭・味司野村 年始營業日",
+     "倉敷川舟流し 冬季（週末）運行日",
+     "Visit Japan Web 線上入境登錄",
+     "海外上網卡／eSIM",
+     "日圓現金（神社與小店多數不收卡）"]}
+  ]},
+ memo:[
+  {id:uid(),h:"一定要做",b:["阿智神社 初詣、求御守與御朱印","吉備津神社 360 公尺迴廊走到底","鳴釜神事（受付 9:00–13:45）","後樂園 丹頂鶴放鳥（1/3 11:00–14:00・沢の池）","岡山城天守閣（共通券 ¥720）","倉敷川夜間照明拍一張"]},
+  {id:uid(),h:"想吃清單",b:["ふるいち 倉敷うどん ぶっかけ（備前燒碗）","デミカツ丼（みのるダイニング ¥2,079）","デミカツえびめし（麺屋匠 ¥1,650）","吾妻寿司 ままかり・鰆・黄ニラ ¥1,350","エル・グレコ 咖啡（10:00–17:00・週一休）","三宅商店 季節水果聖代"]},
+  {id:uid(),h:"伴手禮",b:["吉備團子（きびだんご）","白桃果凍・白桃果汁","倉敷帆布・倉敷デニム","大手饅頭","※ 岡山駅站內買齊，機場選擇少很多"]},
+  {id:uid(),h:"隨手記",b:[""]}
+ ],
+ days:[
+ /* ================= DAY 1 ================= */
+ {id:"d1",num:"Day 1",date:"1月1日",dow:"週五",tag:"元日",
+  title:"落地．倉敷初詣",
+  sub:"下午兩點半落地，直接殺到倉敷。趕在天黑前走進美觀地區，傍晚上鶴形山參拜阿智神社。",
+  start:"07:10",
+  items:[
+  {id:"a1",k:"flight",dir:"out",notes:[
+    "元旦連假人潮多，抓 2.5 小時更安心",
+    "出發前完成 Visit Japan Web 線上入境登錄"]},
+  {id:"a00",k:"spot",ic:"bed",t:"家 出發",place:P.WANLONG,pin:"07:10",stay:5,min:0,notes:[
+    "抓 08:50 到 T1，07:15 出門最保險（車程 62 分＋兩段候車最多 20 分）",
+    ":證件、Visit Japan Web QR、日幣現金、悠遊卡再確認一次"]},
+  {id:"t10",k:"transit",from:P.WANLONG,to:P.TPE,fare:185,cur:"NT$",
+   note:"北門站走地下連通道到機捷 A1 台北車站約 5–6 分，比在台北車站站內走近很多。\n備案：萬隆 → 中正紀念堂轉淡水信義線 → 台北車站，再走到 A1（站內約 10 分）。\n※ 票價與時間為 2026/08 查得，出發前再確認一次。",
+   legs:[ W("家 → 捷運萬隆站",5),
+          RIDE({ic:"train",line:"台北捷運 松山新店線",a:"萬隆",b:"北門",min:15,fare:25,tt:"mrtWanlong"}),
+          X("北門站 → 機捷 A1 台北車站（地下連通道）",6),
+          RIDE({ic:"train",line:"機場捷運 直達車",a:"A1 台北車站",b:"A12 第一航廈",min:36,fare:160,tt:"mrtAirport"}),
+          W("A12 → T1 出境大廳報到櫃檯",5) ]},
+  {id:"a0",k:"spot",ic:"plane",t:"桃園機場 T1 搭機",place:P.TPE,pin:"08:50",stay:140,min:90,notes:[
+    "虎航在第一航廈，08:50 前到機場",
+    "自助報到＋托運行李，元旦連假隊伍會長",
+    "出境後可先在管制區內吃午餐，廉航機上不含餐",
+    "登機門通常起飛前 40 分開始登機"]},
+  {id:"a3",k:"spot",ic:"luggage",t:"岡山桃太郎空港 入境",place:P.OKJ,pin:"14:35",stay:40,min:30,notes:[
+    "入境＋提領行李抓 30–40 分",
+    "1F 有巴士乘車券售票機，也可直接刷日系 IC 卡",
+    "沒有 IC 卡的話這裡先辦一張，後面三天的 JR、路面電車、巴士都能用"]},
+  {id:"t11",k:"transit",from:P.OKJ,to:P.HOTEL,fare:1400,altI:0,
+   alts:[
+    ALT("利木津直達","約 43 分・¥1,400・免轉車",1400,
+     "空港 3 號乘車處直達，走高速不進市區。\n※ 2027 年 1 月時刻表尚未公布，出發前一週上官網查好，直接點上面的「出發」把時刻填進去。",
+     [ W("出關 → 空港 3 號乘車處",5),
+       RIDE({ic:"bus",line:"利木津巴士",a:"岡山桃太郎空港",b:"倉敷駅北口",min:35,fare:1400,tt:"busArr",dep:"15:25"}),
+       W("倉敷駅南口 → 飯店",3) ]),
+    ALT("岡山駅轉 JR","約 65 分・¥1,050・班次多",1050,
+     "台北線抵達時通常有加班車，而且岡山線班次比倉敷線密很多；錯過直達車就走這條。\n岡山駅西口下車後走到 JR 剪票口約 8 分。",
+     [ W("出關 → 空港 2 號乘車處",5),
+       RIDE({ic:"bus",line:"利木津巴士 岡山駅線",a:"岡山桃太郎空港",b:"岡山駅西口",min:30,fare:720,tt:"busDep",freq:30}),
+       X("岡山駅西口 → JR 岡山駅 剪票口",8),
+       RIDE({ic:"train",line:"JR 山陽本線",a:"岡山",b:"倉敷",min:18,fare:330,tt:"sanyoDown",freq:11}),
+       W("倉敷駅南口 → 飯店",3) ])],
+   note:"空港 3 號乘車處直達，走高速不進市區。\n※ 2027 年 1 月時刻表尚未公布，出發前一週上官網查好，直接點上面的「出發」把時刻填進去。",
+   legs:[ W("出關 → 空港 3 號乘車處",5),
+          RIDE({ic:"bus",line:"利木津巴士",a:"岡山桃太郎空港",b:"倉敷駅北口",min:35,fare:1400,tt:"busArr",dep:"15:25"}),
+          W("倉敷駅南口 → 飯店",3) ]},
+  {id:"a4",k:"spot",ic:"bed",t:"倉敷ステーションホテル Check-in",place:P.HOTEL,stay:30,min:15,notes:[
+    "倉敷市阿知2-8-1，倉敷駅南口徒步 3 分",
+    "先放行李、換上好走的鞋——這三天石階不少",
+    "!這間飯店早餐要另訂（4F・7:00–9:00・¥1,100），我們沒訂，明後兩天早餐另外安排"]},
+  {id:"t12",k:"transit",from:P.HOTEL,to:P.BIKAN,fare:0,note:"",legs:[W("飯店 → 美觀地區",8)]},
+  {id:"a5",k:"spot",ic:"camera",t:"倉敷美觀地區 傍晚散策",place:P.BIKAN,stay:40,min:25,notes:[
+    "白壁町家、倉敷川、柳並木",
+    "10–3 月夜間景觀照明：日落～21:00",
+    "1 月日落約 17:10，剛好接上藍調時刻"]},
+  {id:"t13",k:"transit",from:P.BIKAN,to:P.ACHI,fare:0,note:"最後一段是通往鶴形山的石階，約 100 階。",legs:[W("美觀地區 → 阿智神社",5)]},
+  {id:"a6",k:"spot",ic:"torii",t:"阿智神社 初詣",place:P.ACHI,star:true,stay:80,min:45,notes:[
+    "鶴形山山頂，美觀地區的總鎮守，主祭宗像三女神",
+    "參拜終日開放；授与所 9:00–17:00（元旦通常延長）",
+    "境內「阿知の藤」是日本最古老的藤樹之一（花期 4 月中）",
+    "元旦傍晚人潮比白天緩和，燈籠亮起來的氣氛剛好"],
+   esrc:"阿智神社 年間祭事・正月行事案內（2026/08 查得，實際以官網公告為準）", eurl:"https://achi.or.jp/saiji",
+   events:[
+    {t:"0:00",n:"鏡開き",d:"跨年零時，於境內舉行。"},
+    {t:"6:30",n:"歳旦祭",d:"拝殿舉行，祈求皇室彌榮與社會平安。"},
+    {t:"9:00 起",n:"崇敬会祈願祭・迎春行事",d:"福餅つき、獅子舞、三女神の舞等新春表演。"},
+    {t:"終日",n:"和あかり展示",d:"境內和風燈飾，傍晚之後最好看。"},
+    {t:"0:00–17:00",n:"授与所",d:"元旦整天開放。御守、破魔矢、御朱印在這裡。"},
+    {t:"10:00–16:00",n:"御祈祷受付",d:"需現場受付。"}
+   ]},
+  {id:"t14",k:"transit",from:P.ACHI,to:P.FURUICHI,fare:0,note:"下山後往倉敷駅方向走。",legs:[W("阿智神社 → 阿知町",10)]},
+  {id:"a7",k:"spot",ic:"fork",t:"晚餐（元旦口袋名單）",place:P.FURUICHI,stay:85,min:50,notes:[
+    ":元旦當天美觀地區多數店家公休，以下較穩",
+    "倉敷うどん ぶっかけ庵ふるいち 阿知店｜中央2-1-16｜11:00–19:00｜原則無休",
+    "アリオ倉敷／三井 OUTLET 倉敷｜倉敷駅北口直結｜元旦初売營業",
+    "飯店周邊便利商店與連鎖店也多半有開"]},
+  {id:"t15",k:"transit",from:P.FURUICHI,to:P.HOTEL,fare:0,note:"",legs:[W("阿知町 → 飯店",5)]},
+  {id:"a8",k:"spot",ic:"bed",t:"回飯店",place:P.HOTEL,stay:0,min:0,notes:[
+    "順路再看一段美觀地區的夜間照明（亮到 21:00）",
+    "順手在超商買好明早的早餐"]}
+ ]},
+ /* ================= DAY 2 ================= */
+ {id:"d2",num:"Day 2",date:"1月2日",dow:"週六",tag:"倉敷日",
+  title:"吉備津早參．倉敷慢走",
+  sub:"早上搶在人潮前拜完吉備津神社，中午回倉敷，整個下午到晚上都留給美觀地區。",
+  start:"07:15",
+  items:[
+  {id:"b1",k:"spot",ic:"cup",t:"早餐（超商・房內解決）",place:P.HOTEL,stay:44,min:25,notes:[
+    "飯店早餐沒訂，今天 08:02 就要出門，倉敷的咖啡店最早 8:00 才開，趕不上",
+    "倉敷駅周邊有 7-11／LAWSON，前一晚買好最省事",
+    "想吃熱的：倉敷駅北口アリオ側的連鎖店較早開",
+    "若改吃飯店 4F 和食定食（7:00–9:00・¥1,100），要前一天先跟櫃檯訂"]},
+  {id:"t21",k:"transit",from:P.HOTEL,to:P.KIBITSU,fare:540,altI:0,
+   alts:[
+    ALT("岡山轉桃太郎線","約 60 分・¥540・最常見",540,
+     "全天最需要對時刻的一段。倉敷這頭班次很密，關鍵是接上岡山 08:36 的吉備線——錯過就要等到 09:29，抵達時人潮已經湧入。",
+     [ W("飯店 → 倉敷駅",3),
+       RIDE({ic:"train",line:"JR 山陽本線",a:"倉敷",b:"岡山",min:18,fare:330,tt:"sanyoUp"}),
+       X("岡山站 JR 換 JR 轉乘緩衝",6),
+       RIDE({ic:"train",line:"JR 桃太郎線",a:"岡山",b:"吉備津",min:18,fare:210,tt:"kibiDown"}),
+       W("吉備津駅 → 神社（松並木參道）",10) ]),
+    ALT("総社轉桃太郎線","約 60 分・¥480・班次少，備用",480,
+     "倉敷搭伯備線到総社，再轉桃太郎線往岡山方向到吉備津。票價便宜一點，但兩段班次都不密，錯過岡山那班時才考慮。\n※ 這條的班次是用班距推算的，月台看板為準。",
+     [ W("飯店 → 倉敷駅",3),
+       RIDE({ic:"train",line:"JR 伯備線",a:"倉敷",b:"総社",min:11,fare:240,freq:20}),
+       X("総社站 轉乘緩衝",6),
+       RIDE({ic:"train",line:"JR 桃太郎線",a:"総社",b:"吉備津",min:13,fare:240,freq:35}),
+       W("吉備津駅 → 神社（松並木參道）",10) ])],
+   note:"全天最需要對時刻的一段。倉敷這頭班次很密，關鍵是接上岡山 08:36 的吉備線——錯過就要等到 09:29，抵達時人潮已經湧入。",
+   legs:[ W("飯店 → 倉敷駅",3),
+          RIDE({ic:"train",line:"JR 山陽本線",a:"倉敷",b:"岡山",min:18,fare:330,tt:"sanyoUp"}),
+          X("岡山站 JR 換 JR 轉乘緩衝",6),
+          RIDE({ic:"train",line:"JR 桃太郎線",a:"岡山",b:"吉備津",min:18,fare:210,tt:"kibiDown"}),
+          W("吉備津駅 → 神社（松並木參道）",10) ]},
+  {id:"b2",k:"spot",ic:"torii",t:"吉備津神社 初詣",place:P.KIBITSU,star:true,stay:91,min:60,notes:[
+    "桃太郎傳說的原鄉，國寶本殿・拜殿是全日本唯一的「吉備津造」",
+    "延伸 360 公尺的迴廊是必看",
+    "開門 5:00–18:00",
+    "鳴釜神事 受付 9:00–13:45（以釜鳴聲占卜吉凶，值得排）",
+    "祈禱 9:00／10:00／11:00／13:00／14:00／15:00",
+    "!三が日約 5 萬人參拜，10:00–16:00 是尖峰，9 點到最舒服",
+    "屋台約 11:00 才陸續開"],
+   esrc:"吉備津神社 正月案內・年中行事（2026/08 查得，實際以官網公告為準）", eurl:"https://www.kibitujinja.com/event/",
+   events:[
+    {t:"5:00–21:00",n:"參拜時間",d:"三が日延長到 21:00，1/4 起恢復 5:00–18:00。"},
+    {t:"9:00 起",n:"御祈祷",d:"9:00／10:00／11:00／13:00／14:00／15:00 各一場。"},
+    {t:"9:00–13:45",n:"鳴釜神事 受付",d:"御釜殿。以釜鳴聲占卜吉凶，是這裡最特別的體驗。"},
+    {t:"約 11:00 起",n:"屋台",d:"三が日為主，我們 9 點到時多半還沒開。"},
+    {t:"人潮",n:"10:00–16:00 最尖峰",d:"三が日約 5 萬人，所以排早上 9 點抵達。"}
+   ]},
+  {id:"t22",k:"transit",from:P.KIBITSU,to:P.FURUICHI,fare:540,
+   note:"回程吉備線一樣稀疏（10:46／11:36／12:36），離開神社前先看好。\n岡山→倉敷 除了山陽本線，還有伯備線與瀬戸大橋線列車停靠，實際約 4–6 班／小時，所以這段用「約 11 分一班」推算，月台看板為準。\n想加碼的話，中途「備前一宮」站下車徒步 3 分是吉備津彦神社（備前國一宮），同樣熱門。",
+   legs:[ W("吉備津神社 → 吉備津駅",10),
+          RIDE({ic:"train",line:"JR 桃太郎線",a:"吉備津",b:"岡山",min:15,fare:210,tt:"kibiUp"}),
+          X("岡山站 JR 換 JR 轉乘緩衝",6),
+          RIDE({ic:"train",line:"JR 山陽本線ほか",a:"岡山",b:"倉敷",min:18,fare:330,tt:"sanyoDown",freq:11}),
+          W("倉敷駅 → 阿知町",8) ]},
+  {id:"b3",k:"spot",ic:"fork",t:"午餐 @ 倉敷",place:P.FURUICHI,stay:50,min:35,notes:[
+    "倉敷うどん ぶっかけ庵ふるいち｜中央2-1-16｜11:00–19:00｜原則無休",
+    "備前燒碗裝，海老天 ¥1,690／和牛 ¥2,380",
+    "レストラン亀遊亭｜美觀地區內的老派洋食，年始營業日需確認"]},
+  {id:"t23",k:"transit",from:P.FURUICHI,to:P.OHARA,fare:0,note:"",legs:[W("阿知町 → 大原美術館",6)]},
+  {id:"b4",k:"spot",ic:"museum",t:"大原美術館",place:P.OHARA,stay:100,min:60,notes:[
+    "日本第一座西洋近代美術館",
+    "鎮館之寶是 El Greco〈受胎告知〉，還有莫內、高更、羅丹",
+    "!年末年始開館時間常縮短（近年年始 9:00–15:00、入館至 14:30），太晚進場會來不及",
+    "出發前務必確認 1/2 的開館時間"]},
+  {id:"t24",k:"transit",from:P.OHARA,to:P.ACHI,fare:0,note:"含約 100 階石階。",legs:[W("大原美術館 → 阿智神社",6)]},
+  {id:"b5",k:"spot",ic:"torii",t:"阿智神社（白天版）",place:P.ACHI,star:true,stay:40,min:25,notes:[
+    "授与所 9:00–17:00，御朱印與御守在這個時段拿",
+    "從鶴形山上可俯瞰倉敷街景，跟元旦晚上完全兩種感覺"],
+   esrc:"阿智神社 年間祭事（2026/08 查得）", eurl:"https://achi.or.jp/saiji",
+   events:[
+    {t:"9:00 起",n:"崇敬会祈願祭・迎春行事",d:"福餅つき、獅子舞、三女神の舞——1/2 也照常，白天來剛好看得到。"},
+    {t:"7:30–17:00",n:"授与所",d:"御守、破魔矢、御朱印。"},
+    {t:"10:00–16:00",n:"御祈祷受付",d:"現場受付。"},
+    {t:"終日",n:"和あかり展示",d:"境內和風燈飾。"}
+   ]},
+  {id:"t25",k:"transit",from:P.ACHI,to:P.BIKAN,fare:0,note:"",legs:[W("阿智神社 → 美觀地區",5)]},
+  {id:"b6",k:"spot",ic:"camera",t:"美觀地區散策",place:P.BIKAN,stay:55,min:35,notes:[
+    "林源十郎商店｜選物店＋屋上展望台",
+    "倉敷デニムストリート｜兒島牛仔布，藍色霜淇淋是招牌",
+    "蟲文庫｜町家裡的舊書店",
+    "倉敷川舟流し｜冬季通常只在週末運行，1/2 是週六，現場確認"]},
+  {id:"t26",k:"transit",from:P.BIKAN,to:P.GRECO,fare:0,note:"",legs:[W("美觀地區 → エル・グレコ",2)]},
+  {id:"b7",k:"spot",ic:"cup",t:"咖啡休息 @ エル・グレコ",place:P.GRECO,stay:60,min:35,notes:[
+    "中央1-1-11｜10:00–17:00｜週一休",
+    "爬滿常春藤的大正洋館，17:00 就關要抓時間"]},
+  {id:"t27",k:"transit",from:P.GRECO,to:P.IVY,fare:0,note:"",legs:[W("エル・グレコ → アイビースクエア",5)]},
+  {id:"b8",k:"spot",ic:"museum",t:"倉敷アイビースクエア",place:P.IVY,stay:55,min:30,notes:[
+    "原倉敷紡績工廠改建的紅磚建築群，爬滿常春藤",
+    "就在美觀地區東側，冬天傍晚有點燈"]},
+  {id:"t28",k:"transit",from:P.IVY,to:P.BIKAN,fare:0,note:"",legs:[W("アイビースクエア → 美觀地區",5)]},
+  {id:"b9",k:"spot",ic:"fork",t:"晚餐 @ 倉敷",place:P.BIKAN,stay:75,min:45,notes:[
+    "1/2 起店家陸續恢復營業，選擇比元旦多很多",
+    "想吃日式可找美觀地區周邊的居酒屋",
+    "懶得走遠就回倉敷駅北口的アリオ倉敷"]},
+  {id:"b10",k:"spot",ic:"moon",t:"美觀地區 夜間照明",place:P.BIKAN,stay:70,min:30,notes:[
+    "照明到 21:00",
+    "白壁與倉敷川的倒影是這裡最好看的時刻，人也比白天少很多"]},
+  {id:"t29",k:"transit",from:P.BIKAN,to:P.HOTEL,fare:0,note:"",legs:[W("美觀地區 → 飯店",8)]},
+  {id:"b11",k:"spot",ic:"bed",t:"回飯店",place:P.HOTEL,stay:0,min:0,notes:["明天行李要跟著走，今晚先收好"]}
+ ]},
+ /* ================= DAY 3 ================= */
+ {id:"d3",num:"Day 3",date:"1月3日",dow:"週日",tag:"返程日",
+  title:"町家早餐．丹頂鶴．返程",
+  sub:"最後一個早上留給倉敷的町家咖啡，再帶著行李去岡山看丹頂鶴放鳥，傍晚從岡山駅直接搭巴士去機場。",
+  start:"08:15",
+  items:[
+  {id:"c1",k:"spot",ic:"luggage",t:"Check-out ＋ 行李寄櫃檯",place:P.HOTEL,stay:15,min:10,notes:[
+    "退房但先不帶行李，寄在櫃檯，吃完早餐回來拿"]},
+  {id:"t31",k:"transit",from:P.HOTEL,to:P.MIYAKE,fare:0,note:"",legs:[W("飯店 → 三宅商店（本町3-11）",9)]},
+  {id:"c2",k:"spot",ic:"cup",t:"早餐 @ 町家喫茶 三宅商店",place:P.MIYAKE,stay:55,min:35,notes:[
+    "本町3-11｜週日 8:30–17:00（L.O.16:30）｜年中無休",
+    "江戶後期町家改建，招牌是季節水果聖代與特製咖哩，早上有輕食",
+    "這是整趟唯一能好好坐著吃的早餐",
+    "!正月營業時間可能調整，出發前看它 IG",
+    "備案：Cafe Gewa（林源十郎商店1F・8:00 開）離飯店更近、更快"]},
+  {id:"t32",k:"transit",from:P.MIYAKE,to:P.HOTEL,fare:0,note:"",legs:[W("三宅商店 → 飯店取行李",9)]},
+  {id:"c3",k:"spot",ic:"luggage",t:"回飯店取行李",place:P.HOTEL,stay:10,min:5,notes:["取完行李走到倉敷駅約 3 分"]},
+  {id:"t33",k:"transit",from:P.HOTEL,to:P.OKAEKI,fare:330,
+   note:"山陽本線是通勤型車廂、沒有行李架，行李箱放車門旁邊即可。這段一小時 5–7 班，晚一班也沒關係。",
+   legs:[ W("飯店 → 倉敷駅（拖行李）",3),
+          RIDE({ic:"train",line:"JR 山陽本線",a:"倉敷",b:"岡山",min:18,fare:330,tt:"sanyoUp"}) ]},
+  {id:"c4",k:"spot",ic:"luggage",t:"岡山駅 寄放行李",place:P.OKAEKI,stay:15,min:10,notes:[
+    ":站內共 11 處投幣置物櫃，可放行李箱的大型約 ¥700／天",
+    "2F 新幹線改札東側｜大型 18 個｜24 小時｜限投 100 円硬幣",
+    "1F さんすて岡山北館入口前｜大型約 20 個｜24 小時",
+    "1F 西口｜大型 12 個｜可刷 ICOCA",
+    "全滿的話，2F 新幹線改札東側有「ねこのてステーション」人工寄放，大件 ¥700／件，8:00–20:00"]},
+  {id:"t34",k:"transit",from:P.OKAEKI,to:P.KORAKUEN,fare:140,altI:0,
+   alts:[
+    ALT("路面電車 城下","約 17 分・¥140",140,
+     "也可搭岡電巴士東口 1 號乘車處直達「後楽園前」，約 10–15 分。",
+     [ W("岡山駅 → 岡山駅前電停",3),
+       RIDE({ic:"tram",line:"岡電路面電車 東山行",a:"岡山駅前",b:"城下",min:4,fare:140,tt:"tram",freq:5}),
+       W("城下 → 後樂園南門",10) ]),
+    ALT("全程步行","約 25 分・免費",0,
+     "沿桃太郎大通り往東，過旭川的月見橋就到。天氣好的話比等車舒服，沿路會經過岡山城。",
+     [ W("岡山駅東口 → 後樂園（經桃太郎大通り・月見橋）",25) ])],
+   note:"也可搭岡電巴士東口 1 號乘車處直達「後楽園前」，約 10–15 分。",
+   legs:[ W("岡山駅 → 岡山駅前電停",3),
+          RIDE({ic:"tram",line:"岡電路面電車 東山行",a:"岡山駅前",b:"城下",min:4,fare:140,tt:"tram",freq:5}),
+          W("城下 → 後樂園南門",10) ]},
+  {id:"c5",k:"spot",ic:"tree",t:"岡山後樂園「初春祭」",place:P.KORAKUEN,star:true,stay:20,min:15,notes:[
+    "日本三名園之一，1/1–1/3 舉辦初春祭",
+    "8:00–17:00（入園至 16:45）",
+    "入園 ¥500；與岡山城共通券 ¥720——今天兩個都去，直接買共通券",
+    "進園後直接往沢の池方向走"],
+   esrc:"岡山後樂園 初春祭 2027・岡山觀光 WEB（2026/08 查得）", eurl:"https://www.okayama-kanko.jp/event/detail_12435.html",
+   events:[
+    {t:"8:00–17:00",n:"初春祭",d:"入園至 16:45。三が日最後一天。"},
+    {t:"入園",n:"大人 ¥500",d:"與岡山城共通券 ¥720，今天兩個都去直接買共通券。"},
+    {t:"11:00–14:00",n:"タンチョウの園内散策",d:"沢の池周邊。年末年始只有 1/1 與 1/3 有。"},
+    {t:"當日",n:"狂言・お茶会 等",d:"新春表演與茶席，場次以當日公告為準。"}
+   ]},
+  {id:"c6",k:"spot",ic:"bird",t:"丹頂鶴 園內散策",place:P.KORAKUEN,star:true,stay:65,min:40,notes:[
+    "初春祭的重頭戲，整個年末年始只在 1/1 與 1/3 舉行",
+    "時間 11:00–14:00（我們 11:14 到，還有充裕時間）",
+    "地點 沢の池周邊，丹頂鶴放出籠外走上草地，偶爾展翅",
+    "小雨照常，荒天中止",
+    "!近年數度因高病原性禽流感停辦，出發前請上後樂園官網確認"],
+   esrc:"岡山後樂園 タンチョウの園内散策（2026/08 查得）", eurl:"https://www.okayama-kanko.jp/event/12430",
+   events:[
+    {t:"11:00–14:00",n:"園內散策",d:"我們 11:14 到，時間充裕。"},
+    {t:"地點",n:"沢の池周邊",d:"丹頂鶴放出籠外走上草地，偶爾展翅。"},
+    {t:"天候",n:"小雨照常・荒天中止",d:"近年數度因高病原性禽流感停辦，出發前務必上官網確認。"}
+   ]},
+  {id:"t35",k:"transit",from:P.KORAKUEN,to:P.OKAJO,fare:0,note:"",legs:[W("過月見橋 → 岡山城",5)]},
+  {id:"c7",k:"spot",ic:"castle",t:"岡山城「烏城初夢まつり」",place:P.OKAJO,stay:55,min:35,notes:[
+    "2022 年令和大改修後重新開館的黑色天守，因外觀得名「烏城」",
+    "9:00–17:30（入場至 17:00）",
+    "共通券已含天守閣",
+    "三が日有書初體驗、羽子板、陀螺等正月遊戲區"],
+   esrc:"岡山城 烏城初夢まつり（2026/08 查得）", eurl:"https://okayama-kanko.net/ujo/",
+   events:[
+    {t:"9:00–17:30",n:"烏城初夢まつり",d:"入場至 17:00。三が日最後一天。"},
+    {t:"當日",n:"正月遊戲區",d:"書初體驗、羽子板、陀螺等，在天守閣周邊。"},
+    {t:"入場",n:"共通券 ¥720",d:"含後樂園，兩個都去最划算。"}
+   ]},
+  {id:"t36",k:"transit",from:P.OKAJO,to:P.OKAEKI,fare:140,note:"",
+   legs:[ W("岡山城 → 城下電停",10),
+          RIDE({ic:"tram",line:"岡電路面電車",a:"城下",b:"岡山駅前",min:4,fare:140,tt:"tram",freq:5}) ]},
+  {id:"c8",k:"spot",ic:"fork",t:"午餐 @ さんすて岡山 ＋ 取行李",place:P.OKAEKI,stay:55,min:40,notes:[
+    ":岡山駅站內，把名物一次補完",
+    "みのるダイニング（2F）｜岡山県産ピーチポーク デミカツ丼 ¥2,079",
+    "麺屋匠（2F）｜デミカツえびめし ¥1,650",
+    "吾妻寿司（南館2F・7:00–20:30）｜ままかり・鰆・黄ニラ握壽司 ¥1,350",
+    "伴手禮（吉備團子、白桃果凍）也在站內買齊，機場的選擇少很多",
+    "取回行李後走到西口巴士總站約 5 分鐘"]},
+  {id:"t37",k:"transit",from:P.OKAEKI,to:P.OKJ,fare:720,
+   note:"抓 14:30–15:00 之間的班次，15:05–15:35 到機場，離 17:55 起飛還有兩小時餘裕。",
+   legs:[ W("岡山駅 → 西口 21 番乘車處",5),
+          RIDE({ic:"bus",line:"利木津巴士",a:"岡山駅西口",b:"岡山桃太郎空港",min:30,fare:720,tt:"busDep",dep:"14:40"}) ]},
+  {id:"c9",k:"spot",ic:"plane",t:"岡山桃太郎空港 報到",place:P.OKJ,stay:160,min:100,notes:[
+    "國際線建議起飛前 2 小時",
+    "機場不大，2F 有免稅店"]},
+  {id:"c10",k:"flight",dir:"back",notes:[
+    "岡山機場免稅店不大，伴手禮在岡山駅買齊",
+    "回到桃園約 19:55，記得看末班車或叫車"]}
+ ]}
+ ],
+ flights:{
+  out:{airline:"虎航 TIGERAIR TAIWAN",no:"IT214",
+   fromCode:"TPE",fromName:"台北桃園 T1",dep:"11:10",toCode:"OKJ",toName:"岡山桃太郎",arr:"14:35",
+   meta:[["日期","01 JAN 2027"],["報到","08:50"],["飛行","2h25m"]],
+   note:"國際線建議起飛前 2 小時報到；元旦連假抓 2.5 小時更安心。日本比台灣快 1 小時，抵達時刻已是日本時間。"},
+  back:{airline:"虎航 TIGERAIR TAIWAN",no:"IT715",
+   fromCode:"OKJ",fromName:"岡山桃太郎",dep:"17:55",toCode:"TPE",toName:"台北桃園 T1",arr:"19:55",
+   meta:[["日期","03 JAN 2027"],["報到","15:55"],["飛行","3h00m"]],
+   note:"國際線建議起飛前 2 小時報到，也就是 15:55 前抵達機場。回程抵達時刻已換算成台灣時間。"}
+ }
+};}
+
+/* ================= state ================= */
+var S=load(), page="itin", di=0, saveT=null, flagT=null, scrollMem={};
+function migrate(p){
+  if(!p.visited) p.visited={};
+  if(!p.anchor)  p.anchor={};
+  if(!p.leave)   p.leave={};
+  if(!p.photos)  p.photos={};
+  if(!p.pick)    p.pick={};
+  if(!p.done)    p.done={};
+  if(!p.hush)    p.hush={};
+  if(!p.expenses)p.expenses=[];
+  if(!p.cats)    p.cats=[];
+  if(!p.hidecat) p.hidecat={};
+  if(typeof p.rev!=="number") p.rev=0;
+  if(p.mshow!=="twd") p.mshow="jpy";
+  if(!p.people || !p.people.length){
+    p.people = p.who ? [{id:"a",n:p.who.a||"我"},{id:"b",n:p.who.b||"旅伴"}]
+                     : [{id:"a",n:"我"},{id:"b",n:"旅伴"}];
+  }
+  delete p.who;
+  /* 補上「家 出發」與它的交通（舊存檔沒有這兩筆） */
+  try{
+    var d0=p.days&&p.days[0];
+    if(d0 && !d0.items.some(function(x){ return x.id==="a00"; })){
+      var D0=DEFAULT().days[0], add=[];
+      D0.items.forEach(function(x){ if(x.id==="a00"||x.id==="t10") add.push(JSON.parse(JSON.stringify(x))); });
+      var at=-1;
+      for(var i=0;i<d0.items.length;i++){ if(d0.items[i].id==="a0"){ at=i; break; } }
+      if(at<0){ at=0; while(at<d0.items.length && d0.items[at].k==="flight") at++; }
+      if(add.length) d0.items.splice.apply(d0.items,[at,0].concat(add));
+      if(toMin(d0.start)>toMin("07:10")) d0.start="07:10";
+    }
+  }catch(e){}
+  (p.memo||[]).forEach(function(m){
+    if(!m.g || m.g.length!==m.b.length) m.g=m.b.map(function(_,i){ return (m.g&&m.g[i])||""; });
+  });
+  return p;
+}
+function load(){
+  try{ var raw=localStorage.getItem(KEY); if(raw){ var p=JSON.parse(raw); if(p&&p.days&&p.days.length) return migrate(p); } }catch(e){}
+  return migrate(DEFAULT());
+}
+
+function save(){ clearTimeout(saveT); saveT=setTimeout(function(){
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); flag("已儲存"); }catch(e){ flag("無法儲存"); }
+  fbPush(); },250); }
+function flag(t){ var el=$("#saveflag"); if(!el) return; el.textContent=t; el.style.color="var(--shu)";
+  clearTimeout(flagT); flagT=setTimeout(function(){ el.style.color=""; },1000); }
+
+/* ================= 時間鏈 ================= */
+function rideKey(tid,i){ return tid+":"+i; }
+function compute(day){
+  var out={}, cursor=toMin(day.start);
+  /* 第一站若被自己固定成更早的時間，就把當日起點往前挪，
+     這樣「家 出發」這種插在最前面的站才調得動 */
+  for(var q=0;q<day.items.length;q++){
+    var f0=day.items[q];
+    if(f0.k!=="spot") continue;
+    var a0=S.anchor[f0.id];
+    if(a0 && toMin(a0)<cursor) cursor=toMin(a0);
+    break;
+  }
+  day.items.forEach(function(it,i){
+    if(it.k==="flight"){
+      var f=S.flights[it.dir];
+      out[it.id]={dep:toMin(f.dep),arr:toMin(f.arr)}; cursor=toMin(f.arr);
+    } else if(it.k==="transit"){
+      var r=runTransit(it,cursor); out[it.id]=r; cursor=r.arr;
+    } else {
+      var a=S.anchor[it.id]||it.pin, nat=cursor, arr=a?toMin(a):cursor;
+      /* 只有「前一格是交通」才算得上衝突；前面是登機證或另一站就不用警告 */
+      var pv=day.items[i-1], chained=!!(pv&&pv.k==="transit");
+      out[it.id]={arr:arr, nat:nat, anchored:!!S.anchor[it.id], chained:chained,
+        early:!!S.anchor[it.id]&&arr<nat&&chained};
+      /* 離開：使用者釘住的優先，否則抵達＋預計停留 */
+      var lv=S.leave[it.id], lvm = lv ? toMin(lv) : (arr+(it.stay||0));
+      var over = lvm < arr;                 /* 抵達晚於原本設定的離開 */
+      if(over) lvm = arr;
+      out[it.id].leave  = lvm;
+      out[it.id].lvfix  = !!lv;
+      out[it.id].over   = over;
+      out[it.id].win    = lvm-arr;
+      cursor = lvm;
+    }
+  });
+  day.items.forEach(function(it,i){
+    if(it.k!=="spot") return;
+    var me=out[it.id], nx=day.items[i+1];
+    me.need  = (nx&&nx.k==="transit") ? out[nx.id].leaveAt : null;   /* 趕上目前這班車最晚要走的時間 */
+    me.tight = me.win<(it.min||0);
+  });
+  return out;
+}
+function runTransit(it,entry){
+  var cursor=entry, pre=0, seen=false, legs=[], firstDep=null, leaveAt=entry;
+  for(var i=0;i<it.legs.length;i++){
+    var lg=it.legs[i];
+    if(lg.k!=="ride"){ cursor+=lg.min||0; if(!seen) pre+=lg.min||0; legs.push({i:i,type:lg.k}); continue; }
+    var ready=cursor, list=lg.tt?ttList(lg.tt):[], key=rideKey(it.id,i), picked=S.pick[key], dep, synth=false;
+    /* 沒有公布時刻表、但屬於「隨到隨搭」的密集班次（班距 ≤15 分），
+       就依班距推算一排可切換的班次，並標明是推算的 */
+    /* 沒有可用時刻表、但知道班距時，就依班距推算一排可切換的班次。
+       已知「有時刻表但尚未公布」（tt 存在但沒有資料）且班距很疏的，不推算，以免誤導。 */
+    var ttEmpty = lg.tt && !list.length;
+    if(!list.length && lg.freq && (!ttEmpty || lg.freq<=15)){
+      synth=true;
+      list=[];                                   /* 一定要新陣列，不能動到共用的時刻表 */
+      var st=Math.max(0,Math.floor((ready-lg.freq*4)/lg.freq)*lg.freq);
+      for(var z=0;z<16;z++) list.push(toHM(st+z*lg.freq).slice(0,5));
+    } else { list=list.slice(); }
+    if(picked){ dep=toMin(picked); }
+    else if(lg.freq){ dep=ready+lg.freq; }
+    else if(list.length){
+      var auto=null;
+      for(var j=0;j<list.length;j++){ if(toMin(list[j])>=ready){ auto=list[j]; break; } }
+      dep=auto!=null?toMin(auto):toMin(list[list.length-1]);
+    }
+    else if(lg.dep){ dep=toMin(lg.dep); }
+    else dep=ready;
+    var arr=dep+(lg.min||0);
+    legs.push({i:i,type:"ride",dep:dep,arr:arr,ready:ready,wait:dep-ready,list:list,key:key,late:dep<ready,synth:synth});
+    if(!seen){ seen=true; firstDep=dep; leaveAt=dep-pre; }
+    cursor=arr;
+  }
+  return {dep:seen?firstDep:entry, arr:cursor, entry:entry, pre:pre, legs:legs, leaveAt:seen?leaveAt:entry, total:cursor-entry};
+}
+function shiftTransit(day,tid){
+  var idx=-1; for(var i=0;i<day.items.length;i++) if(day.items[i].id===tid) idx=i;
+  var c=compute(day)[tid], target=null;
+  for(var j=0;j<c.legs.length;j++){ var L=c.legs[j]; if(L.type==="ride"&&L.late){ target=L; break; } }
+  if(!target) for(var j2=0;j2<c.legs.length;j2++){ var L2=c.legs[j2]; if(L2.type==="ride"&&L2.list.length){ target=L2; break; } }
+  if(target){
+    if(target.list.length){
+      var need=target.late?target.ready:target.dep+1, nx=null;
+      for(var q=0;q<target.list.length;q++){ if(toMin(target.list[q])>=need){ nx=target.list[q]; break; } }
+      if(nx) S.pick[target.key]=nx; else delete S.pick[target.key];
+    } else delete S.pick[target.key];
+  }
+  clearAfter(day,idx); save(); render();
+}
+function extendSpot(day,sid){
+  var idx=-1; for(var i=0;i<day.items.length;i++) if(day.items[i].id===sid) idx=i;
+  if(idx<0) return;
+  var sp=day.items[idx];
+  sp.stay=Math.max(sp.stay||0, sp.min||0);
+  delete S.leave[sp.id];
+  clearAfter(day,idx); save(); render(); flag("停留已拉長，後面順延");
+}
+function resetTransit(day){
+  var def=null, D=DEFAULT();
+  D.days.forEach(function(d){ if(d.id===day.id) def=d; });
+  if(!def) return;
+  var res=day.items.slice(), have={};
+  res.forEach(function(x){ if(x.k==="transit") have[x.id]=1; });
+  def.items.forEach(function(x,i){
+    if(x.k!=="transit") return;
+    var copy=JSON.parse(JSON.stringify(x));
+    if(have[x.id]){
+      for(var q=0;q<res.length;q++) if(res[q].id===x.id) res[q]=copy;
+      return;
+    }
+    var nxt=null;
+    for(var j=i+1;j<def.items.length;j++){ if(def.items[j].k!=="transit"){ nxt=def.items[j]; break; } }
+    var at=res.length;
+    if(nxt){ for(var k=0;k<res.length;k++){ if(res[k].id===nxt.id){ at=k; break; } } }
+    res.splice(at,0,copy);
+  });
+  res.forEach(function(x){ if(x.k==="transit") x.legs.forEach(function(lg,i){ delete S.pick[rideKey(x.id,i)]; }); });
+  day.items=res; save(); render();
+}
+/* ================= 內建路線庫 =================
+   把預設行程裡已經查好的每一段交通，依「起點>終點」建成對照表。
+   新增或重排站點時，只要兩端對得上就自動套用（反向會自動把時刻表方向對調）。 */
+var PALIAS=[
+ [P.OKJ,      ["岡山桃太郎空港","岡山空港","桃太郎空港","OKJ"]],
+ [P.TPE,      ["桃園國際機場第一航廈","桃園國際機場","桃園機場","TPE"]],
+ [P.WANLONG,  ["捷運萬隆站","萬隆站","萬隆"]],
+ [P.HOTEL,    ["倉敷ステーションホテル","倉敷駅","倉敷站","倉敷車站","倉敷駅前"]],
+ [P.BIKAN,    ["倉敷美観地区","倉敷美觀地區","美観地区","美觀地區"]],
+ [P.ACHI,     ["阿智神社"]],
+ [P.IVY,      ["倉敷アイビースクエア","アイビースクエア"]],
+ [P.OHARA,    ["大原美術館"]],
+ [P.FURUICHI, ["ぶっかけ庵ふるいち","ふるいち","阿知町"]],
+ [P.GRECO,    ["喫茶エル・グレコ","エル・グレコ"]],
+ [P.MIYAKE,   ["町家喫茶 三宅商店","三宅商店"]],
+ [P.KIBITSU,  ["吉備津神社","吉備津"]],
+ [P.KORAKUEN, ["岡山後楽園","後楽園","後樂園"]],
+ [P.OKAJO,    ["岡山城"]],
+ [P.OKAEKI,   ["岡山駅","岡山站","岡山車站","岡山駅前"]]
+];
+var PFLAT=(function(){
+  var a=[]; PALIAS.forEach(function(r){ r[1].forEach(function(x){ a.push([x,r[0]]); }); });
+  a.sort(function(x,y){ return y[0].length-x[0].length; });
+  return a;
+})();
+function canonPlace(s){
+  s=String(s||"").trim(); if(!s) return null;
+  for(var i=0;i<PFLAT.length;i++){ if(s.indexOf(PFLAT[i][0])>=0) return PFLAT[i][1]; }
+  return null;
+}
+var TTREV={kibiDown:"kibiUp",kibiUp:"kibiDown",sanyoUp:"sanyoDown",sanyoDown:"sanyoUp",
+           busArr:"busDep",busDep:"busArr",tram:"tram"};
+var ROUTES=(function(){
+  var m={};
+  DEFAULT().days.forEach(function(d){ d.items.forEach(function(x){
+    if(x.k!=="transit") return;
+    var a=canonPlace(x.from), b=canonPlace(x.to);
+    if(!a||!b||a===b) return;
+    if(!m[a+">"+b]) m[a+">"+b]=x;
+  }); });
+  return m;
+})();
+function reverseTransit(t){
+  var c=JSON.parse(JSON.stringify(t));
+  c.legs=(c.legs||[]).slice().reverse().map(function(lg){
+    if(lg.k==="ride"){ var a=lg.a; lg.a=lg.b; lg.b=a; if(lg.tt) lg.tt=TTREV[lg.tt]||lg.tt; delete lg.dep; }
+    else if(typeof lg.text==="string" && lg.text.indexOf("→")>=0){
+      var pp=lg.text.split("→"); lg.text=pp[1].trim()+" → "+pp[0].trim();
+    }
+    return lg;
+  });
+  var f=c.from; c.from=c.to; c.to=f;
+  return c;
+}
+function directRoute(a,b){
+  if(ROUTES[a+">"+b]) return JSON.parse(JSON.stringify(ROUTES[a+">"+b]));
+  if(ROUTES[b+">"+a]) return reverseTransit(ROUTES[b+">"+a]);
+  return null;
+}
+function findRoute(from,to){
+  var a=canonPlace(from), b=canonPlace(to);
+  if(!a||!b||a===b) return null;
+  var d=directRoute(a,b); if(d) return d;
+  /* 沒有直達就找一個中繼點湊兩段（例如 飯店 → 岡山駅 → 後樂園） */
+  for(var i=0;i<PALIAS.length;i++){
+    var h=PALIAS[i][0];
+    if(h===a||h===b) continue;
+    var r1=directRoute(a,h), r2=directRoute(h,b);
+    if(r1&&r2) return {from:from,to:to,fare:(+r1.fare||0)+(+r2.fare||0),
+      note:[r1.note,r2.note].filter(Boolean).join("\n"),
+      legs:r1.legs.concat(r2.legs)};
+  }
+  return null;
+}
+/* 把查到的路線套進這段交通；套不到回傳 false */
+function applyRoute(tr){
+  var r=findRoute(tr.from,tr.to);
+  if(!r) return false;
+  tr.legs=JSON.parse(JSON.stringify(r.legs));
+  tr.fare=r.fare||0;
+  tr.note=r.note||"";
+  if(r.alts){ tr.alts=JSON.parse(JSON.stringify(r.alts)); tr.altI=r.altI||0; }
+  else { delete tr.alts; delete tr.altI; }
+  if(r.cur) tr.cur=r.cur; else delete tr.cur;
+  (tr.legs||[]).forEach(function(lg,i){ delete S.pick[rideKey(tr.id,i)]; });
+  delete tr.chk;
+  return true;
+}
+
+/* 每一段交通的預設值（用 id 對照），給單獨還原用 */
+var DEFTR=(function(){
+  var m={}; DEFAULT().days.forEach(function(d){
+    d.items.forEach(function(x){ if(x.k==="transit") m[x.id]=x; }); });
+  return m;
+})();
+function switchAlt(day,tid,i){
+  var idx=-1; for(var q=0;q<day.items.length;q++) if(day.items[q].id===tid) idx=q;
+  if(idx<0) return;
+  var it=day.items[idx];
+  if(!it.alts || !it.alts[i]) return;
+  var A=it.alts[i];
+  it.legs=JSON.parse(JSON.stringify(A.legs));
+  it.fare=A.fare||0;
+  it.note=A.note||"";
+  it.altI=i;
+  it.legs.forEach(function(lg,k){ delete S.pick[rideKey(tid,k)]; });
+  clearAfter(day,idx); save(); render(); flag("已換成「"+A.n+"」");
+}
+function restoreOneTransit(day,tid){
+  var idx=-1; for(var i=0;i<day.items.length;i++) if(day.items[i].id===tid) idx=i;
+  if(idx<0) return;
+  var it=day.items[idx], def=DEFTR[tid], msg="";
+  if(def && def.from===it.from && def.to===it.to){
+    day.items[idx]=JSON.parse(JSON.stringify(def));
+    day.items[idx].legs.forEach(function(lg,i){ delete S.pick[rideKey(tid,i)]; });
+    msg="已還原這段交通";
+  } else if(applyRoute(it)){
+    msg="已套用查好的路線";
+  } else if(def){
+    day.items[idx]=JSON.parse(JSON.stringify(def));
+    day.items[idx].legs.forEach(function(lg,i){ delete S.pick[rideKey(tid,i)]; });
+    msg="已還原成原本的交通";
+  } else {
+    tell("沒有現成的路線","「"+it.from+"」到「"+it.to+"」不在已查好的路線裡。"+
+      "按卡片下方的「Google Maps 路線」查好之後，直接在這張卡上改就可以了。");
+    return;
+  }
+  clearAfter(day,idx); save(); render(); flag(msg);
+}
+function newSpot(){ return {id:uid(),k:"spot",ic:"camera",t:"新的一站",place:"",stay:60,min:30,notes:[""],events:[]}; }
+function newTransit(a,b){ return {id:uid(),k:"transit",from:a||"上一站",to:b||"下一站",fare:0,note:"",
+  legs:[{k:"walk",ic:"walk",text:(a||"上一站")+" → "+(b||"下一站"),min:10}]}; }
+function prevSpotName(day,at){
+  for(var i=at-1;i>=0;i--){ if(day.items[i].k==="spot") return day.items[i].place||day.items[i].t; }
+  return "上一站";
+}
+function addStop(day,afterId){
+  var at;
+  if(afterId){ at=0; day.items.forEach(function(x,i){ if(x.id===afterId) at=i+1; }); }
+  else { at=day.items.length; while(at>0 && day.items[at-1].k==="flight") at--; }
+  var sp=newSpot(), tr=newTransit(prevSpotName(day,at), sp.t);
+  day.items.splice(at,0,tr,sp);
+  applyRoute(tr);
+  syncTransits(day);
+  save(); render();
+  setTimeout(function(){ var el=$('[data-ed="t"][data-id="'+sp.id+'"]'); if(el){ el.scrollIntoView({block:"center"}); el.focus(); } },60);
+}
+function spotName(it){ return (it&&(it.place||it.t))||"上一站"; }
+/* 每次新增／刪除／重排之後，把每段交通的起訖點接回真正的上下兩站；
+   端點有變的那段標成「需確認」，班次資料先留著讓使用者自己判斷 */
+function syncTransits(day){
+  var prev=null;
+  day.items.forEach(function(it,i){
+    if(it.k==="spot"){ prev=it; return; }
+    if(it.k!=="transit") return;
+    var nxt=null;
+    for(var j=i+1;j<day.items.length;j++){ if(day.items[j].k==="spot"){ nxt=day.items[j]; break; } }
+    if(!prev || !nxt){ it.orphan=1; return; }
+    delete it.orphan;
+    var a=spotName(prev), b=spotName(nxt), changed=false;
+    if(it.from!==a){ (it.legs||[]).forEach(function(lg){
+        if(lg.k!=="ride"&&typeof lg.text==="string") lg.text=lg.text.split(it.from).join(a); });
+      it.from=a; changed=true; }
+    if(it.to!==b){ (it.legs||[]).forEach(function(lg){
+        if(lg.k!=="ride"&&typeof lg.text==="string") lg.text=lg.text.split(it.to).join(b); });
+      it.to=b; changed=true; }
+    if(changed){
+      (it.legs||[]).forEach(function(lg,k){ delete S.pick[rideKey(it.id,k)]; });
+      if(!applyRoute(it)) it.chk=1;    /* 查得到就自動填好，查不到才標「需確認」 */
+    }
+  });
+  /* 第一站前面若還掛著一段交通（重排後常見），直接拿掉 */
+  for(var q=day.items.length-1;q>=0;q--) if(day.items[q].orphan){ day.items.splice(q,1); }
+}
+function delSpot(day,id){
+  var i=-1; day.items.forEach(function(x,k){ if(x.id===id) i=k; });
+  if(i<0) return;
+  var start=i, del=1;
+  if(i>0 && day.items[i-1].k==="transit"){ start=i-1; del=2; }
+  day.items.splice(start,del);
+  delete S.visited[id]; delete S.anchor[id]; delete S.leave[id];
+  syncTransits(day);
+  save(); render(); flag("已刪除，交通已接起");
+}
+function clearAfter(day,idx){
+  for(var j=idx+1;j<day.items.length;j++){
+    var t=day.items[j]; if(t.k!=="transit") continue;
+    t.legs.forEach(function(lg,i){ delete S.pick[rideKey(t.id,i)]; });
+  }
+}
+
+/* ================= 花費 ================= */
+function twd(n){ return "NT$"+Math.round((n||0)*(+S.rate||0)).toLocaleString("en-US"); }
+function twd2jpy(n){ var r=+S.rate||0.2006; return Math.round((+n||0)/r); }
+/* 花費頁的日圓用 JPY 開頭（交通票價維持 ¥） */
+function jpy(n){ return "JPY¥"+Math.round(n||0).toLocaleString("en-US"); }
+/* 兩種幣別都顯示，mshow 只決定哪一個當主要（大字） */
+function amtMain(n){ return S.mshow==="twd" ? twd(n) : jpy(n); }
+function amtSub(n){  return S.mshow==="twd" ? jpy(n) : twd(n); }
+function amtLine(n,sep){ return amtMain(n)+(sep||"　")+amtSub(n); }
+function grand(){ var s=0; S.expenses.forEach(function(e){ s+=+e.a||0; }); return s; }
+function dayById(id){ for(var i=0;i<S.days.length;i++) if(S.days[i].id===id) return S.days[i]; return null; }
+function findItem(id){ for(var i=0;i<S.days.length;i++){ var its=S.days[i].items;
+  for(var j=0;j<its.length;j++) if(its[j].id===id) return {d:S.days[i],it:its[j],j:j}; } return null; }
+
+/* ================= 共享同步（把行程存進 Artifact 的資料檔） ================= */
+/* ================= 即時同步（Firebase Realtime Database，REST + SSE） =================
+   只在自己架的版本有效；claude.ai 的 Artifact 會被安全政策擋掉對外連線。 */
+var FBKEY=KEY+":fb";
+var FB={url:"",room:""}, FBes=null, FBtimer=null, FBstate="off", FBlastTs=0;
+var FBme=Math.random().toString(36).slice(2,8);
+function fbLoad(){ try{ var r=localStorage.getItem(FBKEY); if(r) FB=JSON.parse(r)||FB; }catch(e){} }
+function fbSaveCfg(){ try{ localStorage.setItem(FBKEY,JSON.stringify(FB)); }catch(e){} }
+function fbOn(){ return !!(FB.url&&FB.room); }
+function fbPath(){ return String(FB.url).replace(/\/+$/,"")+"/trips/"+encodeURIComponent(FB.room)+".json"; }
+function fbRoom(){ var a="abcdefghijkmnpqrstuvwxyz23456789",o="";
+  for(var i=0;i<22;i++) o+=a.charAt(Math.floor(Math.random()*a.length)); return o; }
+function fbStop(){ if(FBes){ try{ FBes.close(); }catch(e){} FBes=null; } FBstate="off"; }
+function fbStart(){
+  fbStop();
+  if(!fbOn()) return;
+  if(typeof EventSource==="undefined"){ FBstate="err"; return; }
+  FBstate="connecting"; renderMast();
+  try{
+    FBes=new EventSource(fbPath());
+    FBes.onopen=function(){ FBstate="on"; renderMast(); };
+    FBes.onerror=function(){ if(FBstate!=="on"){ FBstate="err"; renderMast(); } };
+    FBes.addEventListener("put",function(ev){ FBstate="on"; fbIncoming(ev.data); renderMast(); });
+    FBes.addEventListener("patch",function(ev){ FBstate="on"; fbIncoming(ev.data); renderMast(); });
+  }catch(e){ FBstate="err"; renderMast(); }
+}
+function fbIncoming(raw){
+  var m=null; try{ m=JSON.parse(raw); }catch(e){ return; }
+  if(!m || (m.path && m.path!=="/")) return;
+  var d=m.data;
+  if(!d || !d.days || !d.days.length) return;
+  if(d.by===FBme) return;                       /* 自己剛送出去的，不用再套用 */
+  if((+d.ts||0) <= (+FBlastTs||0)) return;
+  FBlastTs=+d.ts||0;
+  var keep=S.photos;
+  S=migrate(d);
+  if(!S.photos || !Object.keys(S.photos).length) S.photos=keep||{};
+  S.days.forEach(function(day){ day.items.forEach(function(x){
+    if(x.k==="transit" && !x.alts && DEFTR[x.id] && DEFTR[x.id].alts)
+      x.alts=JSON.parse(JSON.stringify(DEFTR[x.id].alts)); }); });
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+  render(); flag("已同步對方的更新");
+}
+function fbPush(){
+  if(!fbOn() || FBstate==="off") return;
+  clearTimeout(FBtimer);
+  FBtimer=setTimeout(function(){
+    var d=JSON.parse(JSON.stringify(S));
+    d.ts=Date.now(); d.by=FBme;
+    var body=JSON.stringify(d);
+    if(body.length>3000000){ d.photos={}; body=JSON.stringify(d); }
+    FBlastTs=d.ts;
+    fetch(fbPath(),{method:"PUT",body:body,headers:{"Content-Type":"application/json"}})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); })
+      .catch(function(){ FBstate="err"; renderMast(); flag("同步失敗，檢查網路或設定"); });
+  },1500);
+}
+function fbInvite(){
+  var pay=btoa(unescape(encodeURIComponent(JSON.stringify({u:FB.url,r:FB.room}))))
+    .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  return location.origin+location.pathname+location.search+"#fb="+pay;
+}
+function fbIncomingLink(){
+  var h=location.hash||"";
+  if(h.indexOf("#fb=")!==0) return false;
+  var b=h.slice(4).replace(/-/g,"+").replace(/_/g,"/");
+  while(b.length%4) b+="=";
+  history.replaceState(null,"",location.pathname+location.search);
+  var cfg=null;
+  try{ cfg=JSON.parse(decodeURIComponent(escape(atob(b)))); }catch(e){}
+  if(!cfg||!cfg.u||!cfg.r){ tell("這個同步邀請讀不出來","請對方重新複製一次。"); return true; }
+  ask("加入共同編輯？","加入之後，你和對方任何一邊的修改都會即時同步。你目前這台裝置上的內容會被雲端那份取代。",
+    function(){ FB={url:cfg.u,room:cfg.r}; fbSaveCfg(); fbStart(); flag("已加入，正在同步…"); renderMast(); },"加入");
+  return true;
+}
+
+/* ---------- 分享連結：把行程壓進網址（哪裡都能用，不需要權限） ---------- */
+function u8ToB64(u8){
+  var s="",CH=0x8000;
+  for(var i=0;i<u8.length;i+=CH) s+=String.fromCharCode.apply(null,u8.subarray(i,i+CH));
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function b64ToU8(b){
+  b=String(b).replace(/-/g,"+").replace(/_/g,"/");
+  while(b.length%4) b+="=";
+  var raw=atob(b), u=new Uint8Array(raw.length);
+  for(var i=0;i<raw.length;i++) u[i]=raw.charCodeAt(i);
+  return u;
+}
+function packState(){
+  var d=JSON.parse(JSON.stringify(S));
+  d.photos={};                                   /* 活動圖太大，不放進連結 */
+  /* 交通方案是程式內建的資料，不用塞進連結，對方那邊會自己接回來 */
+  (d.days||[]).forEach(function(day){ (day.items||[]).forEach(function(x){ delete x.alts; }); });
+  var txt=JSON.stringify(d), bytes=new TextEncoder().encode(txt);
+  if(typeof CompressionStream==="undefined") return Promise.resolve("r"+u8ToB64(bytes));
+  var cs=new CompressionStream("gzip");
+  return new Response(new Blob([bytes]).stream().pipeThrough(cs)).arrayBuffer()
+    .then(function(ab){ return "z"+u8ToB64(new Uint8Array(ab)); })
+    .catch(function(){ return "r"+u8ToB64(bytes); });
+}
+function unpackState(code){
+  var tag=code.charAt(0), body=code.slice(1), u=b64ToU8(body);
+  if(tag!=="z") return Promise.resolve(JSON.parse(new TextDecoder().decode(u)));
+  var ds=new DecompressionStream("gzip");
+  return new Response(new Blob([u]).stream().pipeThrough(ds)).arrayBuffer()
+    .then(function(ab){ return JSON.parse(new TextDecoder().decode(new Uint8Array(ab))); });
+}
+function shareLink(){
+  return packState().then(function(code){
+    return location.origin+location.pathname+location.search+"#s="+code;
+  });
+}
+function copyText(t){
+  if(navigator.clipboard && navigator.clipboard.writeText)
+    return navigator.clipboard.writeText(t).then(function(){return true;}).catch(function(){return false;});
+  try{
+    var ta=document.createElement("textarea");
+    ta.value=t; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    var ok=document.execCommand("copy"); document.body.removeChild(ta);
+    return Promise.resolve(ok);
+  }catch(e){ return Promise.resolve(false); }
+}
+/* 開啟時如果網址帶著分享碼，問要不要載入 */
+function shareIncoming(){
+  var h=location.hash||"";
+  if(h.indexOf("#s=")!==0) return false;
+  var code=h.slice(3);
+  history.replaceState(null,"",location.pathname+location.search);
+  unpackState(code).then(function(d){
+    if(!d||!d.days||!d.days.length){ tell("這個連結讀不出來","可能複製時被截斷了，請對方重傳一次。"); return; }
+    ask("載入朋友分享的行程？","「"+(d.meta&&d.meta.title||"行程")+"」。載入後會覆蓋你目前這台裝置上的內容（活動圖不含在連結裡，會保留你自己的）。",
+      function(){
+        var keep=S.photos;
+        S=migrate(d); S.photos=keep||{};
+        /* 把內建的交通方案接回來 */
+        S.days.forEach(function(day){ day.items.forEach(function(x){
+          if(x.k==="transit" && !x.alts && DEFTR[x.id] && DEFTR[x.id].alts)
+            x.alts=JSON.parse(JSON.stringify(DEFTR[x.id].alts)); }); });
+        save(); di=0; render(0); flag("已載入分享的行程");
+      },"載入");
+  }).catch(function(){ tell("這個連結讀不出來","可能複製時被截斷了，請對方重傳一次。"); });
+  return true;
+}
+
+function fbLabel(){
+  if(!fbOn()) return "尚未設定";
+  if(FBstate==="on") return "● 連線中（房間 "+FB.room.slice(0,6)+"…）";
+  if(FBstate==="connecting") return "連線中…";
+  if(FBstate==="err") return "✕ 連不上（可能是網址錯了，或這個網址不支援對外連線）";
+  return "已停止";
+}
+function sheetSync(){
+  openSheet("分享行程",
+    '<div class="flh">即時同步（兩人同步編輯）</div>'+
+    '<p class="perhead" id="fbStat">'+esc(fbLabel())+'</p>'+
+    (fbOn()
+      ? '<button class="bigbtn" id="fbInv">🔗 複製「一起編輯」邀請連結</button>'+
+        '<button class="bigbtn ghost" id="fbOff" style="color:var(--red)">停止即時同步</button>'
+      : '<button class="bigbtn" id="fbSet">⚡ 設定即時同步</button>')+
+    '<p class="perhead">改完幾秒內對方就會自動更新，不用按任何按鈕。'+
+    '需要一個免費的 Firebase 資料庫，而且只在你自己架的版本有效——claude.ai 這個網址會被安全政策擋住。</p>'+
+    '<hr style="border:0;border-top:1px solid var(--line)">'+
+    '<div class="flh">分享連結（快照・哪裡都能用）</div>'+
+    '<button class="bigbtn ghost" id="syLink">🔗 複製分享連結</button>'+
+    '<p class="perhead">把整份行程壓進網址，用 LINE 傳給朋友，他一點開就是你這份。'+
+    '不需要帳號或權限。這是「快照」：之後你再改要再傳一次。活動圖不會包進連結裡。<br><br>'+
+    '想留一份文字備份，到「設定 → 匯出備份」。</p>');
+  if($("#fbSet")) $("#fbSet").onclick=function(){
+    askInput("資料庫網址","貼上 Firebase 即時資料庫的網址，長得像 https://xxx-default-rtdb.asia-southeast1.firebasedatabase.app",
+      FB.url||"",function(v){
+        var u=String(v||"").trim().replace(/\/+$/,"");
+        if(!/^https:\/\/.+/.test(u)){ tell("網址看起來不對","要以 https:// 開頭，結尾是 firebasedatabase.app 或 firebaseio.com。"); return true; }
+        FB={url:u,room:fbRoom()}; fbSaveCfg(); fbStart();
+        setTimeout(function(){ fbPush(); },200);
+        closeSheet(); flag("已開始即時同步"); renderMast();
+      });
+  };
+  if($("#fbInv")) $("#fbInv").onclick=function(){
+    copyText(fbInvite()).then(function(ok){
+      if(ok){ closeSheet(); flag("邀請連結已複製"); }
+      else openSheet("邀請連結",'<p class="perhead">長按全選複製，傳給一起編輯的人：</p>'+
+        '<textarea class="inp bk" id="fbT" readonly>'+esc(fbInvite())+'</textarea>'+
+        '<button class="bigbtn ghost" data-close>關閉</button>');
+    });
+  };
+  if($("#fbOff")) $("#fbOff").onclick=function(){
+    ask("停止即時同步？","這台裝置會停止收發更新，行程留在本機。雲端上的資料不會刪除。",function(){
+      fbStop(); FB={url:"",room:""}; fbSaveCfg(); closeSheet(); render(); },"停止",true);
+  };
+  $("#syLink").onclick=function(){
+    var btn=$("#syLink"); btn.textContent="產生中…";
+    shareLink().then(function(url){
+      btn.textContent="🔗 複製分享連結";
+      copyText(url).then(function(ok){
+        if(ok){ closeSheet(); flag("連結已複製，貼到 LINE 傳給朋友"); }
+        else openSheet("分享連結",'<p class="perhead">長按下面的文字全選複製：</p>'+
+          '<textarea class="inp bk" id="syT" readonly>'+esc(url)+'</textarea>'+
+          '<button class="bigbtn ghost" data-close>關閉</button>');
+      });
+    });
+  };
+}
+
+
+/* ================= viewport（避免 iOS 編輯時自動放大） ================= */
+var VP_LOOSE="width=device-width, initial-scale=1, viewport-fit=cover";
+var VP_LOCK ="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover";
+function vpSet(c){
+  var vp=document.querySelector('meta[name="viewport"]');
+  if(!vp){ vp=document.createElement("meta"); vp.name="viewport"; document.head.appendChild(vp); }
+  if(vp.getAttribute("content")===c) return;
+  vp.setAttribute("content",c);
+  /* Safari 只有在 meta 節點本身變動時才重讀 viewport，所以整顆換掉 */
+  var n=vp.cloneNode(true); vp.parentNode.replaceChild(n,vp);
+}
+function vpLock(){ vpSet(VP_LOCK); }
+function vpUnlock(){ vpSet(VP_LOOSE); }
+
+/* ================= render ================= */
+var view=$("#view");
+var EDIT=false;                    /* 全域編輯模式（不寫進存檔） */
+var NOSCROLL=false;
+var EDITPAGES={info:1,itin:1,memo:1};
+/* 進出編輯模式時整顆換掉 viewport：必須在任何欄位取得焦點之前就設定好，
+   iOS 才不會在編輯時自動放大 */
+function setEdit(on){
+  /* 進出編輯模式時每張卡都會長高／變矮，先記住畫面上第一張卡的位置，
+     重畫完再把它放回原位，眼睛看到的東西才不會整個往下跑 */
+  var anchor=null, off=0;
+  $$(".card[data-id],.sec[data-id],.memo[data-id]",view).some(function(n){
+    var r=n.getBoundingClientRect();
+    if(r.bottom>70){ anchor=n.dataset.id; off=r.top; return true; }
+    return false;
+  });
+  EDIT=!!on;
+  if(EDIT) vpLock(); else vpUnlock();
+  NOSCROLL=true; render(); NOSCROLL=false;
+  if(anchor){
+    var t=$('[data-id="'+anchor+'"]',view);
+    if(t){
+      var d=t.getBoundingClientRect().top-off;
+      window.scrollTo(0,Math.max(0,window.scrollY+d));
+      requestAnimationFrame(function(){
+        var t2=$('[data-id="'+anchor+'"]',view);
+        if(t2) window.scrollTo(0,Math.max(0,window.scrollY+(t2.getBoundingClientRect().top-off)));
+      });
+    }
+  }
+}
+function applyEdit(){
+  document.body.classList.toggle("editmode",EDIT);
+  var eb=$("#editBtn");
+  if(eb){
+    eb.hidden = !EDITPAGES[page];
+    eb.innerHTML = ico(EDIT ? "check" : "pencil");
+    eb.setAttribute("aria-label", EDIT ? "完成編輯" : "編輯");
+    eb.classList.toggle("on",EDIT);
+  }
+  if(!EDIT){
+    $$('[contenteditable="true"]',view).forEach(function(n){ n.setAttribute("contenteditable","false"); });
+    $$('.mast [contenteditable="true"]').forEach(function(n){ n.setAttribute("contenteditable","false"); });
+  }
+
+}
+function pageKey(){ return page==="itin" ? "itin:"+di : page; }
+function render(target){
+  var y = (target===undefined) ? window.scrollY : target;
+  $$(".tab").forEach(function(t){ t.setAttribute("aria-selected",String(t.dataset.p===page)); });
+  $("#daystrip").hidden = page!=="itin";
+  $("#fab").hidden = page==="money";
+  renderMast();
+  if(page==="itin") renderStrip();
+  view.innerHTML = page==="info"?viewInfo():page==="itin"?viewItin():page==="money"?viewMoney():page==="memo"?viewMemo():viewOver();
+  applyEdit();
+  wire();
+  if(!NOSCROLL) requestAnimationFrame(function(){ window.scrollTo(0,y); });
+}
+function mizuhiki(){
+  return '<span class="mizu" aria-hidden="true"><i class="g"></i><i class="rw"></i></span>';
+}
+/* 頁首會被 renderMast 單獨重畫，所以它的按鈕要自己接事件 */
+function wireMast(){
+  if($("#btnSet"))  $("#btnSet").onclick=sheetSet;
+  if($("#btnSync")) $("#btnSync").onclick=sheetSync;
+}
+function renderMast(){
+  $("#mast").innerHTML =
+   '<div class="eyebrow"><span>Okayama · Kurashiki</span><span>2027.01.01–03</span></div>'+
+   '<span class="titlewrap"><h1 contenteditable="true" data-meta="title">'+esc(S.meta.title)+'</h1>'+mizuhiki()+'</span>'+
+   '<p contenteditable="true" data-meta="lede">'+esc(S.meta.lede)+'</p>'+
+   '<div class="mtools"><button class="pill" id="btnSet">'+ico("clock")+'設定</button>'+
+   '<button class="pill'+(FBstate==="on"?" live":"")+'" id="btnSync">'+ico("swap")+
+     (FBstate==="on"?"同步中":"分享")+'</button>'+
+   '<span id="saveflag">自動存檔</span></div>';
+  wireMast();
+}
+function renderStrip(){
+  $("#daystrip").innerHTML = S.days.map(function(d,i){
+    return '<button class="dchip" role="tab" data-d="'+i+'" aria-selected="'+(i===di)+'">'+
+      '<b>'+esc(d.date)+'</b><span>'+esc(d.dow)+'・'+esc(d.tag)+'</span></button>';
+  }).join("");
+}
+
+/* ---------- Page 2: 行程 ---------- */
+function viewItin(){
+  var d=S.days[di], c=compute(d);
+  var fi=-1, la=-1;
+  d.items.forEach(function(it,i){ if(it.k==="spot"){ if(fi<0) fi=i; la=i; } });
+  function lnOf(i){
+    if(fi<0||la<=fi) return "none";
+    if(i<fi||i>la) return "none";
+    if(i===fi) return "start";
+    if(i===la) return "end";
+    return "mid";
+  }
+  var doneN=0, allN=0;
+  d.items.forEach(function(it){ if(it.k==="spot"){ allN++; if(S.visited[it.id]) doneN++; } });
+  var pct=allN?Math.round(doneN/allN*100):0;
+  var prog='<div class="prog'+(allN&&doneN===allN?" full":"")+'"><span class="pl">今日進度</span>'+
+    '<span class="pt"><span class="pf" style="width:'+pct+'%"></span></span>'+
+    '<span class="pn">'+doneN+' / '+allN+'</span></div>';
+  var body=d.items.map(function(it,i){
+    var ln=lnOf(i);
+    if(it.k==="flight")  return rowFlight(it,c[it.id],ln);
+    if(it.k==="transit"){
+      /* 這段交通的「下一站」勾完了，代表已經搭過，收成一行 */
+      var nx=null;
+      for(var j=i+1;j<d.items.length;j++){ if(d.items[j].k==="spot"){ nx=d.items[j]; break; } }
+      var doneTr = nx && S.visited[nx.id] && !expandTr[it.id];
+      return doneTr ? rowTransitMini(it,c[it.id],ln) : rowTransit(it,c[it.id],ln);
+    }
+    return rowSpot(it,c[it.id],ln);
+  }).join("");
+  return ''+
+  '<div class="dayhead"><div class="kick"><span>'+esc(d.num)+'</span><span>'+esc(d.date)+' '+esc(d.dow)+'</span><span>'+esc(d.tag)+'</span></div>'+
+    '<h2 contenteditable="true" data-day="title">'+esc(d.title)+'</h2>'+
+    '<p contenteditable="true" data-day="sub">'+esc(d.sub)+'</p></div>'+
+  prog+
+  '<div class="tl" id="tl">'+body+'</div>'+
+  '<div class="dayfoot"><button class="addstop" id="addStop">＋ 新增一站</button></div>'+
+  '';
+}
+
+function rowFlight(it,c,ln){
+  var f=S.flights[it.dir];
+  var route='<div class="route" aria-hidden="true">'+
+    '<i class="rdot"></i><i class="rdash"></i>'+
+    '<svg class="rpl" viewBox="0 0 24 24">'+
+      '<g transform="rotate(90 12 12)">'+
+      '<path d="M10.6 3.1a1.4 1.4 0 0 1 2.8 0v5.6l7.6 4.2v1.9l-7.6-2.3v3.8l2.4 1.9v1.4L12 18.9l-3.8 1.7v-1.4l2.4-1.9v-3.8L3 15.8v-1.9l7.6-4.2V3.1Z" '+
+      'fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></g></svg>'+
+    '<i class="rdash"></i>'+
+    '<svg class="rarw" viewBox="0 0 9 14"><path d="M1.4 1.4 L7.2 7 L1.4 12.6" fill="none" '+
+      'stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+    '</div>';
+  function ed(field,val,cls){ return '<span class="'+cls+'" contenteditable="true" data-fl="'+it.dir+':'+field+'">'+esc(val)+'</span>'; }
+  var notes='<li class="'+(String(f.note).trim()?"":"blank")+'" contenteditable="true" data-fl="'+it.dir+':note">'+esc(f.note)+'</li>'+
+    (it.notes||[]).map(function(n,i){
+      return '<li class="'+(String(n).trim()?"":"blank")+'" contenteditable="true" data-note="'+it.id+':'+i+'">'+esc(n)+'</li>';}).join("");
+  return '<div class="row" data-k="flight" data-ln="'+ln+'"><div class="col">'+
+   '<div class="bp">'+
+    '<div class="band"><span>Boarding Pass</span><span class="ln" contenteditable="true" data-fl="'+it.dir+':airline">'+esc(f.airline)+'</span></div>'+
+    '<div class="grid">'+
+      '<div class="col">'+ed("fromCode",f.fromCode,"iata")+ed("fromName",f.fromName,"apname")+ed("dep",f.dep,"tm")+'</div>'+
+      '<div class="col"><div class="plane">'+route+ed("no",f.no,"fno")+'</div></div>'+
+      '<div class="col">'+ed("toCode",f.toCode,"iata")+ed("toName",f.toName,"apname")+ed("arr",f.arr,"tm")+'</div>'+
+    '</div>'+
+    '<dl class="meta">'+f.meta.map(function(m,i){
+      return '<div><dt>'+esc(m[0])+'</dt><dd contenteditable="true" data-flm="'+it.dir+':'+i+'">'+esc(m[1])+'</dd></div>';}).join("")+'</dl>'+
+    '<ul class="bpnotes">'+notes+'</ul>'+
+   '</div>'+
+   '</div></div>';
+}
+
+function photoStrip(id){
+  var ph=S.photos[id]||[];
+  if(!ph.length) return "";
+  return '<div class="photos">'+ph.map(function(x,i){
+    return '<button class="ph" data-photo="'+id+':'+i+'"><img src="'+x.d+'" alt="活動圖"></button>';
+  }).join("")+'</div>';
+}
+function readPhoto(file,cb){
+  var fr=new FileReader();
+  fr.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      var max=1500, w=img.width, h=img.height, r=Math.min(1,max/Math.max(w,h));
+      var cv=document.createElement("canvas");
+      cv.width=Math.max(1,Math.round(w*r)); cv.height=Math.max(1,Math.round(h*r));
+      cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+      try{ cb(cv.toDataURL("image/jpeg",0.72)); }catch(e){ tell("讀不到這張圖","這張圖處理不了，換一張試試。"); }
+    };
+    img.onerror=function(){ tell("讀不到這張圖","換一張試試。"); };
+    img.src=fr.result;
+  };
+  fr.onerror=function(){ tell("讀不到這個檔案","換一個試試。"); };
+  fr.readAsDataURL(file);
+}
+function pickPhoto(id){
+  var inp=document.createElement("input");
+  inp.type="file"; inp.accept="image/*";
+  inp.onchange=function(){
+    var f=inp.files&&inp.files[0]; if(!f) return;
+    readPhoto(f,function(d){
+      if(!S.photos[id]) S.photos[id]=[];
+      S.photos[id].push({d:d});
+      try{ localStorage.setItem(KEY,JSON.stringify(S)); }
+      catch(e){ S.photos[id].pop(); tell("存不下了","儲存空間不夠，刪掉幾張活動圖再試。"); return; }
+      render();
+    });
+  };
+  inp.click();
+}
+function eventsBox(it){
+  if(!it.events||!it.events.length) return "";
+  return '<details class="evt"><summary>元旦・正月行事（'+it.events.length+'）</summary><ul>'+
+    it.events.map(function(e){
+      return '<li><span class="et">'+esc(e.t)+'</span><span class="en"><b>'+esc(e.n)+'</b>'+esc(e.d||"")+'</span></li>';
+    }).join("")+'</ul>'+
+    (it.esrc?'<div class="esrc">'+esc(it.esrc)+(it.eurl?' ・<a href="'+esc(it.eurl)+'" target="_blank" rel="noopener">官網</a>':'')+'</div>':'')+
+    '</details>';
+}
+
+function rowSpot(it,c,ln){
+  var notes=(it.notes||[]).map(function(n,i){
+    var cls="", tx=n;
+    if(n.charAt(0)==="!"){ cls="warn"; tx=n.slice(1); }
+    else if(n.charAt(0)===":"){ cls="sub"; tx=n.slice(1); }
+    if(!tx.trim()) cls+=" blank";
+    return '<li class="'+cls.trim()+'">'+
+      '<span class="nt" contenteditable="true" data-note="'+it.id+':'+i+'">'+esc(tx)+'</span>'+
+      '<button class="rowx" data-delnote="'+it.id+':'+i+'" aria-label="刪除這列">✕</button></li>';
+  }).join("");
+  notes = '<ul class="notes">'+notes+'</ul>'+
+    '<div><button class="rowadd" data-addnote="'+it.id+'">＋ 新增一列</button></div>';
+  var done=!!S.visited[it.id];
+  var nameHTML = EDIT
+    ? '<span class="mv'+(String(it.place||"").trim()?"":" empty")+'" contenteditable="true" data-ed="place" data-id="'+it.id+'">'+esc(it.place||"")+'</span>'
+    : (it.place
+        ? '<a class="mv" target="_blank" rel="noopener" href="'+mapGo(it.place)+'">'+esc(it.place)+'</a>'
+        : '<span class="mv plain">尚未填地點</span>');
+  return '<div class="row" data-k="spot" data-ln="'+ln+'"><div class="gutter">'+
+   '<div class="mark" data-icopen="'+it.id+'">'+ico(it.ic)+'</div></div><div class="col">'+
+   '<div class="card'+(it.star?" star":"")+(done?" done":"")+'" data-id="'+it.id+'" data-drag>'+
+    '<div class="chead">'+
+      '<button class="tick" data-tick="'+it.id+'" aria-pressed="'+done+'" aria-label="標記已完成">✓</button>'+
+      '<div class="mid">'+
+        '<h3 class="h3" contenteditable="true" data-ed="t" data-id="'+it.id+'">'+esc(it.t)+'</h3>'+
+        '<div class="span"><span class="lbl">抵達</span>'+
+          timeField("arr",it.id,hm(c.arr),c.anchored?"anch":"")+
+          (c.anchored&&c.chained?'<button class="clr" data-unanchor="'+it.id+'" aria-label="解除固定">✕ 固定</button>':'')+
+        '</div>'+
+      '</div>'+
+      '<div class="rt'+(c.tight?" tight":"")+'">'+
+        '<span class="stay">可停留 '+dur(Math.max(0,c.win))+'</span>'+
+        '<span class="lv">離開'+timeField("lv",it.id,hm(c.leave),"sm")+
+          (c.lvfix?'<button class="clr" data-unlv="'+it.id+'" aria-label="解除固定">✕</button>':'')+
+        '</span>'+
+      '</div></div>'+
+    (c.over?'<div class="conf">抵達已經晚於原本設定的離開時間，可停留變成 0 分。'+
+      '<br><button class="cb" data-unlv="'+it.id+'">解除離開時間，改用預計停留</button></div>':'')+
+    (c.early&&!S.hush[it.id+":early"]?'<div class="conf">這一站被固定在 '+toHM(c.arr)+'，但前一段最快 '+toHM(c.nat)+' 才會到。'+
+      '<button class="cx" data-hush="'+it.id+':early" aria-label="關掉提醒">✕</button>'+
+      '<br><button class="cb" data-unanchor="'+it.id+'">解除固定</button></div>':'')+
+    (c.tight&&!S.hush[it.id+":tight"]?'<div class="conf">這一站只排了 '+dur(Math.max(0,c.win))+'，比建議的 '+dur(it.min)+' 少。'+
+      '<button class="cx" data-hush="'+it.id+':tight" aria-label="關掉提醒">✕</button>'+
+      '<br><button class="cb" data-ext="'+it.id+'">一鍵套用：拉長到 '+dur(it.min)+'</button></div>':'')+
+    notes+
+    eventsBox(it)+ photoStrip(it.id)+
+    '<div class="ftrow">'+ico("pin")+ nameHTML +
+      '<button class="iconb" data-addphoto="'+it.id+'" aria-label="加入活動圖">'+ico("camera")+'</button>'+
+      '<span class="grip" data-grip>'+ico("grip")+'</span>'+
+    '</div>'+
+    '<div class="boxfoot"><span class="bl">這一站</span>'+
+      '<button class="bf add" data-insert="'+it.id+'" aria-label="在下方新增一站">＋</button>'+
+      '<button class="bf del" data-delspot="'+it.id+'" aria-label="刪除這一站">✕</button></div>'+
+   '</div></div></div>';
+}
+
+var expandTr={};
+function rowTransitMini(it,c,ln){
+  var ic="walk"; (it.legs||[]).forEach(function(lg){ if(lg.k==="ride"&&ic==="walk") ic=lg.ic; });
+  return '<div class="row" data-k="transit" data-ln="'+ln+'"><div class="gutter"></div><div class="col">'+
+   '<button class="trmini" data-expandtr="'+it.id+'">'+ico(ic)+
+     '<span class="w">'+esc(it.from)+' → '+esc(it.to)+'</span>'+
+     '<span class="t">'+toHM(c.dep)+'→'+toHM(c.arr)+'</span>'+
+     '<span class="ex">展開</span></button>'+
+   '</div></div>';
+}
+function rowTransit(it,c,ln){
+  var mainIc="walk", hasRide=false;
+  it.legs.forEach(function(lg){ if(lg.k==="ride"){ if(!hasRide) mainIc=lg.ic; hasRide=true; } });
+  var legHTML=it.legs.map(function(lg,i){
+    if(lg.k!=="ride"){
+      return '<li>'+ico(lg.ic)+'<span class="lg"><b contenteditable="true" data-leg="'+it.id+':'+i+':text">'+esc(lg.text)+'</b>'+
+        '<span class="m"><button class="em" data-legmin="'+it.id+':'+i+'">'+lg.min+'分</button>'+
+        (it.legs.length>1?'　<button class="em" data-delleg="'+it.id+':'+i+'">刪除</button>':'')+'</span></span></li>';
+    }
+    var L=null; c.legs.forEach(function(x){ if(x.i===i) L=x; });
+    return '<li>'+ico(lg.ic)+'<span class="lg"><b contenteditable="true" data-leg="'+it.id+':'+i+':line">'+esc(lg.line)+'</b>　'+
+      '<span class="tm">'+esc(lg.a)+' '+toHM(L.dep)+' → '+esc(lg.b)+' '+toHM(L.arr)+'</span>'+
+      '<span class="m">'+lg.min+'分'+(lg.fare?'・'+money(lg.fare,it.cur):'')+(L.wait>0?'・候車 '+dur(L.wait):'')+'</span></span></li>';
+  }).join("");
+
+  var pickHTML="", lateL=null, first=true;
+  c.legs.forEach(function(L){ if(!lateL&&L.late) lateL=L; });
+  c.legs.forEach(function(L){
+    if(L.type!=="ride") return;
+    var lg=it.legs[L.i];
+    var why = L.synth ? ("約 "+lg.freq+" 分一班・下列時刻為推算")
+            : !L.list.length ? "時刻表待公布，請自行填入"
+            : lg.freq ? ("約 "+lg.freq+" 分一班・表列為部分路線")
+            : "可切換班次";
+    pickHTML+='<div class="depbar'+(first?"":" more")+'"><span class="tlb">出發</span>'+
+      timeField("dep",L.key,hm(L.dep),L.late?"bad":"")+
+      (S.pick[L.key]?'<button class="clr" data-cleardep="'+L.key+'">還原</button>':'')+
+      '<span class="why">'+esc(lg.line)+'　'+esc(lg.a)+' 發・'+why+'</span></div>';
+    first=false;
+    if(L.list.length){
+      var chosen=toHM(L.dep), at=L.list.indexOf(chosen);
+      if(at<0){ at=0; for(var q=0;q<L.list.length;q++){ if(toMin(L.list[q])>=L.dep){ at=q; break; } } }
+      var a=Math.max(0,at-6), b=Math.min(L.list.length,at+9);
+      pickHTML+='<div class="times'+(L.synth?" synth":"")+'" data-focus="'+L.key+'">'+L.list.slice(a,b).map(function(t){
+        return '<button class="tb'+(toMin(t)<L.ready?" past":"")+(t===chosen?" now":"")+
+          '" aria-pressed="'+(t===chosen)+'" data-pick="'+L.key+'" data-t="'+t+'">'+t+'</button>';
+      }).join("")+'</div>';
+    }
+  });
+  var altHTML = (it.alts && it.alts.length>1) ?
+    '<div class="alts">'+it.alts.map(function(A,i){
+      return '<button class="altb" aria-pressed="'+((it.altI||0)===i)+'" data-alt="'+it.id+':'+i+'">'+
+        '<b>'+esc(A.n)+'</b><span>'+esc(A.d||"")+'</span></button>';
+    }).join("")+'</div>' : '';
+  var chkHTML = it.chk ? '<div class="conf warn2">上下兩站變動過了，這段的路線與班次請重新確認。'+
+    '<button class="cx" data-okchk="'+it.id+'" aria-label="關掉提醒">✕</button>'+
+    '<br><button class="cb" data-restr="'+it.id+'">↺ 帶入查好的交通</button></div>' : '';
+  var conf = lateL ? '<div class="conf">趕不上這班：'+esc(it.legs[lateL.i].line)+' '+toHM(lateL.dep)+' 開，但 '+toHM(lateL.ready)+' 才到得了 '+esc(it.legs[lateL.i].a)+'，差 '+dur(lateL.ready-lateL.dep)+'。'+
+    '<br><button class="cb" data-shift="'+it.id+'">一鍵套用下一班</button></div>' : '';
+
+  var tts={}; it.legs.forEach(function(lg){ if(lg.k==="ride"&&lg.tt) tts[lg.tt]=1; });
+  var ttHTML=Object.keys(tts).map(function(k){ return ttBox(TTS[k], toHM(c.dep)); }).join("");
+
+  return '<div class="row" data-k="transit" data-ln="'+ln+'"><div class="gutter"></div><div class="col">'+
+   '<div class="tr">'+
+    '<div class="th"><b><span contenteditable="true" data-tr="'+it.id+':from">'+esc(it.from)+'</span> → '+
+      '<span contenteditable="true" data-tr="'+it.id+':to">'+esc(it.to)+'</span></b></div>'+
+    '<div class="main"><span>'+toHM(c.dep)+'</span><span class="ar">▶</span><span>'+toHM(c.arr)+'</span>'+
+      '<span class="tot">全程 '+dur(c.total)+(it.fare?'　<b class="fare">'+money(it.fare,it.cur)+'／人</b>':'')+'</span></div>'+
+    chkHTML+altHTML+
+    '<ul class="legs">'+legHTML+'</ul>'+
+    pickHTML+conf+
+    (String(it.note||"").trim()?'<div class="tnote" contenteditable="true" data-tnote="'+it.id+'">'+esc(it.note)+'</div>':'')+
+    (ttHTML?'<details class="disc"><summary>完整時刻表與出處</summary>'+ttHTML+'</details>':'')+
+    '<div class="acts">'+
+      (hasRide
+        ? '<a class="mini" target="_blank" rel="noopener" href="'+mapDir(it.from,it.to)+'">'+ico("route")+'Google Maps 路線</a>'+
+          '<button class="mini" data-addleg="'+it.id+'">＋ 加一段</button>'
+        : '<a class="mini" target="_blank" rel="noopener" href="'+mapDir(it.from,it.to)+'&travelmode=walking">'+ico("walk")+'Google Maps 路線</a>')+
+      '<button class="mini rst" data-restr="'+it.id+'" title="重新帶入查好的交通">↺ 還原</button>'+
+    '</div>'+
+   '</div></div></div>';
+}
+function ttBox(tt,hi){
+  var hh=String(hi||"").slice(0,2);
+  var rows=(tt.rows||[]).map(function(r){
+    return '<div class="ttr'+(r[0]===hh?" hi":"")+'"><span class="hh">'+esc(r[0])+'</span><span class="mm">'+esc(r[1])+'</span></div>';
+  }).join("");
+  return '<div class="ttbox"><h4>'+esc(tt.t)+'</h4>'+
+    (rows?'<div class="ttgrid">'+rows+'</div>':'')+
+    '<div class="src">'+esc(tt.note)+(tt.url?'\n出處：<a href="'+esc(tt.url)+'" target="_blank" rel="noopener">'+esc(tt.src)+'</a>':'')+'</div></div>';
+}
+
+/* ---------- Page 1: 行前 ---------- */
+function viewInfo(){
+  var secs=S.info.sections.map(function(sec){
+    var inner="", id=sec.id;
+    function x(kind,i){ return '<button class="rowx" data-delrow="'+id+':'+kind+':'+i+'" aria-label="刪除這列">✕</button>'; }
+    if(sec.type==="kv"){
+      inner='<div class="kv">'+sec.rows.map(function(r,i){
+        return '<div class="r"><span class="k" contenteditable="true" data-kvk="'+id+':'+i+'">'+esc(r[0])+'</span>'+
+          '<span class="v" contenteditable="true" data-kv="'+id+':'+i+'">'+esc(r[1])+'</span>'+x("rows",i)+'</div>';
+      }).join("")+'</div>';
+    } else if(sec.type==="table"){
+      inner='<div class="tblwrap"><table class="tbl"><thead><tr>'+
+        sec.head.map(function(h){return '<th>'+esc(h)+'</th>';}).join("")+'<th class="x"></th></tr></thead><tbody>'+
+        sec.rows.map(function(r,ri){ return '<tr>'+r.map(function(cc,ci){
+          return '<td'+(ci===r.length-1?' class="num"':'')+' contenteditable="true" data-td="'+id+':'+ri+':'+ci+'">'+esc(cc)+'</td>';
+        }).join("")+'<td class="x">'+x("rows",ri)+'</td></tr>'; }).join("")+
+        '</tbody></table></div>'+
+        (sec.after?'<ul class="after">'+sec.after.map(function(a,ai){
+          return '<li><span class="tx" contenteditable="true" data-af="'+id+':'+ai+'">'+esc(a)+'</span>'+x("after",ai)+'</li>';
+        }).join("")+'</ul>':'');
+    } else if(sec.type==="list"){
+      inner='<ul class="after">'+sec.rows.map(function(r,i){
+        return '<li><span class="tx" contenteditable="true" data-li="'+id+':'+i+'">'+esc(r)+'</span>'+x("rows",i)+'</li>';
+      }).join("")+'</ul>';
+    } else if(sec.type==="check"){
+      inner='<div class="chk">'+sec.rows.map(function(r,i){
+        var k=id+":"+i, on=!!S.done[k];
+        return '<div class="chkrow'+(on?" done":"")+'"><button class="chkbox" data-chk="'+k+'">✓</button>'+
+          '<span class="ct" contenteditable="true" data-li="'+id+':'+i+'">'+esc(r)+'</span>'+x("rows",i)+'</div>';
+      }).join("")+'</div>';
+    }
+    inner+='<div><button class="rowadd" data-addrow="'+id+'">＋ 新增一列</button></div>';
+    inner+='<div class="boxfoot"><span class="bl">這個區塊</span>'+
+      '<button class="bf add" data-addsec="'+id+'" aria-label="在下方新增一個區塊">＋</button>'+
+      '<button class="bf del" data-delsec="'+id+'" aria-label="刪除這個區塊">✕</button></div>';
+    return '<div class="sec" data-id="'+id+'" data-drag><span class="grip" data-grip>'+ico("grip")+'</span>'+
+      '<div class="sc"><h3 contenteditable="true" data-sech="'+id+'">'+esc(sec.t)+'</h3>'+inner+'</div></div>';
+  }).join("");
+  return '<div class="sechead"><h2>行前資訊</h2><span class="rule"></span>'+
+     '<span class="cnt">'+S.info.sections.length+'</span></div>'+
+   '<div class="info" id="infoList">'+secs+'</div>'+
+   (S.info.sections.length?'':'<button class="addb" id="addSec0">＋ 新增一個區塊</button>')+
+   '<p class="foot">'+esc(S.info.foot)+'</p>';
+}
+
+/* ---------- Page 3: 花費 ---------- */
+function viewMoney(){
+  var g=grand(), n=S.expenses.length;
+  var head='<div class="sechead"><h2>花費紀錄</h2><span class="rule"></span><span class="cnt">'+n+' 筆</span></div>'+
+   '<div class="total"><span class="tlb">總計</span>'+
+     '<span class="amt"><b>'+amtMain(g)+'</b><small>'+amtSub(g)+'</small></span>'+
+     '<button class="curtog" data-curtog aria-label="切換主要幣別">'+ico("swap")+'</button></div>'+
+   '<button class="bigbtn" id="mAdd">＋ 新增花費</button>';
+  if(!n) return head+'<div class="empty">還沒有任何紀錄。<br>按上面的「新增花費」，或右下角的記帳本。</div>';
+
+  var seg='<div class="seg" role="tablist">'+
+    '<button role="tab" data-g="day" aria-selected="'+(S.mgroup!=="cat"&&S.mgroup!=="who")+'">依日期</button>'+
+    '<button role="tab" data-g="cat" aria-selected="'+(S.mgroup==="cat")+'">依類別</button>'+
+    '<button role="tab" data-g="who" aria-selected="'+(S.mgroup==="who")+'">依人</button></div>';
+
+  /* 類別長條 */
+  var cs={}; S.expenses.forEach(function(e){ cs[e.c||"etc"]=(cs[e.c||"etc"]||0)+(+e.a||0); });
+  var mx=1; Object.keys(cs).forEach(function(k){ if(cs[k]>mx) mx=cs[k]; });
+  var bars='<div class="bars">'+allCats().filter(function(C){return cs[C.k];}).sort(function(a,b){return cs[b.k]-cs[a.k];})
+    .map(function(C){ return '<div class="bar"><span class="bl">'+esc(C.n)+'</span>'+
+      '<span class="bt"><span class="bfill" style="width:'+Math.max(3,cs[C.k]/mx*100)+'%;background:'+catColor(C)+'"></span></span>'+
+      '<span class="bv">'+amtMain(cs[C.k])+'</span></div>'; }).join("")+'</div>';
+
+  var groups="";
+  if(S.mgroup==="cat"){
+    groups=allCats().filter(function(C){return cs[C.k];}).sort(function(a,b){return cs[b.k]-cs[a.k];}).map(function(C){
+      var rows=S.expenses.filter(function(e){return (e.c||"etc")===C.k;}).map(function(e){ return mrow(e,true); }).join("");
+      return '<div class="mgrp"><h3><span class="sw" style="background:'+catColor(C)+'"></span>'+esc(C.n)+
+        '<small>'+amtLine(cs[C.k])+'</small></h3>'+rows+'</div>';
+    }).join("");
+  } else if(S.mgroup==="who"){
+    groups=WHOS().map(function(W){
+      var list=S.expenses.filter(function(e){ return whoOf(e)===W.k; });
+      if(!list.length) return "";
+      var sum=0; list.forEach(function(e){ sum+=+e.a||0; });
+      return '<div class="mgrp"><h3><span class="sw" style="background:'+W.c+'"></span>'+esc(W.n)+
+        '<small>'+amtLine(sum)+'</small></h3>'+
+        list.map(function(e){ return mrow(e,true); }).join("")+'</div>';
+    }).join("");
+  } else {
+    groups=S.days.map(function(d){
+      var list=S.expenses.filter(function(e){return e.day===d.id;});
+      if(!list.length) return "";
+      var sum=0; list.forEach(function(e){ sum+=+e.a||0; });
+      return '<div class="mgrp"><h3>'+esc(d.date)+'（'+esc(d.dow)+'）'+
+        '<small>'+amtLine(sum)+'</small></h3>'+list.map(function(e){return mrow(e,false);}).join("")+'</div>';
+    }).join("");
+    var un=S.expenses.filter(function(e){ return !dayById(e.day); });
+    if(un.length){ var s2=0; un.forEach(function(e){s2+=+e.a||0;});
+      groups+='<div class="mgrp"><h3>未指定日期<small>'+amtLine(s2)+'</small></h3>'+un.map(function(e){return mrow(e,false);}).join("")+'</div>'; }
+  }
+  return head+seg+(S.mgroup==="cat"?bars:"")+groups;
+}
+var WHOPAL=["#C04C36","#4E7A8C","#9C7A2E","#6B5C9E","#B4557E","#A8683F"];
+function people(){ return (S.people&&S.people.length)?S.people:[{id:"a",n:"我"}]; }
+function whoOf(e){
+  var w=e.w||"both";
+  return people().some(function(x){ return x.id===w; }) ? w : "both";
+}
+/* 共同排最前面，其他人照設定順序 */
+function WHOS(){
+  var L=[{k:"both",n:"共同",c:"#5C7A56"}];
+  people().forEach(function(x,i){ L.push({k:x.id,n:x.n,c:WHOPAL[i%WHOPAL.length]}); });
+  return L;
+}
+function whoName(k){ var L=WHOS(); for(var i=0;i<L.length;i++) if(L[i].k===k) return L[i].n; return "共同"; }
+function newPersonId(){ var k; do{ k="p"+uid().slice(0,4); }while(people().some(function(x){return x.id===k;})); return k; }
+function mrow(e,byCat){
+  var C=cat(e.c), d=dayById(e.day);
+  var sub = byCat ? (d?d.date+"（"+d.dow+"）":"未指定日期") : C.n;
+  sub = sub+"　"+whoName(whoOf(e));
+  return '<div class="mrow">'+
+    '<button class="mhit" data-editex="'+e.id+'" aria-label="編輯這筆">'+
+      '<span class="dot" style="background:'+catColor(C)+'"></span>'+
+      '<span class="mn"><b>'+esc(e.n||C.n)+'</b><small>'+esc(sub)+'</small></span>'+
+      '<span class="mv"><b>'+amtMain(+e.a||0)+'</b><small>'+amtSub(+e.a||0)+'</small></span>'+
+    '</button>'+
+    '<button class="mx" data-delex="'+e.id+'">✕</button></div>';
+}
+
+/* ---------- Page 4: 備忘 ---------- */
+function viewMemo(){
+  return '<div class="sechead"><h2>行程備忘錄</h2><span class="rule"></span></div>'+
+   '<div class="memolist" id="memoList">'+
+   S.memo.map(function(m){
+     return '<div class="memo" data-id="'+m.id+'" data-drag>'+
+      '<span class="grip" data-grip>'+ico("grip")+'</span>'+
+      '<h2 contenteditable="true" data-memoh="'+m.id+'">'+esc(m.h)+'</h2>'+
+      '<div class="buls" data-memo="'+m.id+'">'+m.b.map(function(t,i){
+        var q=(m.g&&m.g[i])||"";
+        return '<div class="bul'+(String(t).trim()?"":" blank")+'" data-geo="'+esc(q)+'"><span class="d">・</span>'+
+          '<div class="x" contenteditable="true">'+esc(t)+'</div>'+
+          (q?'<a class="bmap" target="_blank" rel="noopener" href="'+mapGo(q)+'" aria-label="在 Google Maps 開啟：'+esc(q)+'">'+ico("pin")+'</a>':'')+
+          '<button class="rowx bmapset'+(q?" on":"")+'" data-setg="'+m.id+':'+i+'" aria-label="設定地圖連結">'+ico("pin")+'</button>'+
+          '<button class="rowx" data-delbul="'+m.id+':'+i+'" aria-label="刪除這點">✕</button></div>';
+      }).join("")+'</div>'+
+      '<div><button class="rowadd" data-addbul="'+m.id+'">＋ 新增一點</button></div>'+
+      '<div class="boxfoot"><span class="bl">這則備忘</span>'+
+        '<button class="bf add" data-addmemo="'+m.id+'" aria-label="在下方新增一則備忘">＋</button>'+
+        '<button class="bf del" data-delmemo="'+m.id+'" aria-label="刪除這則備忘">✕</button></div>'+
+      '</div>';
+   }).join("")+'</div>'+
+   (S.memo.length?'':'<button class="addb" id="addMemo">＋ 新增一個備忘標題</button>');
+}
+
+/* ---------- Page 5: 概略 ---------- */
+function viewOver(){
+  return '<div class="sechead"><h2>概略版行程表</h2><span class="rule"></span></div>'+
+   S.days.map(function(d){
+     var c=compute(d), last=d.items[d.items.length-1];
+     var endT = last.k==="flight" ? S.flights[last.dir].arr : toHM(c[last.id].leave!=null?c[last.id].leave:c[last.id].arr);
+     var rows=d.items.map(function(it){
+       var x=c[it.id];
+       if(it.k==="flight"){ var f=S.flights[it.dir];
+         return '<div class="ovr mv"><span class="i">'+ico("plane")+'</span><span class="t">'+esc(f.dep)+'–'+esc(f.arr)+'</span>'+
+           '<span class="n">'+esc(f.fromCode)+' → '+esc(f.toCode)+'　'+esc(f.no)+'</span></div>'; }
+       if(it.k==="transit"){ var mi="walk"; it.legs.forEach(function(lg){ if(lg.k==="ride"&&mi==="walk") mi=lg.ic; });
+         return '<div class="ovr mv"><span class="i">'+ico(mi)+'</span><span class="t">'+toHM(x.leaveAt)+'–'+toHM(x.arr)+'</span>'+
+           '<span class="n">'+esc(it.from)+' → '+esc(it.to)+'</span></div>'; }
+       if(!it.stay) return '<div class="ovr"><span class="i">'+ico(it.ic)+'</span><span class="t">'+toHM(x.arr)+'</span><span class="n">'+esc(it.t)+'</span></div>';
+       return '<div class="ovr"><span class="i">'+ico(it.ic)+'</span><span class="t">'+toHM(x.arr)+'–'+toHM(x.leave)+'</span><span class="n">'+esc(it.t)+'</span></div>';
+     }).join("");
+     return '<div class="ov"><h3>'+esc(d.date)+'（'+esc(d.dow)+'）<span>'+esc(d.tag)+'</span><small>'+esc(d.start)+' – '+endT+'</small></h3>'+rows+'</div>';
+   }).join("");
+}
+
+/* ================= sheets ================= */
+var sheet=$("#sheet");
+function openSheet(t,h){ $("#shTitle").textContent=t; $("#shBody").innerHTML=h; sheet.setAttribute("open",""); }
+function closeSheet(){ sheet.removeAttribute("open"); }
+sheet.addEventListener("click",function(e){ if(e.target.closest("[data-close]")) closeSheet(); });
+
+function delCat(k,keepEdit){
+  var L=allCats();
+  if(L.length<=1){ tell("至少要留一個類別","不能把類別全部刪掉。"); return; }
+  var rest=L.filter(function(c){ return c.k!==k; });
+  var to=rest[0];
+  var used=S.expenses.filter(function(e){return e.c===k;}).length, nm=cat(k).n;
+  ask("刪除類別「"+nm+"」？", used?("已有 "+used+" 筆花費用這個類別，會改成「"+to.n+"」。"):"",function(){
+    S.expenses.forEach(function(e){ if(e.c===k) e.c=to.k; });
+    if(S.cats.some(function(c){ return c.k===k; })) S.cats=S.cats.filter(function(c){ return c.k!==k; });
+    else S.hidecat[k]=1;                       /* 內建類別用隱藏的，舊資料不會壞掉 */
+    save(); sheetAdd(keepEdit); render(); },"刪除",true);
+}
+function exById(id){ for(var i=0;i<S.expenses.length;i++) if(S.expenses[i].id===id) return S.expenses[i]; return null; }
+function sheetAdd(editId){
+  var E = editId ? exById(editId) : null;
+  var inCur = E ? (E.cur||"JPY") : "JPY";
+  var startVal = E ? (inCur==="TWD" ? Math.round((+E.a||0)*(+S.rate||0.2006)) : (+E.a||0)) : "";
+  openSheet(E?"編輯花費":"新增花費",
+   '<div class="curin" id="bCur">'+
+     '<button data-in="JPY" aria-selected="'+(inCur==="JPY")+'">JPY¥ 日圓</button>'+
+     '<button data-in="TWD" aria-selected="'+(inCur==="TWD")+'">NT$ 台幣</button></div>'+
+   '<label class="fl"><span id="bAL">金額（日圓）</span>'+
+     '<input class="inp bigjpy" id="bA" type="number" inputmode="numeric" placeholder="0" value="'+esc(startVal)+'"></label>'+
+   '<div class="twdline" id="bT">≈ NT$0</div>'+
+   '<label class="fl">項目<input class="inp" id="bN" placeholder="買了什麼" value="'+esc(E?(E.n||""):"")+'"></label>'+
+   '<div><div class="flh">日期</div>'+
+   '<div class="seg wrap" id="bD">'+S.days.map(function(d,i){
+     return '<button data-d="'+d.id+'" aria-selected="'+(E? E.day===d.id : i===di)+'">'+esc(d.date)+'</button>';}).join("")+'</div></div>'+
+   '<div><div class="flh">誰的</div>'+
+   '<div class="seg wrap" id="bW">'+WHOS().map(function(W,i){
+     var on = E ? (whoOf(E)===W.k) : (i===0);
+     return '<button data-w="'+W.k+'"'+(on?' aria-selected="true"':'')+'>'+esc(W.n)+'</button>';
+   }).join("")+'</div></div>'+
+   '<div><div class="flh">類別</div>'+
+   '<div class="catsel" id="bC">'+allCats().map(function(C){
+     var on = E ? ((E.c||"etc")===C.k) : false;
+     return '<button class="cs" data-c="'+C.k+'" aria-pressed="'+on+'" style="color:'+catColor(C)+'">'+
+       '<span class="dot" style="background:'+catColor(C)+'"></span>'+esc(C.n)+
+       '<span class="csx" data-delcat="'+C.k+'">✕</span></button>';}).join("")+
+     '<button class="cs newc" id="bNewC">＋ 新類別</button>'+
+     (allCats().length>1?'<button class="cs mgc" id="bMgC">✕ 管理</button>':'')+'</div></div>'+
+   '<button class="bigbtn" id="bSave">'+(E?"儲存修改":"記下來")+'</button>'+
+   (E?'<button class="bigbtn ghost" id="bDel" style="color:var(--red)">刪除這筆</button>':''));
+
+  var a=$("#bA"), cur=inCur;
+  function sync(){
+    var v=+a.value||0;
+    $("#bAL").textContent = cur==="TWD" ? "金額（台幣）" : "金額（日圓）";
+    $("#bT").textContent = cur==="TWD" ? ("≈ "+jpy(twd2jpy(v))) : ("≈ "+twd(v));
+  }
+  a.addEventListener("input",sync); sync();
+  if(!E) a.focus();
+  $("#bCur").addEventListener("click",function(e){ var b=e.target.closest("[data-in]"); if(!b) return;
+    if(cur===b.dataset.in) return;
+    var v=+a.value||0;
+    a.value = v ? (b.dataset.in==="TWD" ? Math.round(v*(+S.rate||0.2006)) : twd2jpy(v)) : "";
+    cur=b.dataset.in;
+    $$("#bCur [data-in]").forEach(function(x){ x.setAttribute("aria-selected",String(x===b)); });
+    sync(); });
+  $("#bC").addEventListener("click",function(e){
+    var x=e.target.closest("[data-delcat]");
+    if(x){ e.stopPropagation(); delCat(x.dataset.delcat, editId); return; }
+    var b=e.target.closest(".cs"); if(!b||!b.dataset.c) return;
+    var on=b.getAttribute("aria-pressed")==="true";
+    if(E){ $$("#bC .cs").forEach(function(y){ y.setAttribute("aria-pressed","false"); }); b.setAttribute("aria-pressed","true"); }
+    else b.setAttribute("aria-pressed", on?"false":"true"); });
+  if($("#bMgC")) $("#bMgC").onclick=function(){
+    var box=$("#bC"), on=box.classList.toggle("mg");
+    $("#bMgC").textContent = on ? "✓ 完成" : "✕ 管理"; };
+  $("#bD").addEventListener("click",function(e){ var b=e.target.closest("[data-d]"); if(!b) return;
+    $$("#bD [data-d]").forEach(function(x){ x.setAttribute("aria-selected",String(x===b)); }); });
+  $("#bW").addEventListener("click",function(e){ var b=e.target.closest("[data-w]"); if(!b) return;
+    $$("#bW [data-w]").forEach(function(x){ x.setAttribute("aria-selected",String(x===b)); }); });
+  $("#bNewC").onclick=function(){
+    askInput("新類別","要叫什麼名字？","",function(v){
+      var n=String(v||"").trim(); if(!n) return true;
+      var k=newCatKey(), col=CATPAL[S.cats.length%CATPAL.length];
+      S.cats.push({k:k,n:n,v:col,i:"dots"});
+      save();
+      var box=$("#bC"), btn=document.createElement("button");
+      btn.className="cs"; btn.dataset.c=k; btn.setAttribute("aria-pressed","true");
+      btn.style.color=col;
+      btn.innerHTML='<span class="dot" style="background:'+col+'"></span>'+esc(n);
+      if(E) $$("#bC .cs").forEach(function(x){ x.setAttribute("aria-pressed","false"); });
+      box.insertBefore(btn,$("#bNewC"));
+    });
+  };
+  if($("#bDel")) $("#bDel").onclick=function(){
+    ask("刪除這筆花費？","",function(){
+      S.expenses=S.expenses.filter(function(x){ return x.id!==editId; });
+      save(); closeSheet(); render(); },"刪除",true);
+  };
+  $("#bSave").onclick=function(){
+    var raw=+a.value||0; if(!raw){ a.focus(); return; }
+    var jpy = cur==="TWD" ? twd2jpy(raw) : raw;
+    var cs=$$("#bC .cs[aria-pressed='true']").map(function(b){return b.dataset.c;}).filter(Boolean);
+    if(!cs.length) cs=["etc"];
+    var dsel=$("#bD [aria-selected='true']"), dayId=dsel?dsel.dataset.d:S.days[di].id;
+    var wsel=$("#bW [aria-selected='true']"), w=wsel?wsel.dataset.w:"both";
+    var nm=$("#bN").value.trim();
+    if(E){
+      E.a=jpy; E.n=nm||cat(cs[0]).n; E.day=dayId; E.w=w; E.c=cs[0]; E.cur=cur;
+      save(); closeSheet(); render(); flag("已更新"); return;
+    }
+    var each=Math.round(jpy/cs.length);
+    cs.forEach(function(k,i){
+      S.expenses.push({id:uid(),day:dayId,n:nm||cat(k).n,
+        a:(i===cs.length-1? jpy-each*(cs.length-1):each),c:k,w:w,cur:cur});
+    });
+    save(); closeSheet(); page="money"; render(0);
+  };
+}
+
+var ICONS=["camera","torii","fork","cup","store",
+           "market","museum","castle","tree","bird",
+           "bed","luggage","gift","moon","plane"];
+function sheetIcon(id){
+  var f=findItem(id); if(!f) return;
+  openSheet("換一個圖標",
+    '<div class="icgrid">'+ICONS.map(function(n){
+      return '<button data-ic="'+n+'" aria-pressed="'+(n===f.it.ic)+'" aria-label="'+n+'">'+ico(n)+'</button>';
+    }).join("")+'</div>');
+  $$("[data-ic]",$("#shBody")).forEach(function(b){ b.onclick=function(){
+    f.it.ic=b.dataset.ic; save(); closeSheet(); render(); }; });
+}
+function sheetSet(){
+  openSheet("設定",
+   '<label class="fl">日圓 → 台幣 匯率（1 JPY = ? TWD）<input class="inp mono" id="sR" type="number" step="0.0001" value="'+S.rate+'"></label>'+
+   '<div class="whoset"><span class="wlb">記帳人</span>'+
+     people().map(function(x,i){
+       return '<span class="wc" style="color:'+WHOPAL[i%WHOPAL.length]+'">'+
+         '<button class="wn" data-renwho="'+x.id+'">'+esc(x.n)+'</button>'+
+         (people().length>1?'<button class="wx" data-delwho="'+x.id+'" aria-label="刪除">✕</button>':'')+'</span>';
+     }).join("")+
+     '<button class="wadd" id="sAddWho" aria-label="新增記帳人">＋</button></div>'+
+   '<button class="bigbtn" id="sSave">儲存</button>'+
+   '<hr style="border:0;border-top:1px solid var(--line)">'+
+   '<button class="bigbtn ghost" id="sExp">匯出備份</button>'+
+   '<button class="bigbtn ghost" id="sImp">從備份還原</button>'+
+   '<button class="bigbtn ghost" id="sRst" style="color:var(--red)">重設回預設行程</button>'+
+   '<p class="perhead">所有編輯都存在這台裝置的瀏覽器裡，會自動存檔。換手機或想跟旅伴同步，用匯出／還原。</p>');
+  $("#sSave").onclick=function(){
+    S.rate=+$("#sR").value||0.2006;
+    save(); closeSheet(); render(); };
+  $("#sAddWho").onclick=function(){
+    askInput("新增記帳人","要叫什麼名字？","",function(v){
+      var n=String(v||"").trim(); if(!n) return true;
+      S.people.push({id:newPersonId(),n:n}); save(); sheetSet(); });
+  };
+  $$("[data-renwho]",$("#shBody")).forEach(function(b){ b.onclick=function(){
+    var id=b.dataset.renwho, pp=null;
+    S.people.forEach(function(x){ if(x.id===id) pp=x; });
+    if(!pp) return;
+    askInput("改名字","",pp.n,function(v){
+      var n=String(v||"").trim(); if(!n) return true;
+      pp.n=n; save(); sheetSet(); render(); });
+  }; });
+  $$("[data-delwho]",$("#shBody")).forEach(function(b){ b.onclick=function(){
+    var id=b.dataset.delwho, used=S.expenses.filter(function(e){return e.w===id;}).length;
+    ask("刪除這個記帳人？", used?("已有 "+used+" 筆花費記在他名下，會改成「共同」。"):"",function(){
+      S.expenses.forEach(function(e){ if(e.w===id) e.w="both"; });
+      S.people=S.people.filter(function(x){ return x.id!==id; });
+      save(); sheetSet(); render(); },"刪除",true); }; });
+  $("#sExp").onclick=sheetExport;
+  $("#sImp").onclick=sheetImport;
+  $("#sRst").onclick=sheetReset;
+}
+function sheetExport(){
+  var t="";
+  try{ t=JSON.stringify(S); }catch(e){ t=""; }
+  openSheet("匯出備份",
+   '<p class="perhead">下面整串就是你的備份（含活動圖）。按下面的鍵複製，或長按文字全選複製，貼到記事本、訊息裡保存。</p>'+
+   '<textarea class="inp bk" id="bkT" readonly>'+esc(t)+'</textarea>'+
+   '<button class="bigbtn" id="bkCopy">複製全部</button>'+
+   '<button class="bigbtn ghost" data-close>關閉</button>');
+  var ta=$("#bkT");
+  ta.addEventListener("focus",function(){ try{ this.setSelectionRange(0,this.value.length); }catch(e){} });
+  $("#bkCopy").onclick=function(){
+    var btn=$("#bkCopy"), ok=false;
+    ta.focus(); try{ ta.setSelectionRange(0,ta.value.length); }catch(e){}
+    try{ ok=document.execCommand("copy"); }catch(e){}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(
+        function(){ btn.textContent="已複製 ✓"; },
+        function(){ btn.textContent = ok ? "已複製 ✓" : "請長按上面文字手動複製"; });
+    } else btn.textContent = ok ? "已複製 ✓" : "請長按上面文字手動複製";
+  };
+}
+function sheetImport(){
+  openSheet("從備份還原",
+   '<p class="perhead">把之前匯出的那一整串貼進來。按下還原之後，目前這台裝置上的內容會被覆蓋掉。</p>'+
+   '<textarea class="inp bk" id="imT" placeholder="貼在這裡"></textarea>'+
+   '<button class="bigbtn" id="imGo">還原</button>'+
+   '<button class="bigbtn ghost" data-close>取消</button>');
+  $("#imGo").onclick=function(){
+    var t=($("#imT").value||"").trim();
+    if(!t){ $("#imT").focus(); return; }
+    var pp=null;
+    try{ pp=JSON.parse(t); }catch(e){ pp=null; }
+    if(!pp||!pp.days||!pp.days.length){ $("#imGo").textContent="這串看起來不是有效的備份"; return; }
+    S=migrate(pp);
+    try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+    closeSheet(); di=0; render(0); flag("已還原");
+  };
+}
+function sheetReset(){
+  openSheet("重設回預設行程",
+   '<p class="perhead">會清掉<b>全部</b>編輯、勾選、記帳與活動圖，整份回到最初的樣子。這個動作沒辦法復原。</p>'+
+   '<button class="bigbtn" id="rsGo" style="background:var(--red)">確定重設</button>'+
+   '<button class="bigbtn ghost" data-close>取消</button>');
+  $("#rsGo").onclick=function(){
+    S=migrate(DEFAULT());
+    try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+    closeSheet(); di=0; page="itin"; render(0); flag("已重設");
+  };
+}
+
+/* 時間欄位：轉滑輪的過程不動，等離開欄位（按完成／點別處）才套用一次 */
+function onTime(inp,apply){
+  var start=inp.value, done=false;
+  function commit(){
+    if(done) return;
+    if(inp.value===start) return;
+    done=true; apply(inp.value);
+  }
+  inp.addEventListener("blur",commit);
+  inp.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); inp.blur(); } });
+}
+
+/* ================= 拖曳排序 ================= */
+function sortable(box,sel,onEnd,holdMs){
+  var el=null,sy=0,hold=null,py=0,auto=null;
+  function items(){ return $$(sel,box); }
+  /* 拖到畫面上下緣時自動捲動，這樣才能從最底下一路拉到最上面 */
+  function autoScroll(){
+    if(!el){ auto=null; return; }
+    var top=90, bot=window.innerHeight-120, sp=0;
+    if(py<top) sp=-Math.min(26,Math.ceil((top-py)/4)+4);
+    else if(py>bot) sp= Math.min(26,Math.ceil((py-bot)/4)+4);
+    if(sp){
+      var y0=window.scrollY;
+      window.scrollBy(0,sp);
+      var moved=window.scrollY-y0;
+      if(moved){ sy-=moved; el.style.transform="translateY("+(py-sy)+"px)"; reorder(); }
+    }
+    auto=requestAnimationFrame(autoScroll);
+  }
+  box.addEventListener("pointerdown",function(e){
+    var t=e.target.closest(sel); if(!t) return;
+    if(e.target.closest("[data-grip]")){ e.preventDefault(); begin(t,e.clientY); return; }
+    if(holdMs==null) return;
+    if(e.target.closest("[contenteditable],button,a,input,summary,details")) return;
+    hold=setTimeout(function(){ begin(t,e.clientY); },holdMs);
+    var clr=function(){ clearTimeout(hold); };
+    document.addEventListener("pointerup",clr,{once:true});
+    document.addEventListener("pointercancel",clr,{once:true});
+    document.addEventListener("pointermove",clr,{once:true});
+  });
+  function begin(t,y){
+    el=t; sy=y; py=y; el.classList.add("dragging");
+    el.style.position="relative"; el.style.zIndex="30"; el.style.transition="none";
+    document.body.style.userSelect="none";
+    if(navigator.vibrate) navigator.vibrate(10);
+    document.addEventListener("pointermove",move,{passive:false});
+    document.addEventListener("pointerup",up,{once:true});
+    document.addEventListener("pointercancel",up,{once:true});
+    if(!auto) auto=requestAnimationFrame(autoScroll);
+  }
+  function reorder(){
+    var r=el.getBoundingClientRect(), mid=r.top+r.height/2, list=items();
+    for(var i=0;i<list.length;i++){
+      var o=list[i]; if(o===el) continue;
+      var q=o.getBoundingClientRect();
+      if(mid>q.top&&mid<q.bottom){
+        var before=list.indexOf(o)<list.indexOf(el);
+        var he=el.closest(".row")||el, ho=o.closest(".row")||o;
+        if(before) ho.parentNode.insertBefore(he,ho); else ho.parentNode.insertBefore(he,ho.nextSibling);
+        sy=py; el.style.transform="translateY(0px)";
+        if(navigator.vibrate) navigator.vibrate(6);
+        break;
+      }
+    }
+  }
+  function move(e){
+    if(!el) return; e.preventDefault();
+    py=e.clientY;
+    el.style.transform="translateY("+(py-sy)+"px)";
+    reorder();
+  }
+  function up(){
+    if(!el) return;
+    document.removeEventListener("pointermove",move);
+    if(auto){ cancelAnimationFrame(auto); auto=null; }
+    el.classList.remove("dragging");
+    el.style.transform=""; el.style.position=""; el.style.zIndex=""; el.style.transition="";
+    document.body.style.userSelect="";
+    var order=items().map(function(n){return n.dataset.id;});
+    el=null; onEnd(order);
+  }
+}
+
+/* ================= events ================= */
+function txt(n){ return n.innerText.replace(/ /g," ").replace(/\n+$/,""); }
+function onBlur(sel,fn){ $$(sel).forEach(function(n){ n.addEventListener("blur",function(){ fn(n); }); }); }
+function noEnter(sel){ $$(sel).forEach(function(n){ n.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); n.blur(); } }); }); }
+function secById(id){ for(var i=0;i<S.info.sections.length;i++) if(S.info.sections[i].id===id) return S.info.sections[i]; return null; }
+function memoById(id){ for(var i=0;i<S.memo.length;i++) if(S.memo[i].id===id) return S.memo[i]; return null; }
+
+function wire(){
+  /* 行程卡：標題 / 地點 */
+  onBlur("[data-ed]",function(n){
+    var f=findItem(n.dataset.id); if(!f) return;
+    var was=f.it[n.dataset.ed];
+    f.it[n.dataset.ed]=txt(n);
+    if(was===f.it[n.dataset.ed]){ save(); return; }
+    /* 站名或地點改了，前後兩段交通要跟著換，能查到路線就直接帶入 */
+    syncTransits(f.d); save(); render();
+  });
+  noEnter("[data-ed]");
+  /* 頁首大標 */
+  onBlur("[data-meta]",function(n){ S.meta[n.dataset.meta]=txt(n); save(); });
+  noEnter('[data-meta="title"]');
+  /* 日標題 */
+  onBlur("[data-day]",function(n){ S.days[di][n.dataset.day]=txt(n); save(); });
+  noEnter('[data-day="title"]');
+  /* 註解：Enter 新增一行、空白 Backspace 刪除 */
+  $$("[data-note]").forEach(function(n){
+    n.addEventListener("blur",function(){
+      var p=n.dataset.note.split(":"), f=findItem(p[0]); if(!f) return;
+      var old=f.it.notes[+p[1]]||"", pre=(old.charAt(0)==="!"||old.charAt(0)===":")?old.charAt(0):"";
+      f.it.notes[+p[1]]=pre+txt(n); save();
+    });
+    n.addEventListener("input",function(){
+      var box=n.closest("li")||n;
+      if(txt(n).trim()) box.classList.remove("blank"); else box.classList.add("blank");
+    });
+    n.addEventListener("keydown",function(e){
+      var p=n.dataset.note.split(":"), f=findItem(p[0]); if(!f) return;
+      if(e.key==="Enter"){ e.preventDefault(); n.blur();
+        f.it.notes.splice(+p[1]+1,0,""); save(); render();
+        var next=$('[data-note="'+p[0]+':'+(+p[1]+1)+'"]'); if(next) next.focus(); }
+      if(e.key==="Backspace"&&!txt(n).trim()&&f.it.notes.length>1){ e.preventDefault();
+        f.it.notes.splice(+p[1],1); save(); render();
+        var prev=$('[data-note="'+p[0]+':'+Math.max(0,+p[1]-1)+'"]'); if(prev) prev.focus(); }
+    });
+  });
+  $$("[data-delnote]").forEach(function(b){ b.onclick=function(){
+    var q=b.dataset.delnote.split(":"), f=findItem(q[0]); if(!f) return;
+    f.it.notes.splice(+q[1],1); save(); render(); }; });
+  $$("[data-addnote]").forEach(function(b){ b.onclick=function(){
+    var f=findItem(b.dataset.addnote); if(!f) return;
+    f.it.notes=f.it.notes||[]; f.it.notes.push(""); save(); render();
+    setTimeout(function(){ var el=$('[data-note="'+f.it.id+':'+(f.it.notes.length-1)+'"]');
+      if(el){ el.scrollIntoView({block:"center"}); el.focus(); } },60); }; });
+  /* 交通卡 */
+  onBlur("[data-tnote]",function(n){ var f=findItem(n.dataset.tnote); if(f){ f.it.note=txt(n); save(); } });
+  onBlur("[data-leg]",function(n){ var p=n.dataset.leg.split(":"), f=findItem(p[0]);
+    if(f){ f.it.legs[+p[1]][p[2]]=txt(n); save(); } });
+  noEnter("[data-leg]");
+  onBlur("[data-tr]",function(n){ var p=n.dataset.tr.split(":"), f=findItem(p[0]);
+    if(f){ f.it[p[1]]=txt(n); save(); } });
+  noEnter("[data-tr]");
+  $$("[data-legmin]").forEach(function(b){ b.onclick=function(){
+    var p=b.dataset.legmin.split(":"), f=findItem(p[0]); if(!f) return;
+    askInput("這一段抓幾分鐘？","", f.it.legs[+p[1]].min, function(v){
+      f.it.legs[+p[1]].min=Math.max(0,parseInt(v,10)||0); save(); render(); }, {type:"number",mode:"numeric"}); }; });
+  /* 登機證 */
+  onBlur("[data-fl]",function(n){ var p=n.dataset.fl.split(":"); S.flights[p[0]][p[1]]=txt(n); save(); });
+  noEnter("[data-fl]");
+  onBlur("[data-flm]",function(n){ var p=n.dataset.flm.split(":"); S.flights[p[0]].meta[+p[1]][1]=txt(n); save(); });
+  noEnter("[data-flm]");
+  /* 行前 */
+  onBlur("[data-kvk]",function(n){ var q=n.dataset.kvk.split(":"), sec=secById(q[0]); if(sec){ sec.rows[+q[1]][0]=txt(n); save(); } });
+  noEnter("[data-kvk]");
+  $$("[data-delrow]").forEach(function(b){ b.onclick=function(){
+    var q=b.dataset.delrow.split(":"), sec=secById(q[0]); if(!sec) return;
+    var arr = q[1]==="after" ? sec.after : sec.rows, i=+q[2];
+    if(!arr) return;
+    if(sec.type==="check" && q[1]==="rows"){
+      var n0=arr.length;
+      for(var k=i;k<n0-1;k++){ if(S.done[sec.id+":"+(k+1)]) S.done[sec.id+":"+k]=1; else delete S.done[sec.id+":"+k]; }
+      delete S.done[sec.id+":"+(n0-1)];
+    }
+    arr.splice(i,1); save(); render(); }; });
+  $$("[data-addrow]").forEach(function(b){ b.onclick=function(){
+    var sec=secById(b.dataset.addrow); if(!sec) return;
+    if(sec.type==="kv") sec.rows.push(["項目","內容"]);
+    else if(sec.type==="table") sec.rows.push(sec.head.map(function(){ return ""; }));
+    else sec.rows.push("");
+    save(); render();
+    setTimeout(function(){
+      var sel = sec.type==="kv" ? '[data-kv="'+sec.id+':'+(sec.rows.length-1)+'"]'
+              : sec.type==="table" ? '[data-td="'+sec.id+':'+(sec.rows.length-1)+':0"]'
+              : '[data-li="'+sec.id+':'+(sec.rows.length-1)+'"]';
+      var el=$(sel); if(el){ el.scrollIntoView({block:"center"}); el.focus(); } },60);
+  }; });
+  $$("[data-delbul]").forEach(function(b){ b.onclick=function(){
+    var q=b.dataset.delbul.split(":"), m=memoById(q[0]); if(!m) return;
+    m.b.splice(+q[1],1); if(m.g) m.g.splice(+q[1],1);
+    if(!m.b.length){ m.b=[""]; m.g=[""]; } save(); render(); }; });
+  $$("[data-addbul]").forEach(function(b){ b.onclick=function(){
+    var m=memoById(b.dataset.addbul); if(!m) return;
+    m.b.push(""); (m.g=m.g||[]).push(""); save(); render();
+    setTimeout(function(){ var box=$('[data-memo="'+m.id+'"]'); if(box){ var xs=$$(".x",box); var last=xs[xs.length-1];
+      if(last){ last.scrollIntoView({block:"center"}); last.focus(); } } },60); }; });
+  onBlur("[data-kv]",function(n){ var p=n.dataset.kv.split(":"), s=secById(p[0]); if(s){ s.rows[+p[1]][1]=txt(n); save(); } });
+  onBlur("[data-li]",function(n){ var p=n.dataset.li.split(":"), s=secById(p[0]); if(s){ s.rows[+p[1]]=txt(n); save(); } });
+  onBlur("[data-af]",function(n){ var p=n.dataset.af.split(":"), s=secById(p[0]); if(s){ s.after[+p[1]]=txt(n); save(); } });
+  onBlur("[data-td]",function(n){ var p=n.dataset.td.split(":"), s=secById(p[0]); if(s){ s.rows[+p[1]][+p[2]]=txt(n); save(); } });
+  noEnter("[data-td]");
+  onBlur("[data-sech]",function(n){ var s=secById(n.dataset.sech); if(s){ s.t=txt(n); save(); } });
+  noEnter("[data-sech]");
+  onBlur("[data-memoh]",function(n){ var m=memoById(n.dataset.memoh); if(m){ m.h=txt(n); save(); } });
+  noEnter("[data-memoh]");
+  $$("[data-chk]").forEach(function(b){ b.onclick=function(){
+    S.done[b.dataset.chk]=!S.done[b.dataset.chk]; save(); render(); }; });
+
+  /* 備忘錄圓點 */
+  $$("[data-memo]").forEach(function(box){
+    var m=memoById(box.dataset.memo);
+    function sync(){
+      m.b=$$(".x",box).map(function(x){return txt(x);});
+      m.g=$$(".bul",box).map(function(n){return n.dataset.geo||"";});
+      save(); }
+    box.addEventListener("input",function(e){
+      var b=e.target.closest(".bul");
+      if(b) b.classList.toggle("blank", !txt(e.target).trim());
+      sync();
+    });
+    box.addEventListener("keydown",function(e){
+      var x=e.target.closest(".x"); if(!x) return;
+      if(e.key==="Enter"){ e.preventDefault();
+        var row=document.createElement("div"); row.className="bul";
+        row.setAttribute("data-geo","");
+        row.innerHTML='<span class="d">・</span><div class="x" contenteditable="true"></div>';
+        x.closest(".bul").after(row); row.querySelector(".x").focus(); sync(); }
+      if(e.key==="Backspace"&&!txt(x).trim()&&$$(".x",box).length>1){ e.preventDefault();
+        var prev=x.closest(".bul").previousElementSibling; x.closest(".bul").remove();
+        if(prev){ var p=prev.querySelector(".x"); p.focus();
+          var r=document.createRange(); r.selectNodeContents(p); r.collapse(false);
+          var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+        sync(); }
+    });
+  });
+  $$("[data-setg]").forEach(function(b){ b.onclick=function(){
+    var q=b.dataset.setg.split(":"), m=memoById(q[0]); if(!m) return;
+    var i=+q[1];
+    m.g=m.g||m.b.map(function(){return "";});
+    var cur=m.g[i]||String(m.b[i]||"").split(/[（(・、，,—－]/)[0].trim();
+    askInput("地圖連結","要用什麼字去 Google Maps 搜尋？留空＝不加連結。",cur,function(v){
+      m.g[i]=String(v||"").trim(); save(); render(); });
+  }; });
+  if($("#addMemo")) $("#addMemo").onclick=function(){ S.memo.push({id:uid(),h:"新標題",b:[""]}); save(); render(); };
+  $$("[data-delmemo]").forEach(function(b){ b.onclick=function(){
+    ask("刪除這則備忘？","裡面的內容會一起刪掉。",function(){
+      S.memo=S.memo.filter(function(x){ return x.id!==b.dataset.delmemo; }); save(); render(); },"刪除",true); }; });
+  $$("[data-addmemo]").forEach(function(b){ b.onclick=function(){
+    var at=S.memo.length; S.memo.forEach(function(x,i){ if(x.id===b.dataset.addmemo) at=i+1; });
+    var m={id:uid(),h:"新標題",b:[""]};
+    S.memo.splice(at,0,m); save(); render();
+    setTimeout(function(){ var el=$('[data-memoh="'+m.id+'"]'); if(el){ el.scrollIntoView({block:"center"}); el.focus(); } },60); }; });
+  var ml=$("#memoList");
+  if(ml) sortable(ml,".memo",function(order){
+    S.memo.sort(function(a,b){ return order.indexOf(a.id)-order.indexOf(b.id); }); save(); render(); },null);
+
+  /* 行前拖曳 */
+  var il=$("#infoList");
+  if($("#addSec0")) $("#addSec0").onclick=function(){
+    S.info.sections.push({id:uid(),t:"新項目",type:"list",rows:[""]}); save(); render(); };
+  if(il){
+    $$("[data-delsec]").forEach(function(b){ b.onclick=function(){
+      ask("刪除這個區塊？","裡面的內容會一起刪掉。",function(){
+        S.info.sections=S.info.sections.filter(function(x){ return x.id!==b.dataset.delsec; }); save(); render(); },"刪除",true); }; });
+    $$("[data-addsec]").forEach(function(b){ b.onclick=function(){
+      var at=0; S.info.sections.forEach(function(x,i){ if(x.id===b.dataset.addsec) at=i+1; });
+      var ns={id:uid(),t:"新項目",type:"list",rows:[""]};
+      S.info.sections.splice(at,0,ns); save(); render();
+      setTimeout(function(){ var el=$('[data-sech="'+ns.id+'"]'); if(el){ el.scrollIntoView({block:"center"}); el.focus(); } },60); }; });
+  }
+  if(il) sortable(il,".sec",function(order){
+    S.info.sections.sort(function(a,b){ return order.indexOf(a.id)-order.indexOf(b.id); }); save(); render(); },null);
+
+  /* 行程互動 */
+  var tl=$("#tl");
+  if(tl){
+    sortable(tl,".card[data-drag]",function(order){
+      var d=S.days[di], slots=[], spots=[];
+      d.items.forEach(function(it,i){ if(it.k==="spot"){ slots.push(i); spots.push(it); } });
+      spots.sort(function(a,b){ return order.indexOf(a.id)-order.indexOf(b.id); });
+      slots.forEach(function(s,k){ d.items[s]=spots[k]; });
+      syncTransits(d);
+      save(); render(); flag("順序已更新，請確認交通"); },380);
+
+    $$("[data-pick]").forEach(function(b){ b.onclick=function(){
+      S.pick[b.dataset.pick]=b.dataset.t;
+      var tid=b.dataset.pick.split(":")[0], d=S.days[di], idx=-1;
+      d.items.forEach(function(x,i){ if(x.id===tid) idx=i; });
+      clearAfter(d,idx); save(); render(); }; });
+    /* 出發：時間滑輪（轉完、關掉滑輪離開欄位才套用，中途不會一直跳） */
+    $$("[data-dep]").forEach(function(b){ onTime(b,function(v){
+      if(!v) delete S.pick[b.dataset.dep]; else S.pick[b.dataset.dep]=v;
+      var tid=b.dataset.dep.split(":")[0], d=S.days[di], idx=-1;
+      d.items.forEach(function(x,i){ if(x.id===tid) idx=i; });
+      clearAfter(d,idx); save(); render(); }); });
+    $$("[data-cleardep]").forEach(function(b){ b.onclick=function(){
+      delete S.pick[b.dataset.cleardep];
+      var tid=b.dataset.cleardep.split(":")[0], d=S.days[di], idx=-1;
+      d.items.forEach(function(x,i){ if(x.id===tid) idx=i; });
+      clearAfter(d,idx); save(); render(); }; });
+    /* 抵達：釘住這一站 */
+    /* 設抵達：先把「目前的離開時間」釘住，這樣調整的是可停留，不是離開 */
+    $$("[data-arr]").forEach(function(b){ onTime(b,function(v){
+      var id=b.dataset.arr, c0=compute(S.days[di])[id];
+      if(c0 && !S.leave[id]) S.leave[id]=hm(c0.leave);
+      if(!v) delete S.anchor[id]; else S.anchor[id]=v;
+      save(); render(); }); });
+    /* 離開：換算成停留長度，並讓後面那段交通重新抓班次（不然離開時間會彈回去） */
+    /* 設離開：直接釘住這個時間，抵達不動，可停留自己算 */
+    $$("[data-lv]").forEach(function(b){ onTime(b,function(v){
+      var id=b.dataset.lv, d=S.days[di];
+      if(!v) delete S.leave[id]; else S.leave[id]=v;
+      var idx=-1; d.items.forEach(function(x,i){ if(x.id===id) idx=i; });
+      clearAfter(d,idx);
+      save(); render(); }); });
+    $$("[data-unlv]").forEach(function(b){ b.onclick=function(){
+      delete S.leave[b.dataset.unlv]; save(); render(); }; });
+    $$("[data-unanchor]").forEach(function(b){ b.onclick=function(){
+      delete S.anchor[b.dataset.unanchor]; save(); render(); }; });
+    /* 去過了 */
+    $$("[data-tick]").forEach(function(b){ b.onclick=function(){
+      var id=b.dataset.tick;
+      if(S.visited[id]) delete S.visited[id]; else S.visited[id]=1;
+      save(); render(); }; });
+    $$("[data-addphoto]").forEach(function(b){ b.onclick=function(){ pickPhoto(b.dataset.addphoto); }; });
+    $$("[data-photo]").forEach(function(b){ b.onclick=function(){ openLb(b.dataset.photo); }; });
+    $$("[data-insert]").forEach(function(b){ b.onclick=function(){ addStop(S.days[di], b.dataset.insert); }; });
+    $$("[data-delspot]").forEach(function(b){ b.onclick=function(){
+      var f=findItem(b.dataset.delspot), id=b.dataset.delspot;
+      ask("刪除「"+((f&&f.it.t)||"這一站")+"」？","前後的交通會自動接起來。",function(){
+        delSpot(S.days[di], id); },"刪除",true); }; });
+    $$("[data-icopen]").forEach(function(b){ b.onclick=function(){ if(EDIT) sheetIcon(b.dataset.icopen); }; });
+    $$("[data-addleg]").forEach(function(b){ b.onclick=function(){
+      var f=findItem(b.dataset.addleg); if(!f) return;
+      f.it.legs.push({k:"walk",ic:"walk",text:"步行",min:5}); save(); render(); }; });
+    $$("[data-delleg]").forEach(function(b){ b.onclick=function(){
+      var p=b.dataset.delleg.split(":"), f=findItem(p[0]); if(!f||f.it.legs.length<2) return;
+      f.it.legs.splice(+p[1],1);
+      f.it.legs.forEach(function(lg,i){ delete S.pick[rideKey(f.it.id,i)]; });
+      save(); render(); }; });
+    $$("[data-expandtr]").forEach(function(b){ b.onclick=function(){
+      var id=b.dataset.expandtr;
+      if(expandTr[id]) delete expandTr[id]; else expandTr[id]=1;
+      render(); }; });
+    $$("[data-alt]").forEach(function(b){ b.onclick=function(){
+      var q=b.dataset.alt.split(":"); switchAlt(S.days[di],q[0],+q[1]); }; });
+    $$("[data-restr]").forEach(function(b){ b.onclick=function(){ restoreOneTransit(S.days[di],b.dataset.restr); }; });
+    $$("[data-okchk]").forEach(function(b){ b.onclick=function(){
+      var f=findItem(b.dataset.okchk); if(f){ delete f.it.chk; save(); render(); } }; });
+    $$("[data-hush]").forEach(function(b){ b.onclick=function(){
+      S.hush[b.dataset.hush]=1; save(); render(); }; });
+    /* 時刻表：把要搭的那班擺在最左邊，已過的往左滑才看得到 */
+    $$(".times").forEach(function(box){
+      var n=box.querySelector(".tb.now")||box.querySelector(".tb:not(.past)"); if(!n) return;
+      box.scrollLeft += n.getBoundingClientRect().left - box.getBoundingClientRect().left - 2;
+    });
+    $$("[data-shift]").forEach(function(b){ b.onclick=function(){ shiftTransit(S.days[di],b.dataset.shift); }; });
+    $$("[data-ext]").forEach(function(b){ b.onclick=function(){ extendSpot(S.days[di],b.dataset.ext); }; });
+  }
+
+  /* 花費頁 */
+  if($("#addStop")) $("#addStop").onclick=function(){ addStop(S.days[di], null); };
+  if($("#mAdd")) $("#mAdd").onclick=sheetAdd;
+  $$(".seg [data-g]").forEach(function(b){ b.onclick=function(){ S.mgroup=b.dataset.g; save(); render(); }; });
+  $$("[data-curtog]").forEach(function(b){ b.onclick=function(){
+    S.mshow = S.mshow==="twd" ? "jpy" : "twd"; save(); render(); }; });
+  $$("[data-editex]").forEach(function(b){ b.onclick=function(){ sheetAdd(b.dataset.editex); }; });
+  $$("[data-delex]").forEach(function(b){ b.onclick=function(){
+    S.expenses=S.expenses.filter(function(e){ return e.id!==b.dataset.delex; }); save(); render(); }; });
+
+  wireMast();
+}
+
+var lbCur=null;
+function openLb(key){
+  var p=key.split(":"), arr=S.photos[p[0]]||[], im=arr[+p[1]];
+  if(!im) return;
+  lbCur=key; $("#lbImg").src=im.d; $("#lb").setAttribute("open","");
+}
+$("#lbClose").onclick=function(){ $("#lb").removeAttribute("open"); $("#lbImg").src=""; lbCur=null; };
+$("#lbDel").onclick=function(){
+  if(!lbCur) return;
+  var p=lbCur.split(":");
+  if(S.photos[p[0]]) S.photos[p[0]].splice(+p[1],1);
+  if(S.photos[p[0]] && !S.photos[p[0]].length) delete S.photos[p[0]];
+  $("#lb").removeAttribute("open"); $("#lbImg").src=""; lbCur=null;
+  save(); render();
+};
+
+$$(".tab").forEach(function(t){ t.onclick=function(){
+  scrollMem[pageKey()]=window.scrollY; page=t.dataset.p;
+  if(!EDITPAGES[page] && EDIT){ EDIT=false; vpUnlock(); }
+  render(scrollMem[pageKey()]||0); }; });
+$("#editBtn").onclick=function(){ setEdit(!EDIT); };
+$("#daystrip").addEventListener("click",function(e){ var c=e.target.closest("[data-d]"); if(c){
+  scrollMem[pageKey()]=window.scrollY; di=+c.dataset.d; render(scrollMem[pageKey()]||0); } });
+$("#fab").onclick=sheetAdd;
+
+fbLoad();
+render();
+if(!fbIncomingLink()) shareIncoming();
+if(fbOn()) fbStart();
+})();
+</script>
+
+<script>
+/* 離線化：把整個 App 存進瀏覽器，之後沒網路也能開 */
+if("serviceWorker" in navigator && location.protocol!=="file:"){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
