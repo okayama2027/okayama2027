@@ -1965,11 +1965,48 @@ function fbAgo(){
 }
 function fbLabel(){
   if(!fbOn()) return "尚未設定";
-  if(FBstate==="on") return "● 連線中（房間 "+FB.room.slice(0,6)+"…）　最後更新 "+fbAgo();
+  if(FBstate==="on") return "● 連線中　最後更新 "+fbAgo();
   if(FBstate==="connecting") return "連線中…";
   if(FBstate==="err") return "✕ 目前連不上，改動先存在這台裝置，連回來會自動補送"+
     (FBseen?("（最後更新 "+fbAgo()+"）"):"（可能是網址錯了，或這個網址不支援對外連線）");
   return "已停止";
+}
+/* 連線診斷：一次把該看的都列出來，看不懂也可以整段複製給我 */
+function fbDiag(){
+  var L=[];
+  L.push("網址　"+(FB.url||"(未設定)"));
+  L.push("房間　"+(FB.room||"(未設定)"));
+  L.push("開啟方式　"+(window.navigator.standalone?"主畫面 App":(location.protocol==="file:"?"本機檔案":"瀏覽器分頁")));
+  L.push("網路　"+(navigator.onLine?"有":"沒有"));
+  L.push("目前狀態　"+FBstate+(FBseen?("（最後更新 "+fbAgo()+"）"):""));
+  L.push("EventSource　"+(typeof EventSource==="undefined"?"這個瀏覽器不支援":
+    (!FBes?"沒有連線":(FBes.readyState===0?"連線中":(FBes.readyState===1?"已連上":"已關閉")))));
+  var show=function(extra){
+    openSheet("連線檢查",'<textarea class="inp bk" id="dgT" readonly rows="10">'+esc(L.concat(extra||[]).join("\n"))+'</textarea>'+
+      '<button class="bigbtn ghost" id="dgCp">複製這段</button>'+
+      '<button class="bigbtn ghost" data-close>關閉</button>');
+    if($("#dgCp")) $("#dgCp").onclick=function(){
+      copyText(L.concat(extra||[]).join("\n")).then(function(ok){ flag(ok?"已複製":"請長按全選複製"); }); };
+  };
+  if(!fbOn()){ show(["讀寫測試　跳過（還沒設定）"]); return; }
+  show(["讀寫測試　進行中…"]);
+  var t0=now();
+  fetch(fbPath()+"?_="+t0,{cache:"no-store"})
+    .then(function(r){
+      var ms=now()-t0;
+      return r.text().then(function(txt){
+        var ok=r.ok, note="讀取測試　"+(ok?"成功":"失敗")+"（HTTP "+r.status+"，"+ms+" 毫秒）";
+        var has=(txt&&txt!=="null")?"雲端有資料（"+txt.length+" 字元）":"雲端這個房間是空的";
+        var tips=[];
+        if(r.status===401||r.status===403) tips.push("→ 資料庫規則沒開。到 Firebase 的「規則」分頁貼上手冊裡那段，按發布");
+        if(r.status===404) tips.push("→ 網址對不上。確認結尾是 firebasedatabase.app，而且是同一個專案");
+        show([note,has].concat(tips));
+      });
+    })
+    .catch(function(e){
+      show(["讀取測試　連不上（"+(e&&e.message||e)+"）",
+            "→ 多半是沒網路、網址打錯，或這個網址不允許對外連線（例如 claude.ai 的 Artifact）"]);
+    });
 }
 function sheetSync(){
   openSheet("分享行程",
@@ -1977,9 +2014,11 @@ function sheetSync(){
     '<p class="perhead" id="fbStat">'+esc(fbLabel())+'</p>'+
     (fbOn()
       ? '<p class="perhead" style="margin-bottom:4px">房間代號（每台裝置都要一樣才會同步）</p>'+
-        '<textarea class="inp bk" id="fbRm" readonly rows="2">'+esc(FB.room)+'</textarea>'+
+        '<textarea class="inp bk" id="fbRm" readonly rows="2" style="font-size:15px;letter-spacing:.04em">'+esc(FB.room)+'</textarea>'+
+        '<button class="bigbtn ghost" id="fbCpRm">複製房間代號</button>'+
         '<button class="bigbtn" id="fbInv">🔗 複製「一起編輯」邀請連結</button>'+
         '<button class="bigbtn ghost" id="fbJoin">🔑 改用其他房間代號</button>'+
+        '<button class="bigbtn ghost" id="fbDiag">🩺 檢查連線</button>'+
         '<button class="bigbtn ghost" id="fbOff" style="color:var(--red)">停止即時同步</button>'
       : '<button class="bigbtn" id="fbSet">⚡ 開一個新的同步房間</button>'+
         '<button class="bigbtn ghost" id="fbJoin">🔑 加入已經有的房間</button>')+
@@ -2005,6 +2044,9 @@ function sheetSync(){
       });
   };
   if($("#fbRm")) $("#fbRm").onclick=function(){ this.select(); };
+  if($("#fbCpRm")) $("#fbCpRm").onclick=function(){
+    copyText(FB.room).then(function(ok){ flag(ok?"房間代號已複製":"請長按上面那格全選複製"); }); };
+  if($("#fbDiag")) $("#fbDiag").onclick=fbDiag;
   if($("#fbJoin")) $("#fbJoin").onclick=function(){
     askInput("資料庫網址","先貼資料庫網址（跟另一台一樣的那個）",FB.url||"",function(v){
       var u=String(v||"").trim().replace(/\/+$/,"");
