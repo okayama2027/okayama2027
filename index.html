@@ -88,6 +88,7 @@ svg{display:block}
   background:var(--surface);color:var(--ink-2);display:inline-flex;align-items:center;gap:5px}
 .pill svg{width:13px;height:13px}
 .pill.live{background:var(--matsu-wash);border-color:color-mix(in srgb,var(--matsu) 45%,var(--line));color:var(--matsu);font-weight:500}
+.pill.down{background:var(--surface);border-color:color-mix(in srgb,var(--red) 40%,var(--line));color:var(--red);font-weight:500}
 #saveflag{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);transition:color .2s}
 
 /* ---------- day strip ---------- */
@@ -1694,37 +1695,119 @@ function findItem(id){ for(var i=0;i<S.days.length;i++){ var its=S.days[i].items
 /* ================= 共享同步（把行程存進 Artifact 的資料檔） ================= */
 /* ================= 即時同步（Firebase Realtime Database，REST + SSE） =================
    只在自己架的版本有效；claude.ai 的 Artifact 會被安全政策擋掉對外連線。 */
+function now(){ return Date.now(); }
 var FBKEY=KEY+":fb";
-var FB={url:"",room:""}, FBes=null, FBtimer=null, FBstate="off", FBlastTs=0;
+var FB={url:"",room:""};
+var FBes=null, FBtimer=null, FBstate="off", FBlastTs=0;
 var FBme=Math.random().toString(36).slice(2,8);
+var FBwant=false;      /* 使用者是否要開著同步（跟連線狀態分開） */
+var FBseen=0;          /* 最後一次真的收到雲端資料的時間 */
+var FBretry=0;         /* 重連次數，用來拉長間隔 */
+var FBpoll=null;       /* 備援輪詢：Safari 切到背景會把 SSE 斷掉且不自己接回來 */
+var FBpending=null;    /* 對方的更新先收著，等使用者不在編輯狀態再套用 */
+var FBdirty=false;     /* 本機有還沒推上去的修改 */
+
 function fbLoad(){ try{ var r=localStorage.getItem(FBKEY); if(r) FB=JSON.parse(r)||FB; }catch(e){} }
 function fbSaveCfg(){ try{ localStorage.setItem(FBKEY,JSON.stringify(FB)); }catch(e){} }
 function fbOn(){ return !!(FB.url&&FB.room); }
 function fbPath(){ return String(FB.url).replace(/\/+$/,"")+"/trips/"+encodeURIComponent(FB.room)+".json"; }
 function fbRoom(){ var a="abcdefghijkmnpqrstuvwxyz23456789",o="";
   for(var i=0;i<22;i++) o+=a.charAt(Math.floor(Math.random()*a.length)); return o; }
-function fbStop(){ if(FBes){ try{ FBes.close(); }catch(e){} FBes=null; } FBstate="off"; }
-function fbStart(){
-  fbStop();
-  if(!fbOn()) return;
-  if(typeof EventSource==="undefined"){ FBstate="err"; return; }
-  FBstate="connecting"; renderMast();
-  try{
-    FBes=new EventSource(fbPath());
-    FBes.onopen=function(){ FBstate="on"; renderMast(); };
-    FBes.onerror=function(){ if(FBstate!=="on"){ FBstate="err"; renderMast(); } };
-    FBes.addEventListener("put",function(ev){ FBstate="on"; fbIncoming(ev.data); renderMast(); });
-    FBes.addEventListener("patch",function(ev){ FBstate="on"; fbIncoming(ev.data); renderMast(); });
-  }catch(e){ FBstate="err"; renderMast(); }
+
+/* 使用者正在打字、開著編輯模式或彈窗時，不要把畫面整個重畫掉 */
+function fbBusy(){
+  var a=document.activeElement;
+  if(a && (a.isContentEditable || a.tagName==="INPUT" || a.tagName==="TEXTAREA")) return true;
+  if(document.body.classList.contains("editmode")) return true;
+  var d=$("#dlg"); if(d && d.hasAttribute("open")) return true;
+  var sh=$("#sheet"); if(sh && sh.hasAttribute("open")) return true;
+  return false;
 }
+
+function fbCut(){ if(FBes){ try{ FBes.close(); }catch(e){} FBes=null; } }
+function fbStop(){
+  FBwant=false; fbCut();
+  if(FBpoll){ clearInterval(FBpoll); FBpoll=null; }
+  FBpending=null; FBstate="off";
+}
+
+function fbStart(){
+  if(!fbOn()) return;
+  FBwant=true; fbCut();
+  FBstate = (FBstate==="on") ? "on" : "connecting";
+  renderMast();
+  fbPull();                                   /* 先抓一次現況，SSE 掛掉也還有東西 */
+  if(typeof EventSource!=="undefined"){
+    try{
+      FBes=new EventSource(fbPath());
+      FBes.onopen=function(){ FBstate="on"; FBretry=0; FBseen=now(); renderMast(); fbFlushDirty(); };
+      FBes.onerror=function(){ fbDrop(); };
+      FBes.addEventListener("put",function(ev){ FBstate="on"; FBretry=0; fbIncoming(ev.data); renderMast(); });
+      FBes.addEventListener("patch",function(ev){ FBstate="on"; FBretry=0; fbIncoming(ev.data); renderMast(); });
+      FBes.addEventListener("keep-alive",function(){ FBseen=now(); });
+    }catch(e){ fbDrop(); }
+  }
+  fbWatch();
+}
+
+/* 斷線了：標記狀態，隔一段時間自己接回來（間隔越接越長，最多 20 秒） */
+function fbDrop(){
+  fbCut();
+  if(!FBwant) return;
+  if(FBstate!=="err"){ FBstate="err"; renderMast(); }
+  FBretry=Math.min(FBretry+1,8);
+  setTimeout(function(){ if(FBwant && !FBes) fbStart(); }, Math.min(1500*FBretry,20000));
+}
+
+/* 備援：每 12 秒看一次，超過 35 秒沒收到東西就直接用一般連線抓一次 */
+function fbWatch(){
+  if(FBpoll) return;
+  var n=0;
+  FBpoll=setInterval(function(){
+    if(!FBwant) return;
+    /* 每 1.5 秒：使用者一離開編輯狀態就把對方的更新補上 */
+    if(FBpending && !fbBusy()) fbApplyPending();
+    if(++n < 8) return;                      /* 每 12 秒才檢查一次連線 */
+    n=0;
+    if(document.hidden) return;
+    if(FBseen && (now()-FBseen)<35000) return;
+    fbPull();
+    if(!FBes || FBes.readyState===2) fbStart();
+  },1500);
+}
+
+function fbPull(){
+  if(!fbOn()) return;
+  fetch(fbPath()+"?_="+now(),{cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){
+      FBseen=now(); FBretry=0;
+      if(FBstate!=="on"){ FBstate="on"; renderMast(); }
+      fbIncoming(JSON.stringify({path:"/",data:d}));
+    })
+    .catch(function(){});
+}
+
 function fbIncoming(raw){
   var m=null; try{ m=JSON.parse(raw); }catch(e){ return; }
   if(!m || (m.path && m.path!=="/")) return;
   var d=m.data;
+  FBseen=now();
   if(!d || !d.days || !d.days.length) return;
   if(d.by===FBme) return;                       /* 自己剛送出去的，不用再套用 */
   if((+d.ts||0) <= (+FBlastTs||0)) return;
   FBlastTs=+d.ts||0;
+  if(fbBusy()){                                 /* 正在打字/編輯：先收著，不要把畫面抽掉 */
+    FBpending=d;
+    flag("對方有更新，離開編輯後套用");
+    return;
+  }
+  fbApply(d);
+}
+
+function fbApplyPending(){ var d=FBpending; FBpending=null; if(d) fbApply(d); }
+
+function fbApply(d){
   var keep=S.photos;
   S=migrate(d);
   if(!S.photos || !Object.keys(S.photos).length) S.photos=keep||{};
@@ -1734,20 +1817,41 @@ function fbIncoming(raw){
   try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
   render(); flag("已同步對方的更新");
 }
+
 function fbPush(){
-  if(!fbOn() || FBstate==="off") return;
+  if(!fbOn() || !FBwant) return;
+  FBdirty=true;
   clearTimeout(FBtimer);
-  FBtimer=setTimeout(function(){
-    var d=JSON.parse(JSON.stringify(S));
-    d.ts=Date.now(); d.by=FBme;
-    var body=JSON.stringify(d);
-    if(body.length>3000000){ d.photos={}; body=JSON.stringify(d); }
-    FBlastTs=d.ts;
-    fetch(fbPath(),{method:"PUT",body:body,headers:{"Content-Type":"application/json"}})
-      .then(function(r){ if(!r.ok) throw new Error(r.status); })
-      .catch(function(){ FBstate="err"; renderMast(); flag("同步失敗，檢查網路或設定"); });
-  },1500);
+  FBtimer=setTimeout(fbSend,1200);
 }
+function fbFlushDirty(){ if(FBdirty) fbSend(); }
+function fbSend(){
+  if(!fbOn() || !FBwant) return;
+  var d=JSON.parse(JSON.stringify(S));
+  d.ts=now(); d.by=FBme;
+  var body=JSON.stringify(d);
+  if(body.length>3000000){ d.photos={}; body=JSON.stringify(d); }
+  FBlastTs=d.ts;
+  fetch(fbPath(),{method:"PUT",body:body,headers:{"Content-Type":"application/json"}})
+    .then(function(r){ if(!r.ok) throw new Error(r.status);
+      FBdirty=false; FBseen=now();
+      if(FBstate!=="on"){ FBstate="on"; renderMast(); } })
+    .catch(function(){
+      FBdirty=true;                              /* 留著，連回來再送一次 */
+      if(FBstate!=="err"){ FBstate="err"; renderMast(); flag("目前連不上，改動先存在手機裡"); }
+    });
+}
+
+/* Safari 切到背景會把連線收掉而且不會自己接回來，回到前景時要重接 */
+document.addEventListener("visibilitychange",function(){
+  if(document.hidden || !FBwant) return;
+  fbPull();
+  if(!FBes || FBes.readyState===2) fbStart();
+  else fbFlushDirty();
+});
+window.addEventListener("online",function(){ if(FBwant) fbStart(); });
+window.addEventListener("pageshow",function(e){ if(FBwant && e.persisted) fbStart(); });
+
 function fbInvite(){
   var pay=btoa(unescape(encodeURIComponent(JSON.stringify({u:FB.url,r:FB.room}))))
     .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
@@ -1837,11 +1941,20 @@ function shareIncoming(){
   return true;
 }
 
+function fbAgo(){
+  if(!FBseen) return "";
+  var s=Math.round((now()-FBseen)/1000);
+  if(s<10) return "剛剛";
+  if(s<60) return s+" 秒前";
+  if(s<3600) return Math.round(s/60)+" 分鐘前";
+  return Math.round(s/3600)+" 小時前";
+}
 function fbLabel(){
   if(!fbOn()) return "尚未設定";
-  if(FBstate==="on") return "● 連線中（房間 "+FB.room.slice(0,6)+"…）";
+  if(FBstate==="on") return "● 連線中（房間 "+FB.room.slice(0,6)+"…）　最後更新 "+fbAgo();
   if(FBstate==="connecting") return "連線中…";
-  if(FBstate==="err") return "✕ 連不上（可能是網址錯了，或這個網址不支援對外連線）";
+  if(FBstate==="err") return "✕ 目前連不上，改動先存在這台裝置，連回來會自動補送"+
+    (FBseen?("（最後更新 "+fbAgo()+"）"):"（可能是網址錯了，或這個網址不支援對外連線）");
   return "已停止";
 }
 function sheetSync(){
@@ -1984,8 +2097,8 @@ function renderMast(){
    '<span class="titlewrap"><h1 contenteditable="true" data-meta="title">'+esc(S.meta.title)+'</h1>'+mizuhiki()+'</span>'+
    '<p contenteditable="true" data-meta="lede">'+esc(S.meta.lede)+'</p>'+
    '<div class="mtools"><button class="pill" id="btnSet">'+ico("clock")+'設定</button>'+
-   '<button class="pill'+(FBstate==="on"?" live":"")+'" id="btnSync">'+ico("swap")+
-     (FBstate==="on"?"同步中":"分享")+'</button>'+
+   '<button class="pill'+(FBstate==="on"?" live":(FBstate==="err"?" down":""))+'" id="btnSync">'+ico("swap")+
+     (FBstate==="on"?"同步中":(FBstate==="err"?"已離線":(FBstate==="connecting"?"連線中":"分享")))+'</button>'+
    '<span id="saveflag">自動存檔</span></div>';
   wireMast();
 }
@@ -3058,11 +3171,42 @@ if(fbOn()) fbStart();
 
 <script>
 /* 離線化：把整個 App 存進瀏覽器，之後沒網路也能開 */
-if("serviceWorker" in navigator && location.protocol!=="file:"){
+(function(){
+  if(!("serviceWorker" in navigator) || location.protocol==="file:" || !window.caches) return;
+  var CORE="core-2027-okayama-v3";
   window.addEventListener("load",function(){
     navigator.serviceWorker.register("sw.js").catch(function(){});
+    var el=null, shown=false;
+    function pill(){
+      if(el) return el;
+      el=document.createElement("div");
+      el.style.cssText="position:fixed;left:50%;transform:translateX(-50%);"+
+        "bottom:calc(78px + env(safe-area-inset-bottom));z-index:70;padding:8px 15px;"+
+        "border-radius:999px;font:500 13.5px/1.4 -apple-system,system-ui,sans-serif;"+
+        "color:#fff;background:#4A4340;box-shadow:0 6px 18px rgba(0,0,0,.2);"+
+        "opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap";
+      document.body.appendChild(el); return el;
+    }
+    function say(t,bg,hide){
+      var e=pill(); e.textContent=t; e.style.background=bg; e.style.opacity="1";
+      if(hide) setTimeout(function(){ e.style.opacity="0"; },hide);
+    }
+    function ready(){
+      return caches.open(CORE).then(function(c){ return c.match("./index.html"); });
+    }
+    ready().then(function(hit){
+      if(hit) return;                       /* 早就存好了，不用吵使用者 */
+      shown=true; say("離線內容下載中…","#4A4340",0);
+      var n=0, t=setInterval(function(){
+        n++;
+        ready().then(function(h){
+          if(h){ clearInterval(t); say("離線就緒，可以測飛航模式了 ✓","#4E7B5E",4000); }
+          else if(n>60){ clearInterval(t); say("離線內容還沒存好，請保持連線重新整理","#A8442F",6000); }
+        }).catch(function(){});
+      },500);
+    }).catch(function(){});
   });
-}
+})();
 </script>
 </body>
 </html>
