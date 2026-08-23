@@ -199,22 +199,24 @@ main{padding:16px 14px 128px;display:flex;flex-direction:column;gap:16px}
 .notes li{font-size:12.5px;color:var(--ink-2);line-height:1.6;
   word-break:break-word;min-height:24px;display:flex;align-items:center;gap:4px;flex-wrap:nowrap}
 /* 行首符號：點一下可以切換（編輯模式），☐ 平常也能直接打勾 */
-/* 預設的圓點直接用 CSS 畫，大小才控制得準（「・」這個字太小） */
-.mk{flex:none;align-self:flex-start;width:18px;height:24px;padding:0;border:0;background:none;
-  display:grid;place-items:center;font-size:12px;line-height:1;color:var(--ink);
+/* 行首符號：圓點、方框、勾勾都用 CSS 畫，按鈕裡不放文字（放了 grid 會多一格） */
+.mk{flex:none;align-self:flex-start;position:relative;width:18px;height:24px;padding:0;border:0;
+  background:none;display:grid;place-items:center;font-size:12px;line-height:1;color:var(--ink);
   font-family:inherit;cursor:default}
-.mk::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
-.mkwarn>.mk::before,.mkchk>.mk::before{display:none}
 .editmode .mk{cursor:pointer}
+.mk::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.mknone>.mk::before{display:none}
 .mkwarn{color:var(--alert)!important}
 .mkwarn>.mk{color:var(--alert);font-size:12px}
-.mkchk>.mk{width:15px;height:15px;margin:0 1.5px;border:1.5px solid var(--sora);border-radius:3px;
-  color:transparent;font-size:11px;cursor:pointer}
+.mkwarn>.mk::before{display:none}
+/* ☐：小框、垂直對齊該行文字的中線 */
 .mkchk{color:var(--sora)!important}
-.mkchk.mkon>.mk{border-color:var(--ink);color:var(--ink)}
+.mkchk>.mk{cursor:pointer}
+.mkchk>.mk::before{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--sora);background:none}
 .mkchk.mkon{color:var(--ink)!important}
-.notes li.sub{font-weight:700;color:var(--ink);margin-top:4px}
-.notes li.sub>.mk{visibility:hidden}
+.mkchk.mkon>.mk::before{border-color:var(--ink)}
+.mkchk.mkon>.mk::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;
+  font-size:10px;line-height:1;color:var(--ink)}
 .notes li>.nt:focus{outline:none;background:var(--clay-wash);border-radius:4px}
 .notes li.blank>.mk{visibility:hidden}
 .bpnotes li.blank::before{content:""}
@@ -2276,7 +2278,7 @@ function viewItin(){
       var doneTr = nx && S.visited[nx.id] && !expandTr[it.id];
       return doneTr ? rowTransitMini(it,c[it.id],ln) : rowTransit(it,c[it.id],ln);
     }
-    return rowSpot(it,c[it.id],ln,i===fi);
+    return rowSpot(it,c[it.id],ln,i===fi,i===la);
   }).join("");
   return ''+
   '<div class="dayhead"><div class="kick"><span>'+esc(d.num)+'</span><span>'+esc(d.date)+' '+esc(d.dow)+'</span><span>'+esc(d.tag)+'</span></div>'+
@@ -2376,7 +2378,7 @@ function noteKind(n){
   if(c==="!") return "warn";
   if(c==="?") return "chk";
   if(c==="+") return "chkon";
-  if(c===":") return "sub";
+  if(c===":") return "none";
   if(c==="@") return "link";
   return "dot";
 }
@@ -2385,13 +2387,13 @@ function noteBody(n){
   return noteKind(n)==="dot" ? n : n.slice(1);
 }
 function notePre(k){
-  return k==="warn"?"!":k==="chk"?"?":k==="chkon"?"+":k==="sub"?":":k==="link"?"@":"";
+  return k==="warn"?"!":k==="chk"?"?":k==="chkon"?"+":k==="none"?":":k==="link"?"@":"";
 }
-function noteCycle(k){        /* 點符號時的循環：・ → ⚠ → ☐ → ・ */
-  return k==="dot"?"warn":k==="warn"?"chk":"dot";
+function noteCycle(k){        /* 循環：空白 → ・ → ⚠ → ☐ → 空白 */
+  return k==="none"?"dot":k==="dot"?"warn":k==="warn"?"chk":"none";
 }
 function noteMark(k){
-  return k==="warn"?"⚠":k==="chkon"?"✓":"";   /* ・ 由 CSS 畫，這裡留空才不會多一個格 */
+  return k==="warn"?"⚠":"";   /* ・ ☐ ✓ 都由 CSS 畫，按鈕裡不能有文字節點 */
 }
 
 /* 行首符號：三個頁面共用一套，用事件委派，重畫也不用重綁 */
@@ -2431,7 +2433,7 @@ function wireMarkers(){
 function mkBtn(attr,key,k){
   return '<button class="mk" data-'+attr+'="'+key+'" aria-label="切換符號">'+noteMark(k)+'</button>';
 }
-function mkCls(k){ return k==="warn"?"mkwarn":k==="chk"?"mkchk":k==="chkon"?"mkchk mkon":""; }
+function mkCls(k){ return k==="warn"?"mkwarn":k==="chk"?"mkchk":k==="chkon"?"mkchk mkon":k==="none"?"mknone":""; }
 function gripEl(){ return '<span class="grip" data-ngrip>'+ico("grip")+'</span>'; }
 function linkParts(n){
   var b=noteBody(n), i=b.indexOf("|");
@@ -2444,13 +2446,13 @@ function safeUrl(u){
   return /^https?:\/\/[^\s"'<>]+$/i.test(u) ? u : "";
 }
 
-function rowSpot(it,c,ln,isFirst){
+function rowSpot(it,c,ln,isFirst,isLast){
   var lines=[], links=[];
   (it.notes||[]).forEach(function(n,i){ (noteKind(n)==="link"?links:lines).push({n:n,i:i}); });
 
   var notes=lines.map(function(o){
     var k=noteKind(o.n), tx=noteBody(o.n);
-    var cls=(k==="sub"?"sub":mkCls(k));
+    var cls=mkCls(k);
     if(!tx.trim()) cls+=" blank";
     return '<li class="'+cls.trim()+'" data-id="'+o.i+'">'+
       mkBtn("mk",it.id+":"+o.i,k)+
@@ -2480,13 +2482,12 @@ function rowSpot(it,c,ln,isFirst){
   var head = isFirst
    ? '<div class="span"><span class="lbl">出發</span>'+
        timeField("lv",it.id,hm(c.leave),c.lvfix?"anch":"")+
-       (c.lvfix?'<button class="clr" data-unlv="'+it.id+'" aria-label="解除固定">✕ 固定</button>':'')+
      '</div>'
    : '<div class="span"><span class="lbl">抵達</span>'+
        timeField("arr",it.id,hm(c.arr),c.anchored?"anch":"")+
        (c.anchored&&c.chained?'<button class="clr" data-unanchor="'+it.id+'" aria-label="解除固定">✕ 固定</button>':'')+
      '</div>';
-  var rt = isFirst ? '' :
+  var rt = (isFirst||isLast) ? '' :
     '<div class="rt'+(c.tight?" tight":"")+'">'+
       '<span class="stay">可停留 '+dur(Math.max(0,c.win))+'</span>'+
       '<span class="lv">離開'+timeField("lv",it.id,hm(c.leave),"sm")+
