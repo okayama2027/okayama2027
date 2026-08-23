@@ -1852,22 +1852,36 @@ document.addEventListener("visibilitychange",function(){
 window.addEventListener("online",function(){ if(FBwant) fbStart(); });
 window.addEventListener("pageshow",function(e){ if(FBwant && e.persisted) fbStart(); });
 
-function fbInvite(){
-  var pay=btoa(unescape(encodeURIComponent(JSON.stringify({u:FB.url,r:FB.room}))))
+function baseUrl(){ return location.origin+location.pathname; }
+function fbPayload(){
+  return btoa(unescape(encodeURIComponent(JSON.stringify({u:FB.url,r:FB.room}))))
     .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
-  return location.origin+location.pathname+location.search+"#fb="+pay;
+}
+function fbInvite(){ return baseUrl()+"?fb="+fbPayload(); }
+
+/* 把房間寫進網址列。iPhone 的「加入主畫面」是另一個獨立的儲存空間，
+   房間代號不會跟過去；寫進網址之後，主畫面圖示啟動時才認得出自己是哪一間。 */
+function fbStamp(){
+  if(!fbOn()) return;
+  try{ history.replaceState(null,"",baseUrl()+"?fb="+fbPayload()); }catch(e){}
+}
+function fbClearUrl(){ try{ history.replaceState(null,"",baseUrl()); }catch(e){} }
+
+function fbReadUrl(){
+  var m=/^#fb=(.+)$/.exec(location.hash||"") || /[?&]fb=([^&]+)/.exec(location.search||"");
+  return m?m[1]:"";
 }
 function fbIncomingLink(){
-  var h=location.hash||"";
-  if(h.indexOf("#fb=")!==0) return false;
-  var b=h.slice(4).replace(/-/g,"+").replace(/_/g,"/");
+  var code=fbReadUrl();
+  if(!code) return false;
+  var b=code.replace(/-/g,"+").replace(/_/g,"/");
   while(b.length%4) b+="=";
-  history.replaceState(null,"",location.pathname+location.search);
   var cfg=null;
   try{ cfg=JSON.parse(decodeURIComponent(escape(atob(b)))); }catch(e){}
-  if(!cfg||!cfg.u||!cfg.r){ tell("這個同步邀請讀不出來","請對方重新複製一次。"); return true; }
+  if(!cfg||!cfg.u||!cfg.r){ fbClearUrl(); tell("這個同步邀請讀不出來","請對方重新複製一次。"); return true; }
+  if(fbOn() && FB.url===cfg.u && FB.room===cfg.r){ fbStamp(); return false; }  /* 本來就在同一間，不用再問 */
   ask("加入共同編輯？","加入之後，你和對方任何一邊的修改都會即時同步。你目前這台裝置上的內容會被雲端那份取代。",
-    function(){ FB={url:cfg.u,room:cfg.r}; fbSaveCfg(); fbStart(); flag("已加入，正在同步…"); renderMast(); },"加入");
+    function(){ FB={url:cfg.u,room:cfg.r}; fbSaveCfg(); fbStamp(); fbStart(); flag("已加入，正在同步…"); renderMast(); },"加入");
   return true;
 }
 
@@ -1905,7 +1919,7 @@ function unpackState(code){
 }
 function shareLink(){
   return packState().then(function(code){
-    return location.origin+location.pathname+location.search+"#s="+code;
+    return baseUrl()+"#s="+code;
   });
 }
 function copyText(t){
@@ -1962,10 +1976,17 @@ function sheetSync(){
     '<div class="flh">即時同步（兩人同步編輯）</div>'+
     '<p class="perhead" id="fbStat">'+esc(fbLabel())+'</p>'+
     (fbOn()
-      ? '<button class="bigbtn" id="fbInv">🔗 複製「一起編輯」邀請連結</button>'+
+      ? '<p class="perhead" style="margin-bottom:4px">房間代號（每台裝置都要一樣才會同步）</p>'+
+        '<textarea class="inp bk" id="fbRm" readonly rows="2">'+esc(FB.room)+'</textarea>'+
+        '<button class="bigbtn" id="fbInv">🔗 複製「一起編輯」邀請連結</button>'+
+        '<button class="bigbtn ghost" id="fbJoin">🔑 改用其他房間代號</button>'+
         '<button class="bigbtn ghost" id="fbOff" style="color:var(--red)">停止即時同步</button>'
-      : '<button class="bigbtn" id="fbSet">⚡ 設定即時同步</button>')+
-    '<p class="perhead">改完幾秒內對方就會自動更新，不用按任何按鈕。'+
+      : '<button class="bigbtn" id="fbSet">⚡ 開一個新的同步房間</button>'+
+        '<button class="bigbtn ghost" id="fbJoin">🔑 加入已經有的房間</button>')+
+    '<p class="perhead"><b>每台裝置都要加入同一個房間才會同步。</b>'+
+    '在第二台裝置上按「開一個新的同步房間」只會開出另一個房間，兩邊看到的東西不會一樣——'+
+    '要用第一台的邀請連結，或按「加入已經有的房間」把房間代號貼過來。<br><br>'+
+    '改完幾秒內對方就會自動更新，不用按任何按鈕。'+
     '需要一個免費的 Firebase 資料庫，而且只在你自己架的版本有效——claude.ai 這個網址會被安全政策擋住。</p>'+
     '<hr style="border:0;border-top:1px solid var(--line)">'+
     '<div class="flh">分享連結（快照・哪裡都能用）</div>'+
@@ -1978,10 +1999,25 @@ function sheetSync(){
       FB.url||"",function(v){
         var u=String(v||"").trim().replace(/\/+$/,"");
         if(!/^https:\/\/.+/.test(u)){ tell("網址看起來不對","要以 https:// 開頭，結尾是 firebasedatabase.app 或 firebaseio.com。"); return true; }
-        FB={url:u,room:fbRoom()}; fbSaveCfg(); fbStart();
+        FB={url:u,room:fbRoom()}; fbSaveCfg(); fbStamp(); fbStart();
         setTimeout(function(){ fbPush(); },200);
         closeSheet(); flag("已開始即時同步"); renderMast();
       });
+  };
+  if($("#fbRm")) $("#fbRm").onclick=function(){ this.select(); };
+  if($("#fbJoin")) $("#fbJoin").onclick=function(){
+    askInput("資料庫網址","先貼資料庫網址（跟另一台一樣的那個）",FB.url||"",function(v){
+      var u=String(v||"").trim().replace(/\/+$/,"");
+      if(!/^https:\/\/.+/.test(u)){ tell("網址看起來不對","要以 https:// 開頭，結尾是 firebasedatabase.app 或 firebaseio.com。"); return true; }
+      setTimeout(function(){
+        askInput("房間代號","到另一台裝置的「分享」裡複製「房間代號」，貼在這裡","",function(w){
+          var r=String(w||"").trim();
+          if(!/^[a-z0-9]{6,40}$/.test(r)){ tell("房間代號看起來不對","是一串小寫英文加數字，不要有空白。"); return true; }
+          FB={url:u,room:r}; fbSaveCfg(); fbStamp(); fbStart();
+          closeSheet(); flag("已加入房間，正在同步…"); renderMast();
+        },{ok:"加入"});
+      },80);
+    },{ok:"下一步"});
   };
   if($("#fbInv")) $("#fbInv").onclick=function(){
     copyText(fbInvite()).then(function(ok){
@@ -1993,7 +2029,7 @@ function sheetSync(){
   };
   if($("#fbOff")) $("#fbOff").onclick=function(){
     ask("停止即時同步？","這台裝置會停止收發更新，行程留在本機。雲端上的資料不會刪除。",function(){
-      fbStop(); FB={url:"",room:""}; fbSaveCfg(); closeSheet(); render(); },"停止",true);
+      fbStop(); FB={url:"",room:""}; fbSaveCfg(); fbClearUrl(); closeSheet(); render(); },"停止",true);
   };
   $("#syLink").onclick=function(){
     var btn=$("#syLink"); btn.textContent="產生中…";
@@ -3177,8 +3213,9 @@ $("#fab").onclick=sheetAdd;
 
 fbLoad();
 render();
-if(!fbIncomingLink()) shareIncoming();
-if(fbOn()) fbStart();
+var FBjoined = fbIncomingLink();
+if(!FBjoined) shareIncoming();
+if(fbOn()){ fbStamp(); if(!FBjoined) fbStart(); }
 })();
 </script>
 
@@ -3186,7 +3223,7 @@ if(fbOn()) fbStart();
 /* 離線化：把整個 App 存進瀏覽器，之後沒網路也能開 */
 (function(){
   if(!("serviceWorker" in navigator) || location.protocol==="file:" || !window.caches) return;
-  var CORE="core-2027-okayama-v3"; window.OFFCORE=CORE;
+  var CORE="core-2027-okayama-v4"; window.OFFCORE=CORE;
   window.addEventListener("load",function(){
     navigator.serviceWorker.register("sw.js").catch(function(){});
     var el=null, shown=false;

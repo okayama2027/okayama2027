@@ -2,7 +2,6 @@
   "name": "岡山倉敷 初春手帖",
   "short_name": "初春手帖",
   "description": "2027/1/1–1/3 岡山・倉敷三日行程手帖",
-  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

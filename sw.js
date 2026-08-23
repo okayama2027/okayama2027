@@ -1,5 +1,5 @@
 /* 岡山倉敷 初春手帖 — 離線快取 */
-var VER = "2027-okayama-v3";
+var VER = "2027-okayama-v4";
 var CORE = "core-" + VER;
 var FONTS = "fonts-" + VER;
 var SHELL = ["./","./index.html","./manifest.webmanifest",
