@@ -777,63 +777,11 @@ label.fl{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--m
 <script>
 (function(){
 "use strict";
+/* ==========================================================================
+   行程資料 —— 換一趟旅行時，只要改這個檔案，其他檔案完全不用動。
+   順序：KEY / 花費類別 / 時刻表 / 地點代號 / 行程本體 / 地點別名 / 反向時刻表
+   ========================================================================== */
 var KEY = "okayama-kurashiki-shinshun-v8";
-
-/* ================= helpers ================= */
-var $=function(s,r){return (r||document).querySelector(s);};
-var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
-var uid=function(){return Math.random().toString(36).slice(2,9);};
-function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function ico(n){return '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-'+n+'"/></svg>';}
-function toMin(t){ if(!t) return null; var p=String(t).split(":"); return (+p[0])*60+(+p[1]); }
-function toHM(m){ if(m==null||isNaN(m)) return "--:--"; m=Math.round(m); var d=Math.floor(m/1440); m=((m%1440)+1440)%1440;
-  return ("0"+Math.floor(m/60)).slice(-2)+":"+("0"+(m%60)).slice(-2)+(d>0?"+1":""); }
-function dur(m){ if(m==null) return ""; if(m<0) return "−"+dur(-m); var h=Math.floor(m/60),n=m%60; return h?(h+"小時"+(n?n+"分":"")):(n+"分"); }
-function hm(m){ return toHM(m).slice(0,5); }
-function timeField(attr,id,val,cls){
-  return '<span class="tw'+(cls?" "+cls:"")+'"><span class="tv">'+esc(val)+'</span>'+
-    '<input type="time" lang="en-GB" step="60" data-'+attr+'="'+esc(id)+'" value="'+esc(val)+'" aria-label="選擇時間"></span>';
-}
-function yen(n){ return "¥"+Math.round(n||0).toLocaleString("en-US"); }
-function money(n,cur){ return cur ? cur+Math.round(n||0).toLocaleString("en-US") : yen(n); }
-function mapGo(q){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q); }
-function mapDir(a,b){ return "https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent(a)+"&destination="+encodeURIComponent(b)+"&travelmode=transit"; }
-/* ---------- 自製對話框：Artifact 的 iframe 會擋掉原生 confirm/alert/prompt ---------- */
-function dlgClose(){ var d=$("#dlg"); if(d){ d.removeAttribute("open"); d.classList.remove("noCancel"); } }
-function bindDlg(){
-  var d=$("#dlg"); if(!d||d._bound) return; d._bound=true;
-  d.addEventListener("click",function(e){ if(e.target.closest("[data-dclose]")) dlgClose(); });
-}
-function dlgOpen(title,msg,fields,okLabel,onOk,danger){
-  var d=$("#dlg"); bindDlg();
-  $("#dlgT").textContent=title||"";
-  $("#dlgM").textContent=msg||"";
-  $("#dlgF").innerHTML=fields||"";
-  var ok=$("#dlgOk");
-  ok.textContent=okLabel||"確定";
-  ok.classList.toggle("danger",!!danger);
-  ok.onclick=function(){ var keep=onOk&&onOk(); if(!keep) dlgClose(); };
-  d.classList.remove("noCancel");
-  d.setAttribute("open","");
-  setTimeout(function(){ var i=$("#dlgF input"); if(i){ i.focus(); i.select&&i.select(); } },50);
-}
-function ask(title,msg,onOk,okLabel,danger){ dlgOpen(title,msg,"",okLabel||"確定",onOk,danger); }
-function tell(title,msg){ dlgOpen(title,msg,"","知道了",null); $("#dlg").classList.add("noCancel"); }
-function askInput(title,msg,value,onOk,opts){
-  opts=opts||{};
-  dlgOpen(title,msg,'<input class="inp" id="dlgI" '+(opts.type?'type="'+opts.type+'" ':'')+
-    (opts.mode?'inputmode="'+opts.mode+'" ':'')+'value="'+esc(value==null?"":value)+'">',
-    opts.ok||"儲存", function(){ return onOk($("#dlgI").value); });
-}
-function askTime(cur){
-  var v=prompt("輸入時間（HH:MM）；留空取消設定", cur||"");
-  if(v===null) return undefined;
-  v=v.trim(); if(v==="") return null;
-  if(!/^\d{1,2}:\d{2}$/.test(v)){ alert("請用 HH:MM 格式，例如 08:36。"); return undefined; }
-  var p=v.split(":"); if(+p[0]>47||+p[1]>59){ alert("時間不合法。"); return undefined; }
-  return ("0"+p[0]).slice(-2)+":"+p[1];
-}
-
 /* ================= categories ================= */
 var CATS=[
  {k:"food",n:"餐飲",v:"--c-food",i:"fork"},
@@ -845,19 +793,6 @@ var CATS=[
  {k:"misc",n:"寄物櫃·雜支",v:"--c-misc",i:"box"},
  {k:"etc", n:"其他",v:"--c-etc", i:"dots"}
 ];
-var CATPAL=["#C25A3E","#4E7A8C","#6B5C9E","#A8683F","#B4557E","#9C7A2E","#6E7B72","#8A7C75",
-            "#3F7D6B","#8E5B8E","#B08344","#5A6E9E"];
-function allCats(){
-  var hid=(S&&S.hidecat)||{};
-  var base=CATS.filter(function(c){ return !hid[c.k]; });
-  var ex=(S&&S.cats?S.cats:[]).map(function(c){ var o={};
-    for(var k in c) o[k]=c[k]; o.custom=1; return o; });
-  return base.concat(ex);
-}
-function cat(k){ var L=allCats(); for(var i=0;i<L.length;i++) if(L[i].k===k) return L[i]; return CATS[CATS.length-1]; }
-function catColor(C){ return String(C.v).charAt(0)==="-" ? "var("+C.v+")" : C.v; }
-function newCatKey(){ var k; do{ k="c"+uid().slice(0,4); }while(cat(k).k===k); return k; }
-
 /* ================= 時刻表（2026/08 查得，出發前請再確認） ================= */
 var TTS={
  kibiDown:{t:"JR 桃太郎線　岡山 → 吉備津（土休日）",
@@ -921,16 +856,6 @@ var TTS={
   note:"⚠ 同上，1 月時刻表待公布，出發前查好填進來。\n這條線班次比倉敷線密，而且配合國際線（台北／首爾／上海）加開。\n已知：30 分・¥720・岡山駅西口 21 番乘車處・可刷 IC 卡。（部分資料寫 ¥780，以現場公告為準。）",
   src:"岡山桃太郎空港 巴士交通", url:"https://www.okayama-airport.org/access/bus/"}
 };
-function ttList(key){
-  var tt=TTS[key]; if(!tt) return [];
-  if(tt._flat) return tt._flat;
-  var out=[];
-  (tt.rows||[]).forEach(function(r){
-    String(r[1]).trim().split(/\s+/).forEach(function(m){ if(/^\d{1,2}$/.test(m)) out.push(r[0]+":"+("0"+m).slice(-2)); });
-  });
-  tt._flat=out; return out;
-}
-
 /* ================= 地點 ================= */
 var P={
  WANLONG:"捷運萬隆站", TPE:"桃園國際機場第一航廈", OKJ:"岡山桃太郎空港", HOTEL:"倉敷ステーションホテル",
@@ -939,11 +864,6 @@ var P={
  GRECO:"喫茶エル・グレコ 倉敷", MIYAKE:"町家喫茶 三宅商店 倉敷",
  KIBITSU:"吉備津神社 岡山", OKAEKI:"岡山駅", KORAKUEN:"岡山後楽園", OKAJO:"岡山城"
 };
-function W(text,min){ return {k:"walk",ic:"walk",text:text,min:min}; }
-function ALT(n,d,fare,note,legs){ return {n:n,d:d,fare:fare,note:note,legs:legs}; }
-function X(text,min){ return {k:"transfer",ic:"clock",text:text,min:min}; }
-function RIDE(o){ o.k="ride"; return o; }
-
 /* ================= 預設資料 ================= */
 function DEFAULT(){ return {
  rate:0.2006, pax:2, pick:{}, anchor:{}, leave:{}, done:{}, visited:{}, photos:{}, hush:{}, expenses:[], mgroup:"day",
@@ -1316,6 +1236,112 @@ function DEFAULT(){ return {
    note:"國際線建議起飛前 2 小時報到，也就是 15:55 前抵達機場。回程抵達時刻已換算成台灣時間。"}
  }
 };}
+/* ================= 內建路線庫 =================
+   把預設行程裡已經查好的每一段交通，依「起點>終點」建成對照表。
+   新增或重排站點時，只要兩端對得上就自動套用（反向會自動把時刻表方向對調）。 */
+var PALIAS=[
+ [P.OKJ,      ["岡山桃太郎空港","岡山空港","桃太郎空港","OKJ"]],
+ [P.TPE,      ["桃園國際機場第一航廈","桃園國際機場","桃園機場","TPE"]],
+ [P.WANLONG,  ["捷運萬隆站","萬隆站","萬隆"]],
+ [P.HOTEL,    ["倉敷ステーションホテル","倉敷駅","倉敷站","倉敷車站","倉敷駅前"]],
+ [P.BIKAN,    ["倉敷美観地区","倉敷美觀地區","美観地区","美觀地區"]],
+ [P.ACHI,     ["阿智神社"]],
+ [P.IVY,      ["倉敷アイビースクエア","アイビースクエア"]],
+ [P.OHARA,    ["大原美術館"]],
+ [P.FURUICHI, ["ぶっかけ庵ふるいち","ふるいち","阿知町"]],
+ [P.GRECO,    ["喫茶エル・グレコ","エル・グレコ"]],
+ [P.MIYAKE,   ["町家喫茶 三宅商店","三宅商店"]],
+ [P.KIBITSU,  ["吉備津神社","吉備津"]],
+ [P.KORAKUEN, ["岡山後楽園","後楽園","後樂園"]],
+ [P.OKAJO,    ["岡山城"]],
+ [P.OKAEKI,   ["岡山駅","岡山站","岡山車站","岡山駅前"]]
+];
+var TTREV={kibiDown:"kibiUp",kibiUp:"kibiDown",sanyoUp:"sanyoDown",sanyoDown:"sanyoUp",
+           busArr:"busDep",busDep:"busArr",tram:"tram"};
+
+/* ================= helpers ================= */
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+var uid=function(){return Math.random().toString(36).slice(2,9);};
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function ico(n){return '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-'+n+'"/></svg>';}
+function toMin(t){ if(!t) return null; var p=String(t).split(":"); return (+p[0])*60+(+p[1]); }
+function toHM(m){ if(m==null||isNaN(m)) return "--:--"; m=Math.round(m); var d=Math.floor(m/1440); m=((m%1440)+1440)%1440;
+  return ("0"+Math.floor(m/60)).slice(-2)+":"+("0"+(m%60)).slice(-2)+(d>0?"+1":""); }
+function dur(m){ if(m==null) return ""; if(m<0) return "−"+dur(-m); var h=Math.floor(m/60),n=m%60; return h?(h+"小時"+(n?n+"分":"")):(n+"分"); }
+function hm(m){ return toHM(m).slice(0,5); }
+function timeField(attr,id,val,cls){
+  return '<span class="tw'+(cls?" "+cls:"")+'"><span class="tv">'+esc(val)+'</span>'+
+    '<input type="time" lang="en-GB" step="60" data-'+attr+'="'+esc(id)+'" value="'+esc(val)+'" aria-label="選擇時間"></span>';
+}
+function yen(n){ return "¥"+Math.round(n||0).toLocaleString("en-US"); }
+function money(n,cur){ return cur ? cur+Math.round(n||0).toLocaleString("en-US") : yen(n); }
+function mapGo(q){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q); }
+function mapDir(a,b){ return "https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent(a)+"&destination="+encodeURIComponent(b)+"&travelmode=transit"; }
+/* ---------- 自製對話框：Artifact 的 iframe 會擋掉原生 confirm/alert/prompt ---------- */
+function dlgClose(){ var d=$("#dlg"); if(d){ d.removeAttribute("open"); d.classList.remove("noCancel"); } }
+function bindDlg(){
+  var d=$("#dlg"); if(!d||d._bound) return; d._bound=true;
+  d.addEventListener("click",function(e){ if(e.target.closest("[data-dclose]")) dlgClose(); });
+}
+function dlgOpen(title,msg,fields,okLabel,onOk,danger){
+  var d=$("#dlg"); bindDlg();
+  $("#dlgT").textContent=title||"";
+  $("#dlgM").textContent=msg||"";
+  $("#dlgF").innerHTML=fields||"";
+  var ok=$("#dlgOk");
+  ok.textContent=okLabel||"確定";
+  ok.classList.toggle("danger",!!danger);
+  ok.onclick=function(){ var keep=onOk&&onOk(); if(!keep) dlgClose(); };
+  d.classList.remove("noCancel");
+  d.setAttribute("open","");
+  setTimeout(function(){ var i=$("#dlgF input"); if(i){ i.focus(); i.select&&i.select(); } },50);
+}
+function ask(title,msg,onOk,okLabel,danger){ dlgOpen(title,msg,"",okLabel||"確定",onOk,danger); }
+function tell(title,msg){ dlgOpen(title,msg,"","知道了",null); $("#dlg").classList.add("noCancel"); }
+function askInput(title,msg,value,onOk,opts){
+  opts=opts||{};
+  dlgOpen(title,msg,'<input class="inp" id="dlgI" '+(opts.type?'type="'+opts.type+'" ':'')+
+    (opts.mode?'inputmode="'+opts.mode+'" ':'')+'value="'+esc(value==null?"":value)+'">',
+    opts.ok||"儲存", function(){ return onOk($("#dlgI").value); });
+}
+function askTime(cur){
+  var v=prompt("輸入時間（HH:MM）；留空取消設定", cur||"");
+  if(v===null) return undefined;
+  v=v.trim(); if(v==="") return null;
+  if(!/^\d{1,2}:\d{2}$/.test(v)){ alert("請用 HH:MM 格式，例如 08:36。"); return undefined; }
+  var p=v.split(":"); if(+p[0]>47||+p[1]>59){ alert("時間不合法。"); return undefined; }
+  return ("0"+p[0]).slice(-2)+":"+p[1];
+}
+
+var CATPAL=["#C25A3E","#4E7A8C","#6B5C9E","#A8683F","#B4557E","#9C7A2E","#6E7B72","#8A7C75",
+            "#3F7D6B","#8E5B8E","#B08344","#5A6E9E"];
+function allCats(){
+  var hid=(S&&S.hidecat)||{};
+  var base=CATS.filter(function(c){ return !hid[c.k]; });
+  var ex=(S&&S.cats?S.cats:[]).map(function(c){ var o={};
+    for(var k in c) o[k]=c[k]; o.custom=1; return o; });
+  return base.concat(ex);
+}
+function cat(k){ var L=allCats(); for(var i=0;i<L.length;i++) if(L[i].k===k) return L[i]; return CATS[CATS.length-1]; }
+function catColor(C){ return String(C.v).charAt(0)==="-" ? "var("+C.v+")" : C.v; }
+function newCatKey(){ var k; do{ k="c"+uid().slice(0,4); }while(cat(k).k===k); return k; }
+
+function ttList(key){
+  var tt=TTS[key]; if(!tt) return [];
+  if(tt._flat) return tt._flat;
+  var out=[];
+  (tt.rows||[]).forEach(function(r){
+    String(r[1]).trim().split(/\s+/).forEach(function(m){ if(/^\d{1,2}$/.test(m)) out.push(r[0]+":"+("0"+m).slice(-2)); });
+  });
+  tt._flat=out; return out;
+}
+
+function W(text,min){ return {k:"walk",ic:"walk",text:text,min:min}; }
+function ALT(n,d,fare,note,legs){ return {n:n,d:d,fare:fare,note:note,legs:legs}; }
+function X(text,min){ return {k:"transfer",ic:"clock",text:text,min:min}; }
+function RIDE(o){ o.k="ride"; return o; }
+
 
 /* ================= state ================= */
 var S=load(), page="itin", di=0, saveT=null, flagT=null, scrollMem={};
@@ -1487,26 +1513,6 @@ function resetTransit(day){
   res.forEach(function(x){ if(x.k==="transit") x.legs.forEach(function(lg,i){ delete S.pick[rideKey(x.id,i)]; }); });
   day.items=res; save(); render();
 }
-/* ================= 內建路線庫 =================
-   把預設行程裡已經查好的每一段交通，依「起點>終點」建成對照表。
-   新增或重排站點時，只要兩端對得上就自動套用（反向會自動把時刻表方向對調）。 */
-var PALIAS=[
- [P.OKJ,      ["岡山桃太郎空港","岡山空港","桃太郎空港","OKJ"]],
- [P.TPE,      ["桃園國際機場第一航廈","桃園國際機場","桃園機場","TPE"]],
- [P.WANLONG,  ["捷運萬隆站","萬隆站","萬隆"]],
- [P.HOTEL,    ["倉敷ステーションホテル","倉敷駅","倉敷站","倉敷車站","倉敷駅前"]],
- [P.BIKAN,    ["倉敷美観地区","倉敷美觀地區","美観地区","美觀地區"]],
- [P.ACHI,     ["阿智神社"]],
- [P.IVY,      ["倉敷アイビースクエア","アイビースクエア"]],
- [P.OHARA,    ["大原美術館"]],
- [P.FURUICHI, ["ぶっかけ庵ふるいち","ふるいち","阿知町"]],
- [P.GRECO,    ["喫茶エル・グレコ","エル・グレコ"]],
- [P.MIYAKE,   ["町家喫茶 三宅商店","三宅商店"]],
- [P.KIBITSU,  ["吉備津神社","吉備津"]],
- [P.KORAKUEN, ["岡山後楽園","後楽園","後樂園"]],
- [P.OKAJO,    ["岡山城"]],
- [P.OKAEKI,   ["岡山駅","岡山站","岡山車站","岡山駅前"]]
-];
 var PFLAT=(function(){
   var a=[]; PALIAS.forEach(function(r){ r[1].forEach(function(x){ a.push([x,r[0]]); }); });
   a.sort(function(x,y){ return y[0].length-x[0].length; });
@@ -1517,8 +1523,6 @@ function canonPlace(s){
   for(var i=0;i<PFLAT.length;i++){ if(s.indexOf(PFLAT[i][0])>=0) return PFLAT[i][1]; }
   return null;
 }
-var TTREV={kibiDown:"kibiUp",kibiUp:"kibiDown",sanyoUp:"sanyoDown",sanyoDown:"sanyoUp",
-           busArr:"busDep",busDep:"busArr",tram:"tram"};
 var ROUTES=(function(){
   var m={};
   DEFAULT().days.forEach(function(d){ d.items.forEach(function(x){
@@ -3265,7 +3269,7 @@ if(fbOn()){ fbStamp(); if(!FBjoined) fbStart(); }
 /* 離線化：把整個 App 存進瀏覽器，之後沒網路也能開 */
 (function(){
   if(!("serviceWorker" in navigator) || location.protocol==="file:" || !window.caches) return;
-  var CORE="core-2027-okayama-v4"; window.OFFCORE=CORE;
+  var CORE="core-2027-okayama-v5"; window.OFFCORE=CORE;
   window.addEventListener("load",function(){
     navigator.serviceWorker.register("sw.js").catch(function(){});
     var el=null, shown=false;

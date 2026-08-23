@@ -1,5 +1,5 @@
 /* 岡山倉敷 初春手帖 — 離線快取 */
-var VER = "2027-okayama-v4";
+var VER = "2027-okayama-v5";
 var CORE = "core-" + VER;
 var FONTS = "fonts-" + VER;
 var SHELL = ["./","./index.html","./manifest.webmanifest",
@@ -32,9 +32,13 @@ self.addEventListener("fetch", function(e){
 
   /* 開啟網頁本身（含主畫面圖示啟動）：離線時一律回快取裡的手帖 */
   if(req.mode==="navigate"){
+    /* 一定要繞過瀏覽器自己的 HTTP 快取，不然更新過的網頁不會出現 */
+    var fresh;
+    try{ fresh=new Request(req.url,{cache:"no-store",mode:"same-origin",credentials:"same-origin",redirect:"follow"}); }
+    catch(err){ fresh=req; }
     e.respondWith(
-      fetch(req).then(function(r){
-        if(r && r.ok) caches.open(CORE).then(function(c){ c.put(req, r.clone()); });
+      fetch(fresh).then(function(r){
+        if(r && r.ok){ var cp=r.clone(); caches.open(CORE).then(function(c){ c.put(req, cp); }); }
         return r;
       }).catch(function(){
         return caches.open(CORE).then(function(c){
