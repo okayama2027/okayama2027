@@ -103,7 +103,9 @@ svg{display:block}
 .dchip[aria-selected="true"]{background:var(--shu);border-color:var(--shu);color:#fff}
 .dchip[aria-selected="true"] span{color:rgba(255,255,255,.82)}
 
-main{padding:16px 14px 128px;display:flex;flex-direction:column;gap:16px}
+main{padding:16px 14px 128px;display:flex;flex-direction:column;gap:16px;
+  -webkit-user-select:text;user-select:text}   /* 內容可以長按選字複製 */
+main button,main .grip,main .mk,main .tick,main .chkbox{-webkit-user-select:none;user-select:none}
 
 /* ---------- headings ---------- */
 .dayhead{padding:2px 2px 0}
@@ -221,12 +223,13 @@ main{padding:16px 14px 128px;display:flex;flex-direction:column;gap:16px}
 .notes li.blank>.mk{visibility:hidden}
 .bpnotes li.blank::before{content:""}
 /* 文字框的高度跟按鈕一樣，整列垂直置中 */
-.notes li>.nt{flex:1;min-width:0;min-height:24px;display:flex;align-items:center;padding:1px 5px}
+.notes li>.nt{flex:1;min-width:0;min-height:24px;display:flex;align-items:center;padding:1px 5px;
+  -webkit-user-select:text;user-select:text}
 .notes li>.grip{margin-left:0;padding:0;width:24px;height:24px;display:none;place-items:center;flex:none}
 .editmode .notes li>.grip{display:grid}
 .notes li>.grip svg{width:14px;height:14px}
 
-/* 超連結列 */
+
 .lnk{display:inline-flex;align-items:center;gap:4px;max-width:132px;font-size:11.5px;height:24px;
   color:var(--matsu);text-decoration:none;border:1px solid color-mix(in srgb,var(--matsu) 30%,var(--line));
   background:var(--matsu-wash);border-radius:999px;padding:0 9px;flex:none}
@@ -492,7 +495,8 @@ body:not(.editmode) .bul.blank{display:none}
 .icgrid button[aria-pressed="true"]{background:var(--shu-wash);border-color:var(--shu);color:var(--shu)}
 .after{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
 .after li{font-size:11.5px;color:var(--muted);line-height:1.6;display:flex;gap:4px;align-items:center;min-height:24px;flex-wrap:nowrap}
-.after li>.tx{flex:1;min-width:0;min-height:24px;display:flex;align-items:center;padding:1px 5px}
+.after li>.tx{flex:1;min-width:0;min-height:24px;display:flex;align-items:center;padding:1px 5px;
+  -webkit-user-select:text;user-select:text}
 .after li>.grip{padding:0;width:24px;height:24px;display:none;place-items:center;flex:none}
 .editmode .after li>.grip{display:grid}
 .after li>.grip svg{width:14px;height:14px}
@@ -576,6 +580,7 @@ body:not(.editmode) .bul.blank{display:none}
 .editmode .tbl td.x{width:58px;display:flex;gap:4px;align-items:center;justify-content:flex-end}
 
 .bul .x{flex:1;font-size:13.5px;line-height:1.6;min-height:24px;display:flex;align-items:center;
+  -webkit-user-select:text;user-select:text;
   padding:1px 5px;word-break:break-word}
 .bul .x:focus{outline:none;background:var(--clay-wash);border-radius:4px}
 .bul .x:empty::before{content:"輸入重點，按 Enter 換下一點";color:var(--muted)}
@@ -2430,6 +2435,7 @@ function wireMarkers(){
   });
 }
 
+
 function mkBtn(attr,key,k){
   return '<button class="mk" data-'+attr+'="'+key+'" aria-label="切換符號">'+noteMark(k)+'</button>';
 }
@@ -2651,7 +2657,7 @@ function viewInfo(){
     } else if(sec.type==="check"){
       inner='<div class="chk" data-sort="'+id+':rows">'+sec.rows.map(function(r,i){
         var k=id+":"+i, on=!!S.done[k];
-        return '<div class="chkrow'+(on?" done":"")+'" data-id="'+i+'"><button class="chkbox" data-chk="'+k+'">✓</button>'+
+        return '<div class="chkrow'+(on?" done":"")+'" data-id="'+i+'">'+'<button class="chkbox" data-chk="'+k+'">✓</button>'+
           '<span class="ct" contenteditable="true" data-li="'+id+':'+i+'">'+esc(r)+'</span>'+x("rows",i)+gripEl()+'</div>';
       }).join("")+'</div>';
     }
@@ -3069,6 +3075,7 @@ function sortable(box,sel,onEnd,holdMs,wrap,gripSel){
     var t=e.target.closest(sel); if(!t) return;
     if(e.target.closest(gripSel)){ e.preventDefault(); e.stopPropagation(); begin(t,e.clientY); return; }
     if(holdMs==null) return;
+    if(!EDIT) return;        /* 非編輯模式時長按要留給「選取文字」用，不要變成拖曳 */
     if(e.target.closest("[contenteditable],button,a,input,summary,details")) return;
     hold=setTimeout(function(){ begin(t,e.clientY); },holdMs);
     var clr=function(){ clearTimeout(hold); };
@@ -3399,8 +3406,16 @@ function wire(){
     /* 設離開：直接釘住這個時間，抵達不動，可停留自己算 */
     $$("[data-lv]").forEach(function(b){ onTime(b,function(v){
       var id=b.dataset.lv, d=S.days[di];
+      var idx=-1, fi=-1;
+      d.items.forEach(function(x,i){ if(x.id===id) idx=i; if(x.k==="spot"&&fi<0) fi=i; });
+      /* 當天第一站的「出發」前面沒有任何行程，要能往前調到任何時間，
+         所以抵達時間跟著往前挪，可停留維持不變 */
+      if(v && idx===fi && idx>=0){
+        var it=d.items[idx], c0=compute(d)[id];
+        var lvm=toMin(v), arr0=toMin(S.anchor[id]||it.pin||hm(c0.arr));
+        if(arr0!=null && lvm<arr0) S.anchor[id]=hm(Math.max(0,lvm-(it.stay||0)));
+      }
       if(!v) delete S.leave[id]; else S.leave[id]=v;
-      var idx=-1; d.items.forEach(function(x,i){ if(x.id===id) idx=i; });
       clearAfter(d,idx);
       save(); render(); }); });
     $$("[data-unlv]").forEach(function(b){ b.onclick=function(){
