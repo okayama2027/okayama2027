@@ -1,7 +1,8 @@
-/* 岡山倉敷 初春手帖 — 離線快取 */
-var VER = "2027-okayama-v5";
+/* 岡山倉敷🍑初春手帖 — 離線快取 */
+var VER = "2027-okayama-v10-2611";
 var CORE = "core-" + VER;
 var FONTS = "fonts-" + VER;
+var TILES = "map-tiles";
 var SHELL = ["./","./index.html","./manifest.webmanifest",
              "./icon-192.png","./icon-512.png","./apple-touch-icon.png"];
 
@@ -20,7 +21,7 @@ self.addEventListener("install", function(e){
 self.addEventListener("activate", function(e){
   e.waitUntil(caches.keys().then(function(ks){
     return Promise.all(ks.map(function(k){
-      if(k!==CORE && k!==FONTS) return caches.delete(k);
+      if(k!==CORE && k!==FONTS && k!==TILES) return caches.delete(k);
     }));
   }).then(function(){ return self.clients.claim(); }));
 });
@@ -63,6 +64,16 @@ self.addEventListener("fetch", function(e){
           return r;
         }).catch(function(){ return hit; });
         return hit || net;
+      });
+    }));
+    return;
+  }
+
+  /* 地圖底圖：看過的區塊存起來，離線時也看得到 */
+  if(/basemaps.cartocdn.com$/.test(url.hostname)){
+    e.respondWith(caches.open(TILES).then(function(c){
+      return c.match(req).then(function(hit){
+        return hit || fetch(req).then(function(r){ if(r && (r.ok||r.type==="opaque")) c.put(req, r.clone()); return r; });
       });
     }));
     return;
